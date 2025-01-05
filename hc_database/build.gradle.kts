@@ -1,19 +1,16 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
 }
 
 android {
-    namespace = "com.svo7777777.hourscalculator"
+    namespace = "com.svo7777777.hc_database"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.svo7777777.hourscalculator"
         minSdk = 21
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -35,12 +32,8 @@ dependencies {
 
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
     implementation(libs.room.common)
     implementation(libs.room.runtime)
-    implementation(project(":hc_database"))
-    implementation(project(":app:dialogs"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

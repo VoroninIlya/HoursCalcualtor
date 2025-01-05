@@ -1,3 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Hours Calculator</string>
+    <string name="add_employee_btn">Add Employee</string>
+    <string name="add_year_btn">Add Year</string>
+    <string name="settings_menu">Settings</string>
+    <string name="about_menu">About</string>
+    <string name="back_menu">Back</string>
+    <string name="year_filler">Enter year</string>
+
+    <string name="employee_first_name">Employee\'s first name</string>
+    <string name="employee_first_name_filler">Enter employee\'s first name</string>
+    <string name="employee_last_name">Employee\'s last name</string>
+    <string name="employee_last_name_filler">Enter employee\'s last name</string>
+    <string name="employee_age">Employee\'s age</string>
+    <string name="employee_age_filler">Enter employee\'s age</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>

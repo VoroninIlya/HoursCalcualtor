@@ -1,3 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Калькулятор часов</string>
+    <string name="add_employee_btn">Добавить сотрудника</string>
+    <string name="add_year_btn">Добавить год</string>
+    <string name="settings_menu">Настройки</string>
+    <string name="about_menu">О программе</string>
+    <string name="back_menu">Назад</string>
+    <string name="year_filler">Введите год</string>
+
+    <string name="employee_first_name">Имя сотрудника</string>
+    <string name="employee_first_name_filler">Введите имя сотрудника</string>
+    <string name="employee_last_name">Фамилия сотрудника</string>
+    <string name="employee_last_name_filler">Введите фамилию сотрудника</string>
+    <string name="employee_age">Возраст сотрудника</string>
+    <string name="employee_age_filler">Введите возраст сотрудника</string>
+    <string name="confirm">Применить</string>
+    <string name="cancel">Отменить</string>
 </resources>
