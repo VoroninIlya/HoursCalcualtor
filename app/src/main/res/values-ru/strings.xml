@@ -6,6 +6,8 @@
     <string name="settings_menu">Настройки</string>
     <string name="about_menu">О программе</string>
     <string name="back_menu">Назад</string>
+
+    <string name="year">Год</string>
     <string name="year_filler">Введите год</string>
 
     <string name="employee_first_name">Имя сотрудника</string>

@@ -2,11 +2,11 @@ package com.svo7777777.hourscalculator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +19,6 @@ import com.svo7777777.dialogs.EmployeeDialog;
 import com.svo7777777.hc_database.AppDatabaseClient;
 import com.svo7777777.hc_database.EmployeeEntity;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -65,13 +64,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addEmployeeToEmployees(String lastName, String firstName, String age) {
-        Long empId = writeEmployeesToDb(lastName, firstName, age);
+        Long empId = writeEmployeeToDb(lastName, firstName, age);
         updateEmployeesList();
     }
 
     private void updateEmployeesList() {
-        GridLayout ec = findViewById(R.id.employees_container);
-        ec.setColumnCount(3);
+        LinearLayout ec = findViewById(R.id.employees_container);
         ec.clearDisappearingChildren();
 
         employees = getEmployeesFromDb();
@@ -83,33 +81,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         for (EmployeeEntity ee : employees) {
-            // Create LayoutParams for the button
-            GridLayout.LayoutParams emplButtonParams = new GridLayout.LayoutParams();
-            emplButtonParams.width = 0;
-            emplButtonParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            emplButtonParams.columnSpec = GridLayout.spec( 0, 1, 5f);
-            emplButtonParams.rowSpec = GridLayout.spec((int)employeesCount, 1, 1f);
-
-            GridLayout.LayoutParams emplEditButtonParams = new GridLayout.LayoutParams();
-            emplEditButtonParams.width = 0;
-            emplEditButtonParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            emplEditButtonParams.columnSpec = GridLayout.spec( 1, 1, 1f);
-            emplEditButtonParams.rowSpec = GridLayout.spec((int)employeesCount, 1, 1f);
-
-            GridLayout.LayoutParams emplDeleteButtonParams = new GridLayout.LayoutParams();
-            emplDeleteButtonParams.width = 0;
-            emplDeleteButtonParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            emplDeleteButtonParams.columnSpec = GridLayout.spec( 2, 1, 1f);
-            emplDeleteButtonParams.rowSpec = GridLayout.spec((int)employeesCount, 1, 1f);
-
-            // Create a new Button
-            Button newEmplButton = new Button(this);
+            // Inflate the custom LinearLayout from XML
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View newEmployeeItem = inflater.inflate(R.layout.year_employee_item, ec, false);
+            Button newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
             newEmplButton.setText(ee.lastName + " " + ee.firstName  + " (" + ee.age + ")");
 
-            Button newEmplEditButton = new Button(this);
-            newEmplEditButton.setText("E");
-            Button newEmplDeleteButton = new Button(this);
-            newEmplDeleteButton.setText("D");
+            Button newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
+            Button newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
 
             // Set click listener for the new button
             newEmplButton.setOnClickListener(new View.OnClickListener() {
@@ -141,18 +120,12 @@ public class MainActivity extends AppCompatActivity {
             newEmplDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteEmployeesFromDb(ee);
+                    deleteEmployeeFromDb(ee);
                     updateEmployeesList();
                 }
             });
 
-            newEmplButton.setLayoutParams(emplButtonParams);
-            newEmplEditButton.setLayoutParams(emplEditButtonParams);
-            newEmplDeleteButton.setLayoutParams(emplDeleteButtonParams);
-
-            ec.addView(newEmplButton);
-            ec.addView(newEmplEditButton);
-            ec.addView(newEmplDeleteButton);
+            ec.addView(newEmployeeItem);
 
             employeesCount++;
         }
@@ -206,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         return employee;
     }
 
-    private Long writeEmployeesToDb(String lastName, String firstName, String age) {
+    private Long writeEmployeeToDb(String lastName, String firstName, String age) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Long id = (long) -1;
         try {
@@ -250,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         return id;
     }
 
-    private void deleteEmployeesFromDb(EmployeeEntity employee) {
+    private void deleteEmployeeFromDb(EmployeeEntity employee) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
             executorService.execute(() -> {

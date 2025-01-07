@@ -6,6 +6,8 @@
     <string name="settings_menu">Settings</string>
     <string name="about_menu">About</string>
     <string name="back_menu">Back</string>
+
+    <string name="year">Year</string>
     <string name="year_filler">Enter year</string>
 
     <string name="employee_first_name">Employee\'s first name</string>

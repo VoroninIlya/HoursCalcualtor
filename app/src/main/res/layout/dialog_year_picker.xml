@@ -8,16 +8,12 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/employee_last_name" />
-    <EditText
+        android:text="@string/year" />
+
+    <Spinner
         android:id="@+id/editTextYear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/year_filler"
-        android:inputType="number"
-        android:maxLength="4"
-        android:importantForAccessibility="yes"
-        android:accessibilityPaneTitle="year entry" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,11 +24,13 @@
 
         <Button
             android:id="@+id/buttonConfirm"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Confirm" />
         <Button
             android:id="@+id/buttonCancel"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel" />

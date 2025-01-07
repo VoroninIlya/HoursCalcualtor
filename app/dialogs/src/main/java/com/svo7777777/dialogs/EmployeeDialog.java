@@ -85,7 +85,7 @@ public class EmployeeDialog {
                     cb.onComplete(employeeLastName, employeeFirstName, employeeAge);
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(ctx, "Please enter a year!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "Please enter employee's first name, last name and age!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
