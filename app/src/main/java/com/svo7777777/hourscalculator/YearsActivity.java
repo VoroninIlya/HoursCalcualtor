@@ -47,9 +47,7 @@ public class YearsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         employeeId = intent.getIntExtra("employeeId", -1);
 
-        Toast.makeText(YearsActivity.this, "employeeId = " + employeeId, Toast.LENGTH_SHORT).show();
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.years), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -61,7 +59,7 @@ public class YearsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_back, menu); // Replace 'menu_main' with your menu resource name
+        getMenuInflater().inflate(R.menu.menu_main, menu); // Replace 'menu_main' with your menu resource name
         return true;
     }
 
@@ -116,9 +114,10 @@ public class YearsActivity extends AppCompatActivity {
             newEmplButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Intent intent = new Intent(MainActivity.this, YearsActivity.class);
-                    //intent.putExtra("employeeId", ee.id);
-                    //startActivity(intent);
+                    Intent intent = new Intent(YearsActivity.this, MonthsActivity.class);
+                    intent.putExtra("yearId", ye.id);
+                    intent.putExtra("year", ye.year);
+                    startActivity(intent);
                 }
             });
 

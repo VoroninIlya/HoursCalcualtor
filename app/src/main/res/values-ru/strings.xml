@@ -18,4 +18,17 @@
     <string name="employee_age_filler">Введите возраст сотрудника</string>
     <string name="confirm">Применить</string>
     <string name="cancel">Отменить</string>
+
+    <string name="january_month">Январь</string>
+    <string name="february_month">Февраль</string>
+    <string name="march_month">Март</string>
+    <string name="april_month">Апрель</string>
+    <string name="may_month">Май</string>
+    <string name="june_month">Июнь</string>
+    <string name="july_month">Июль</string>
+    <string name="august_month">Август</string>
+    <string name="september_month">Сентябрь</string>
+    <string name="october_month">Октябрь</string>
+    <string name="november_month">Ноябрь</string>
+    <string name="december_month">Декабрь</string>
 </resources>

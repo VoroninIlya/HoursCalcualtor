@@ -13,7 +13,7 @@ public interface YearDao {
     @Insert
     long insert(YearEntity year);
 
-    @Query("SELECT * FROM years WHERE employeeId = :employeeId ORDER BY year ASC" )
+    @Query("SELECT * FROM years WHERE employeeId = :employeeId ORDER BY year DESC" )
     List<YearEntity> getYearsForEmployee(int employeeId);
 
     @Update

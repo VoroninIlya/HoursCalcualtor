@@ -16,6 +16,20 @@
     <string name="employee_last_name_filler">Enter employee\'s last name</string>
     <string name="employee_age">Employee\'s age</string>
     <string name="employee_age_filler">Enter employee\'s age</string>
+
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+
+    <string name="january_month">January</string>
+    <string name="february_month">February</string>
+    <string name="march_month">March</string>
+    <string name="april_month">April</string>
+    <string name="may_month">May</string>
+    <string name="june_month">June</string>
+    <string name="july_month">July</string>
+    <string name="august_month">August</string>
+    <string name="september_month">September</string>
+    <string name="october_month">October</string>
+    <string name="november_month">November</string>
+    <string name="december_month">December</string>
 </resources>

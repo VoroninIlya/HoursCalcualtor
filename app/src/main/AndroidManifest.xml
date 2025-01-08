@@ -13,6 +13,12 @@
         android:theme="@style/Theme.HoursCalculator"
         tools:targetApi="31">
         <activity
+            android:name=".DaysActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MonthsActivity"
+            android:exported="false" />
+        <activity
             android:name=".YearsActivity"
             android:exported="false" />
         <activity
