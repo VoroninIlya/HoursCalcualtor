@@ -18,7 +18,13 @@
     <string name="employee_age_filler">Enter employee\'s age</string>
 
     <string name="confirm">Confirm</string>
+    <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+
+    <string name="hours_worked">Hours worked</string>
+    <string name="hours_worked_filler">Enter hours worked</string>
+    <string name="hours_price">Price of a hour</string>
+    <string name="hours_price_filler">Enter price of a hour</string>
 
     <string name="january_month">January</string>
     <string name="february_month">February</string>

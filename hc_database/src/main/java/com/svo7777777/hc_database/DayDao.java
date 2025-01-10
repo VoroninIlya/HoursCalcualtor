@@ -1,5 +1,6 @@
 package com.svo7777777.hc_database;
 
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -7,6 +8,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
+@Dao
 public interface DayDao {
     @Query("SELECT * FROM days WHERE monthId = :monthId ORDER BY day ASC")
     List<DayEntity> getDaysForMonth(int monthId);

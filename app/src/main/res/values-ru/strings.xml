@@ -16,8 +16,15 @@
     <string name="employee_last_name_filler">Введите фамилию сотрудника</string>
     <string name="employee_age">Возраст сотрудника</string>
     <string name="employee_age_filler">Введите возраст сотрудника</string>
+
     <string name="confirm">Применить</string>
+    <string name="delete">Удалить</string>
     <string name="cancel">Отменить</string>
+
+    <string name="hours_worked">Отработанные часы</string>
+    <string name="hours_worked_filler">Введите отработанные часы</string>
+    <string name="hours_price">Цена часа</string>
+    <string name="hours_price_filler">Введите цену часа</string>
 
     <string name="january_month">Январь</string>
     <string name="february_month">Февраль</string>

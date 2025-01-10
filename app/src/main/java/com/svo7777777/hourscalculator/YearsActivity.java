@@ -64,11 +64,21 @@ public class YearsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_back) {
-
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (R.id.action_settings == id) {
+            // Handle settings action
+            Intent intent = new Intent(YearsActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
+        else if (R.id.action_about == id) {
+            // Handle about action
+            Intent intent = new Intent(YearsActivity.this, AboutActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -103,9 +113,11 @@ public class YearsActivity extends AppCompatActivity {
             LayoutInflater inflater = LayoutInflater.from(this);
             View newEmployeeItem = inflater.inflate(R.layout.year_employee_item, ec, false);
 
+            double hours = getHoursForYearFromDb(ye.id);
+
             // Create a new Button
             Button newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
-            newEmplButton.setText(String.valueOf(ye.year));
+            newEmplButton.setText(String.valueOf(ye.year) + " : " + String.valueOf(hours));
 
             Button newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
             Button newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
@@ -221,5 +233,24 @@ public class YearsActivity extends AppCompatActivity {
             // Shut down the executor
             executorService.shutdown();
         }
+    }
+
+    private double getHoursForYearFromDb(int yearId){
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        double hours = 0.0;
+        try {
+            Future<Double> hoursFuture = executorService.submit(() -> {
+                double h = dbc.getAppDatabase().monthDao().getHoursForYear(yearId);
+
+                return h;
+            });
+            hours = hoursFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executorService.shutdown();
+        }
+        return hours;
     }
 }
