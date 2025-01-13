@@ -40,7 +40,6 @@ dependencies {
     implementation(libs.room.common)
     implementation(libs.room.runtime)
     implementation(project(":hc_database"))
-    implementation(project(":app:dialogs"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

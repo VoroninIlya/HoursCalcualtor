@@ -54,53 +54,55 @@ public class MonthsActivity extends AppCompatActivity {
             return insets;
         });
 
+        String[] months = getResources().getStringArray(R.array.months);
+
         double januaryHours = getHoursForMonthFromDb(yearId, 0);
         Button januaryBtn = findViewById(R.id.january_btn);
-        januaryBtn.setText(getString(R.string.january_month) + " : " + String.valueOf(januaryHours));
+        januaryBtn.setText(months[0] + " : " + String.valueOf(januaryHours));
 
         double februaryHours = getHoursForMonthFromDb(yearId, 1);
         Button februaryBtn = findViewById(R.id.february_btn);
-        februaryBtn.setText(getString(R.string.february_month) + " : " + String.valueOf(februaryHours));
+        februaryBtn.setText(months[1] + " : " + String.valueOf(februaryHours));
 
         double marchHours = getHoursForMonthFromDb(yearId, 2);
         Button marchBtn = findViewById(R.id.march_btn);
-        marchBtn.setText(getString(R.string.march_month) + " : " + String.valueOf(marchHours));
+        marchBtn.setText(months[2] + " : " + String.valueOf(marchHours));
 
         double aprilHours = getHoursForMonthFromDb(yearId, 3);
         Button aprilBtn = findViewById(R.id.april_btn);
-        aprilBtn.setText(getString(R.string.april_month) + " : " + String.valueOf(aprilHours));
+        aprilBtn.setText(months[3] + " : " + String.valueOf(aprilHours));
 
         double mayHours = getHoursForMonthFromDb(yearId, 4);
         Button mayBtn = findViewById(R.id.may_btn);
-        mayBtn.setText(getString(R.string.may_month) + " : " + String.valueOf(mayHours));
+        mayBtn.setText(months[4] + " : " + String.valueOf(mayHours));
 
         double juneHours = getHoursForMonthFromDb(yearId, 5);
         Button juneBtn = findViewById(R.id.june_btn);
-        juneBtn.setText(getString(R.string.june_month) + " : " + String.valueOf(juneHours));
+        juneBtn.setText(months[5] + " : " + String.valueOf(juneHours));
 
         double julyHours = getHoursForMonthFromDb(yearId, 6);
         Button julyBtn = findViewById(R.id.july_btn);
-        julyBtn.setText(getString(R.string.july_month) + " : " + String.valueOf(julyHours));
+        julyBtn.setText(months[6] + " : " + String.valueOf(julyHours));
 
         double augustHours = getHoursForMonthFromDb(yearId, 7);
         Button augustBtn = findViewById(R.id.august_btn);
-        augustBtn.setText(getString(R.string.august_month) + " : " + String.valueOf(augustHours));
+        augustBtn.setText(months[7] + " : " + String.valueOf(augustHours));
 
         double septemberHours = getHoursForMonthFromDb(yearId, 8);
         Button septemberBtn = findViewById(R.id.september_btn);
-        septemberBtn.setText(getString(R.string.september_month) + " : " + String.valueOf(septemberHours));
+        septemberBtn.setText(months[8] + " : " + String.valueOf(septemberHours));
 
         double octoberHours = getHoursForMonthFromDb(yearId, 9);
         Button octoberBtn = findViewById(R.id.october_btn);
-        octoberBtn.setText(getString(R.string.october_month) + " : " + String.valueOf(octoberHours));
+        octoberBtn.setText(months[9] + " : " + String.valueOf(octoberHours));
 
-        double novemberHours = getHoursForMonthFromDb(yearId, 9);
+        double novemberHours = getHoursForMonthFromDb(yearId, 10);
         Button novemberBtn = findViewById(R.id.november_btn);
-        novemberBtn.setText(getString(R.string.november_month) + " : " + String.valueOf(novemberHours));
+        novemberBtn.setText(months[10] + " : " + String.valueOf(novemberHours));
 
-        double decemberHours = getHoursForMonthFromDb(yearId, 9);
+        double decemberHours = getHoursForMonthFromDb(yearId, 11);
         Button decemberBtn = findViewById(R.id.december_btn);
-        decemberBtn.setText(getString(R.string.december_month) + " : " + String.valueOf(decemberHours));
+        decemberBtn.setText(months[11]+ " : " + String.valueOf(decemberHours));
     }
 
     @Override

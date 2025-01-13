@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.svo7777777.hourscalculator">
+    <!-- Custom state -->
+    <item app:state_inside_db="true" app:state_is_weekend="true" android:state_pressed="true"  android:color="#D1836A" />
+    <item app:state_inside_db="true" app:state_is_weekend="true" android:state_pressed="false"  android:color="#DCC8B9" />
+    <item app:state_inside_db="true" app:state_is_weekend="true" android:state_hovered="true"  android:color="#D5A192" />
+    <item app:state_inside_db="true" app:state_is_weekend="true" android:state_hovered="false"  android:color="#DCC8B9" />
+    <item app:state_inside_db="true" app:state_is_weekend="false" android:state_pressed="true"  android:color="#7FD96C" />
+    <item app:state_inside_db="true" app:state_is_weekend="false" android:state_pressed="false"  android:color="#B5D9B5" />
+    <item app:state_inside_db="true" app:state_is_weekend="false" android:state_hovered="true"  android:color="#9ED38F" />
+    <item app:state_inside_db="true" app:state_is_weekend="false" android:state_hovered="false"  android:color="#B5D9B5" />
+    <item app:state_inside_db="false" app:state_is_weekend="true" android:state_pressed="true"  android:color="#EFD6C4" />
+    <item app:state_inside_db="false" app:state_is_weekend="true" android:state_pressed="false"  android:color="#F0EDE9" />
+    <item app:state_inside_db="false" app:state_is_weekend="true" android:state_hovered="true"  android:color="#E6D6CF" />
+    <item app:state_inside_db="false" app:state_is_weekend="true" android:state_hovered="false"  android:color="#F0EDE9" />
+    <item app:state_inside_db="false" app:state_is_weekend="false" android:state_pressed="true"  android:color="#A6A6DC" />
+    <item app:state_inside_db="false" app:state_is_weekend="false" android:state_pressed="false"  android:color="#D2D2D9" />
+    <item app:state_inside_db="false" app:state_is_weekend="false" android:state_hovered="true"  android:color="#C5C5DE" />
+    <item app:state_inside_db="false" app:state_is_weekend="false" android:state_hovered="false"  android:color="#D2D2D9" />
+    <!-- Default state -->
+    <item android:color="#4CAF50" />
+</selector>

@@ -9,7 +9,6 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.GridLayout;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +22,7 @@ import com.svo7777777.dialogs.DayDialog;
 import com.svo7777777.hc_database.AppDatabaseClient;
 import com.svo7777777.hc_database.DayEntity;
 import com.svo7777777.hc_database.MonthEntity;
+import com.svo7777777.views.DayButton;
 
 import java.util.List;
 import java.util.Locale;
@@ -92,16 +92,30 @@ public class DaysActivity extends AppCompatActivity {
                 }
             }
 
+            cldr.set(Calendar.DATE, i);
+            int dayOfWeek = cldr.get(Calendar.DAY_OF_WEEK);
+
+            String[] daysOfWeek = getResources().getStringArray(R.array.days_of_week_short);
+
             // Create a Button programmatically
-            Button button = new Button(DaysActivity.this);
-            button.setText(String.valueOf(i) + "\n" +
+            DayButton button = new DayButton(DaysActivity.this);
+            button.setText("" + daysOfWeek[dayOfWeek-1].trim() + " " + String.valueOf(i) + "\n" +
                     String.valueOf(dayEntity.hours) + " - " +
                     String.valueOf(dayEntity.hours*dayEntity.price));
+
+            button.setBackgroundTintList(getResources().getColorStateList(R.color.day_buttons, null));
+
+            if (dayOfWeek == Calendar.SUNDAY || dayOfWeek == Calendar.SATURDAY)
+                button.setIsWeekend(true);
+            else
+                button.setIsWeekend(false);
+
             if(dayEntity.hours > 0)
-                button.setBackgroundColor(Color.argb(255, 100, 100, 200));
+                button.setIsInsideDb(true);
+            else
+                button.setIsInsideDb(false);
 
             int day = i;
-
             DayEntity finalDayEntity = dayEntity;
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -114,7 +128,7 @@ public class DaysActivity extends AppCompatActivity {
                         monthEntity.id = (int)writeMonthToDb(yearId, month);
                     }
 
-                    if(finalDayEntity.hours== 0) {
+                    if(finalDayEntity.hours == 0) {
                         double hours = 8.0; // using default
                         double price = 0; // using default
                         writeDayToDb(monthEntity.id, day, hours, price);

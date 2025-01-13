@@ -22,4 +22,3 @@ dependencyResolutionManagement {
 rootProject.name = "Hours Calculator"
 include(":app")
 include(":hc_database")
-include(":app:dialogs")
