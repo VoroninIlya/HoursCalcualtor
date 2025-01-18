@@ -7,4 +7,7 @@ import androidx.room.PrimaryKey;
 public class SettingsEntity {
     @PrimaryKey(autoGenerate = true)
     public int id;
+
+    public double hours;
+    public double price;
 }

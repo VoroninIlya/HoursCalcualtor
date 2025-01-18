@@ -22,10 +22,13 @@ import com.svo7777777.dialogs.DayDialog;
 import com.svo7777777.hc_database.AppDatabaseClient;
 import com.svo7777777.hc_database.DayEntity;
 import com.svo7777777.hc_database.MonthEntity;
+import com.svo7777777.hc_database.SettingsEntity;
 import com.svo7777777.views.DayButton;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -36,6 +39,9 @@ public class DaysActivity extends AppCompatActivity {
     private int year = -1;
     private int month = -1;
     private MonthEntity monthEntity = null;
+    private int daysInMonth = 0;
+    private Map<Integer, Integer> buttonsIds = new HashMap<>();
+    private static final Calendar cldr = Calendar.getInstance(Locale.ROOT);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +59,9 @@ public class DaysActivity extends AppCompatActivity {
 
         dbc = AppDatabaseClient.getInstance(getApplicationContext());
 
-        monthEntity = getMonthFromDb(yearId, month);
-        List<DayEntity> days = null;
-        if(monthEntity != null) {
-            days = getDaysFromDb(monthEntity.id);
-        }
-
-        Calendar cldr = Calendar.getInstance(Locale.ROOT);
         cldr.set(Calendar.YEAR, year);
         cldr.set(Calendar.MONTH, month);
-        int daysInMonth = cldr.getActualMaximum(Calendar.DAY_OF_MONTH);
+        daysInMonth = cldr.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         GridLayout dc = findViewById(R.id.days_container);
 
@@ -81,15 +80,22 @@ public class DaysActivity extends AppCompatActivity {
 
         dc.setColumnCount(numColumns);
 
+        monthEntity = getMonthFromDb(yearId, month);
+        List<DayEntity> days = null;
+        if(monthEntity != null) {
+            days = getDaysFromDb(monthEntity.id);
+        }
+
         for(int i = 1; i <= daysInMonth; i++) {
 
-            DayEntity dayEntity = new DayEntity();
-            if(days != null) {
-                for(DayEntity de : days) {
-                    if(de.day == i) {
-                        dayEntity = de;
-                    }
-                }
+            DayEntity dayEntity = null;
+            if(monthEntity != null)
+                dayEntity = getDayFromDb(monthEntity.id, i);
+
+            if(dayEntity == null) {
+                dayEntity = new DayEntity();
+                dayEntity.hours = 0;
+                dayEntity.price = 0;
             }
 
             cldr.set(Calendar.DATE, i);
@@ -99,8 +105,11 @@ public class DaysActivity extends AppCompatActivity {
 
             // Create a Button programmatically
             DayButton button = new DayButton(DaysActivity.this);
-            button.setText("" + daysOfWeek[dayOfWeek-1].trim() + " " + String.valueOf(i) + "\n" +
-                    String.valueOf(dayEntity.hours) + " - " +
+            // Set a unique ID
+            buttonsIds.put(i, View.generateViewId());
+            button.setId(buttonsIds.get(i));
+            button.setText(daysOfWeek[dayOfWeek-1].trim() + " " + String.valueOf(i) + "\n" +
+                    String.valueOf(dayEntity.hours) + "\n" +
                     String.valueOf(dayEntity.hours*dayEntity.price));
 
             button.setBackgroundTintList(getResources().getColorStateList(R.color.day_buttons, null));
@@ -116,10 +125,11 @@ public class DaysActivity extends AppCompatActivity {
                 button.setIsInsideDb(false);
 
             int day = i;
-            DayEntity finalDayEntity = dayEntity;
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    SettingsEntity se = getSettingsFromDb();
 
                     if(monthEntity == null) {
                         monthEntity = new MonthEntity();
@@ -127,13 +137,19 @@ public class DaysActivity extends AppCompatActivity {
                         monthEntity.month = month;
                         monthEntity.id = (int)writeMonthToDb(yearId, month);
                     }
-
-                    if(finalDayEntity.hours == 0) {
-                        double hours = 8.0; // using default
-                        double price = 0; // using default
+                    DayEntity dayEntity = getDayFromDb(monthEntity.id, day);
+                    if(dayEntity == null) {
+                        double hours = se.hours; // using default
+                        double price = se.price; // using default
                         writeDayToDb(monthEntity.id, day, hours, price);
-                        button.setBackgroundColor(Color.argb(255, 100, 100, 200));
-                        button.setText(String.valueOf(day) + "\n" + String.valueOf(hours) + " - " + String.valueOf(hours*price));
+                        button.setIsInsideDb(true);
+                        button.setText(daysOfWeek[dayOfWeek-1].trim() + " " +
+                                String.valueOf(day) + "\n" + String.valueOf(hours) + " - " +
+                                String.valueOf(hours*price));
+
+                        Intent intent = new Intent();
+                        intent.putExtra("month", month);
+                        setResult(RESULT_OK, intent);
                     } else {
                         DayDialog ed = new DayDialog(
                                 R.string.add_year_btn, R.layout.dialog_day_picker,
@@ -141,7 +157,7 @@ public class DaysActivity extends AppCompatActivity {
                                 R.id.buttonConfirm, R.id.buttonDelete, R.id.buttonCancel);
 
                         ed.open(DaysActivity.this, DaysActivity.this::updateDay,
-                                DaysActivity.this::deleteDay, finalDayEntity);
+                                DaysActivity.this::deleteDay, dayEntity);
                     }
                 }
             });
@@ -188,12 +204,77 @@ public class DaysActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateDay(String hours, String price) {
+    private void updateDaysOnActivity() {
+        GridLayout dc = findViewById(R.id.days_container);
 
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
+        float itemWidthDp = 70; // Example item width in dp
+        int numColumns = (int) (screenWidthDp / itemWidthDp);
+        itemWidthDp = screenWidthDp/numColumns;
+
+        // Convert itemWidthDp to pixels for layout parameters
+        int itemWidthPx = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                itemWidthDp,
+                getResources().getDisplayMetrics()
+        );
+
+        dc.setColumnCount(numColumns);
+
+        String[] daysOfWeek = getResources().getStringArray(R.array.days_of_week_short);
+
+        for(int i = 1; i <= daysInMonth; i++) {
+
+            DayEntity dayEntity = getDayFromDb(monthEntity.id, i);
+
+            if(dayEntity == null) {
+                dayEntity = new DayEntity();
+                dayEntity.hours = 0;
+                dayEntity.price = 0;
+            }
+
+            cldr.set(Calendar.DATE, i);
+            int dayOfWeek = cldr.get(Calendar.DAY_OF_WEEK);
+
+            DayButton button = findViewById(buttonsIds.get(i));
+            button.setBackgroundTintList(getResources().getColorStateList(R.color.day_buttons, null));
+
+            button.setText("" + daysOfWeek[dayOfWeek-1].trim() + " " + String.valueOf(i) + "\n" +
+                    String.valueOf(dayEntity.hours) + "\n" +
+                    String.valueOf(dayEntity.hours*dayEntity.price));
+
+            if (dayOfWeek == Calendar.SUNDAY || dayOfWeek == Calendar.SATURDAY)
+                button.setIsWeekend(true);
+            else
+                button.setIsWeekend(false);
+
+            if(dayEntity.hours > 0)
+                button.setIsInsideDb(true);
+            else
+                button.setIsInsideDb(false);
+
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.rowSpec = GridLayout.spec((i-1)/numColumns); // Row index
+            params.columnSpec = GridLayout.spec((i-1)%numColumns); // Column index
+            params.width = itemWidthPx;
+            params.height = itemWidthPx;
+            button.setLayoutParams(params);
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra("month", month);
+        setResult(RESULT_OK, intent);
+    }
+
+    private void updateDay(DayEntity day) {
+        updateDayInDb(day);
+        updateDaysOnActivity();
     }
 
     private void deleteDay(DayEntity day) {
         deleteDayFromDb(day);
+        updateDaysOnActivity();
     }
 
     private MonthEntity getMonthFromDb(int yearId, int month){
@@ -255,6 +336,25 @@ public class DaysActivity extends AppCompatActivity {
         return days;
     }
 
+    private DayEntity getDayFromDb(int monthId, int dayNum) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        DayEntity day = null;
+        try {
+            Future<DayEntity> daysFuture = executorService.submit(() -> {
+                DayEntity empl = dbc.getAppDatabase().dayDao().getDay((int)monthId, dayNum);
+
+                return empl;
+            });
+            day = daysFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executorService.shutdown();
+        }
+        return day;
+    }
+
     private long writeDayToDb(int monthId, int day, double hours, double price){
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         long id = -1;
@@ -267,6 +367,23 @@ public class DaysActivity extends AppCompatActivity {
                 d.price = price;
 
                 return dbc.getAppDatabase().dayDao().insert(d);
+            });
+            id = idFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executorService.shutdown();
+        }
+        return id;
+    }
+
+    private int updateDayInDb(DayEntity day) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        int id = -1;
+        try {
+            Future<Integer> idFuture = (Future<Integer>) executorService.submit(() -> {
+                dbc.getAppDatabase().dayDao().update(day);
             });
             id = idFuture.get();
         } catch (Exception e) {
@@ -292,5 +409,24 @@ public class DaysActivity extends AppCompatActivity {
             // Shut down the executor
             executorService.shutdown();
         }
+    }
+
+    private SettingsEntity getSettingsFromDb() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        SettingsEntity settings = null;
+        try {
+            Future<SettingsEntity> daysFuture = executorService.submit(() -> {
+                SettingsEntity stg = dbc.getAppDatabase().settingsDao().get();
+
+                return stg;
+            });
+            settings = daysFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executorService.shutdown();
+        }
+        return settings;
     }
 }

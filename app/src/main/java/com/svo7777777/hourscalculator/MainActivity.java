@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.svo7777777.dialogs.EmployeeDialog;
 import com.svo7777777.hc_database.AppDatabaseClient;
 import com.svo7777777.hc_database.EmployeeEntity;
+import com.svo7777777.hc_database.YearEntity;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -124,24 +126,32 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     EmployeeDialog ed = new EmployeeDialog(
-                            R.string.add_employee_btn, R.layout.dialog_employee_picker,
-                            R.id.editTextEmployeeLastName, R.id.editTextEmployeeFirstName,
-                            R.id.editTextEmployeeAge,
-                            R.id.buttonConfirm, R.id.buttonCancel);
+                        R.string.add_employee_btn, R.layout.dialog_employee_picker,
+                        R.id.editTextEmployeeLastName, R.id.editTextEmployeeFirstName,
+                        R.id.editTextEmployeeAge,
+                        R.id.buttonConfirm, R.id.buttonCancel);
 
                     ed.open(MainActivity.this,
-                            (String ln, String fn, String ag) -> {
-                                Long empId = updateEmployeeInDb(ee, ln, fn, ag);
-                                updateEmployeesList();
-                            }, ee.lastName, ee.firstName, String.valueOf(ee.age));
+                        (String ln, String fn, String ag) -> {
+                            Long empId = updateEmployeeInDb(ee, ln, fn, ag);
+                            updateEmployeesList();
+                        }, ee.lastName, ee.firstName, String.valueOf(ee.age));
                 }
             });
 
             newEmplDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteEmployeeFromDb(ee);
-                    updateEmployeesList();
+
+                    List<YearEntity> years = getYearsFromDb(ee.id);
+
+                    if(years == null || years.size() == 0) {
+                        deleteEmployeeFromDb(ee);
+                        updateEmployeesList();
+                    } else {
+                        Toast.makeText(MainActivity.this,
+                                R.string.error_delete_employee, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 
@@ -256,5 +266,24 @@ public class MainActivity extends AppCompatActivity {
             // Shut down the executor
             executorService.shutdown();
         }
+    }
+
+    private List<YearEntity> getYearsFromDb(int employeeId) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        List<YearEntity> years = null;
+        try {
+            Future<List<YearEntity>> yearsFuture = executorService.submit(() -> {
+                List<YearEntity> empl = dbc.getAppDatabase().yearDao().getYearsForEmployee(employeeId);
+
+                return empl;
+            });
+            years = yearsFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executorService.shutdown();
+        }
+        return years;
     }
 }

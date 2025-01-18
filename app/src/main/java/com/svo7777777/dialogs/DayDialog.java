@@ -75,7 +75,9 @@ public class DayDialog {
                 String price = editTextPrice.getText().toString().trim();
                 if (!hours.isEmpty() && !price.isEmpty()) {
                     //Toast.makeText(MainActivity.this, "Year entered: " + year, Toast.LENGTH_SHORT).show();
-                    cb.onComplete(hours, price);
+                    de.hours = Double.valueOf(hours);
+                    de.price = Double.valueOf(price);
+                    cb.onComplete(de);
                     dialog.dismiss();
                 } else {
                     Toast.makeText(ctx, "Please enter hours and price", Toast.LENGTH_SHORT).show();

@@ -20,6 +20,7 @@
     <string name="confirm">Применить</string>
     <string name="delete">Удалить</string>
     <string name="cancel">Отменить</string>
+    <string name="save">Сохранить</string>
 
     <string name="hours_worked">Отработанные часы</string>
     <string name="hours_worked_filler">Введите отработанные часы</string>
@@ -38,6 +39,9 @@
     <string name="october_month">Октябрь</string>
     <string name="november_month">Ноябрь</string>
     <string name="december_month">Декабрь</string>
+
+    <string name="default_hours_worked">Рабочих часов в день по умолчанию</string>
+    <string name="default_hours_price">Цена одного часа по умолчанию</string>
 
     <string-array name="months">
         <item>Январь</item>
@@ -73,4 +77,8 @@
         <item>Пт</item>
         <item>Сб</item>
     </string-array>
+
+    <string name="error_delete_year">"Невозможно удалить год, потому что в данном году есть отработанные часы"</string>
+    <string name="error_delete_employee">"Невозможно удалить работника, потому что у него есть учтенные года"</string>
+
 </resources>

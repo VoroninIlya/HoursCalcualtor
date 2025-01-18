@@ -13,6 +13,9 @@ public interface DayDao {
     @Query("SELECT * FROM days WHERE monthId = :monthId ORDER BY day ASC")
     List<DayEntity> getDaysForMonth(int monthId);
 
+    @Query("SELECT * FROM days WHERE (monthId = :monthId AND day = :day)")
+    DayEntity getDay(int monthId, int day);
+
     @Query("SELECT SUM(hours) FROM days WHERE monthId = :monthId")
     long getHoursForMonth(int monthId);
 

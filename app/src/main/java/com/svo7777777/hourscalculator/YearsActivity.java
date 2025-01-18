@@ -1,5 +1,6 @@
 package com.svo7777777.hourscalculator;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -82,6 +87,18 @@ public class YearsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    ActivityResultLauncher<Intent> mStartForResult =
+        registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if(result.getResultCode() == Activity.RESULT_OK) {
+                        updateYearsList();
+                    }
+                }
+            });
+
     public void addYearClickHandler(View view) {
         YearDialog ed = new YearDialog(
                 R.string.add_year_btn, R.layout.dialog_year_picker,
@@ -117,7 +134,7 @@ public class YearsActivity extends AppCompatActivity {
 
             // Create a new Button
             Button newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
-            newEmplButton.setText(String.valueOf(ye.year) + " : " + String.valueOf(hours));
+            newEmplButton.setText(String.valueOf(ye.year) + " : " + String.format("%.2f", hours));
 
             Button newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
             Button newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
@@ -129,7 +146,7 @@ public class YearsActivity extends AppCompatActivity {
                     Intent intent = new Intent(YearsActivity.this, MonthsActivity.class);
                     intent.putExtra("yearId", ye.id);
                     intent.putExtra("year", ye.year);
-                    startActivity(intent);
+                    mStartForResult.launch(intent);
                 }
             });
 
@@ -152,8 +169,16 @@ public class YearsActivity extends AppCompatActivity {
             newEmplDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteYearFromDb(ye);
-                    updateYearsList();
+
+                    double hours = getHoursForYearFromDb(ye.id);
+
+                    if(hours == 0) {
+                        deleteYearFromDb(ye);
+                        updateYearsList();
+                    } else {
+                        Toast.makeText(YearsActivity.this,
+                                R.string.error_delete_year, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 

@@ -20,6 +20,7 @@
     <string name="confirm">Confirm</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 
     <string name="hours_worked">Hours worked</string>
     <string name="hours_worked_filler">Enter hours worked</string>
@@ -38,6 +39,9 @@
     <string name="october_month">October</string>
     <string name="november_month">November</string>
     <string name="december_month">December</string>
+
+    <string name="default_hours_worked">Default hours worked</string>
+    <string name="default_hours_price">Default price of a hour</string>
 
     <string-array name="months">
         <item>January</item>
@@ -73,4 +77,8 @@
         <item>Fri</item>
         <item>Sat</item>
     </string-array>
+
+    <string name="error_delete_year">"Could not delete a year because it has working hours"</string>
+    <string name="error_delete_employee">"Could not delete an employee because it has working years"</string>
+
 </resources>
