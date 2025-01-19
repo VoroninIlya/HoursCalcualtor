@@ -1,7 +1,6 @@
 package com.svo7777777.hourscalculator;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -19,22 +18,19 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.svo7777777.dialogs.DayDialog;
-import com.svo7777777.hc_database.AppDatabaseClient;
 import com.svo7777777.hc_database.DayEntity;
 import com.svo7777777.hc_database.MonthEntity;
 import com.svo7777777.hc_database.SettingsEntity;
+import com.svo7777777.utils.DatabaseHandler;
 import com.svo7777777.views.DayButton;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class DaysActivity extends AppCompatActivity {
-    private AppDatabaseClient dbc;
+    private DatabaseHandler dbh = null;
     private int yearId = -1;
     private int year = -1;
     private int month = -1;
@@ -57,7 +53,7 @@ public class DaysActivity extends AppCompatActivity {
         year = intent.getIntExtra("year", -1);
         month = intent.getIntExtra("month", -1);
 
-        dbc = AppDatabaseClient.getInstance(getApplicationContext());
+        dbh = new DatabaseHandler(getApplicationContext());
 
         cldr.set(Calendar.YEAR, year);
         cldr.set(Calendar.MONTH, month);
@@ -80,17 +76,17 @@ public class DaysActivity extends AppCompatActivity {
 
         dc.setColumnCount(numColumns);
 
-        monthEntity = getMonthFromDb(yearId, month);
+        monthEntity = dbh.getMonth(yearId, month);
         List<DayEntity> days = null;
         if(monthEntity != null) {
-            days = getDaysFromDb(monthEntity.id);
+            days = dbh.getDays(monthEntity.id);
         }
 
         for(int i = 1; i <= daysInMonth; i++) {
 
             DayEntity dayEntity = null;
             if(monthEntity != null)
-                dayEntity = getDayFromDb(monthEntity.id, i);
+                dayEntity = dbh.getDay(monthEntity.id, i);
 
             if(dayEntity == null) {
                 dayEntity = new DayEntity();
@@ -129,22 +125,29 @@ public class DaysActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    SettingsEntity se = getSettingsFromDb();
+                    SettingsEntity se = dbh.getSettings();
 
                     if(monthEntity == null) {
                         monthEntity = new MonthEntity();
                         monthEntity.yearId = yearId;
                         monthEntity.month = month;
-                        monthEntity.id = (int)writeMonthToDb(yearId, month);
+                        monthEntity.id = (int)dbh.writeMonth(monthEntity);
                     }
-                    DayEntity dayEntity = getDayFromDb(monthEntity.id, day);
+                    DayEntity dayEntity = dbh.getDay(monthEntity.id, day);
                     if(dayEntity == null) {
                         double hours = se.hours; // using default
                         double price = se.price; // using default
-                        writeDayToDb(monthEntity.id, day, hours, price);
+
+                        DayEntity de = new DayEntity();
+                        de.monthId = monthEntity.id;
+                        de.day = day;
+                        de.hours = hours;
+                        de.price = price;
+
+                        dbh.writeDay(de);
                         button.setIsInsideDb(true);
                         button.setText(daysOfWeek[dayOfWeek-1].trim() + " " +
-                                String.valueOf(day) + "\n" + String.valueOf(hours) + " - " +
+                                String.valueOf(day) + "\n" + String.valueOf(hours) + "\n" +
                                 String.valueOf(hours*price));
 
                         Intent intent = new Intent();
@@ -226,7 +229,7 @@ public class DaysActivity extends AppCompatActivity {
 
         for(int i = 1; i <= daysInMonth; i++) {
 
-            DayEntity dayEntity = getDayFromDb(monthEntity.id, i);
+            DayEntity dayEntity = dbh.getDay(monthEntity.id, i);
 
             if(dayEntity == null) {
                 dayEntity = new DayEntity();
@@ -268,165 +271,13 @@ public class DaysActivity extends AppCompatActivity {
     }
 
     private void updateDay(DayEntity day) {
-        updateDayInDb(day);
+        dbh.updateDay(day);
         updateDaysOnActivity();
     }
 
     private void deleteDay(DayEntity day) {
-        deleteDayFromDb(day);
+        dbh.deleteDay(day);
         updateDaysOnActivity();
     }
 
-    private MonthEntity getMonthFromDb(int yearId, int month){
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        MonthEntity monthRes = null;
-        try {
-            Future<MonthEntity> monthFuture = executorService.submit(() -> {
-                MonthEntity empl = dbc.getAppDatabase().monthDao().getMonthForYear(yearId, month);
-
-                return empl;
-            });
-            monthRes = monthFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return monthRes;
-    }
-
-    private long writeMonthToDb(int yearId, int month){
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        long id = -1;
-        try {
-            Future<Long> idFuture = executorService.submit(() -> {
-                MonthEntity m = new MonthEntity();
-                m.month = month;
-                m.yearId = yearId;
-
-                return dbc.getAppDatabase().monthDao().insert(m);
-            });
-            id = idFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return id;
-    }
-
-    private List<DayEntity> getDaysFromDb(int monthId) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        List<DayEntity> days = null;
-        try {
-            Future<List<DayEntity>> daysFuture = executorService.submit(() -> {
-                List<DayEntity> empl = dbc.getAppDatabase().dayDao().getDaysForMonth((int)monthId);
-
-                return empl;
-            });
-            days = daysFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return days;
-    }
-
-    private DayEntity getDayFromDb(int monthId, int dayNum) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        DayEntity day = null;
-        try {
-            Future<DayEntity> daysFuture = executorService.submit(() -> {
-                DayEntity empl = dbc.getAppDatabase().dayDao().getDay((int)monthId, dayNum);
-
-                return empl;
-            });
-            day = daysFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return day;
-    }
-
-    private long writeDayToDb(int monthId, int day, double hours, double price){
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        long id = -1;
-        try {
-            Future<Long> idFuture = executorService.submit(() -> {
-                DayEntity d = new DayEntity();
-                d.monthId = monthId;
-                d.day = day;
-                d.hours = hours;
-                d.price = price;
-
-                return dbc.getAppDatabase().dayDao().insert(d);
-            });
-            id = idFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return id;
-    }
-
-    private int updateDayInDb(DayEntity day) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        int id = -1;
-        try {
-            Future<Integer> idFuture = (Future<Integer>) executorService.submit(() -> {
-                dbc.getAppDatabase().dayDao().update(day);
-            });
-            id = idFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return id;
-    }
-
-    private void deleteDayFromDb(DayEntity day) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        long id = -1;
-        try {
-            Future<Void> idFuture = (Future<Void>) executorService.submit(() -> {
-                dbc.getAppDatabase().dayDao().delete(day);
-            });
-            idFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-    }
-
-    private SettingsEntity getSettingsFromDb() {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        SettingsEntity settings = null;
-        try {
-            Future<SettingsEntity> daysFuture = executorService.submit(() -> {
-                SettingsEntity stg = dbc.getAppDatabase().settingsDao().get();
-
-                return stg;
-            });
-            settings = daysFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return settings;
-    }
 }

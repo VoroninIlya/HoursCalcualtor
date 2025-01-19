@@ -29,6 +29,7 @@ import com.svo7777777.dialogs.YearDialog;
 import com.svo7777777.hc_database.AppDatabaseClient;
 import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.hc_database.YearEntity;
+import com.svo7777777.utils.DatabaseHandler;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -37,7 +38,7 @@ import java.util.concurrent.Future;
 
 public class YearsActivity extends AppCompatActivity {
 
-    private AppDatabaseClient dbc;
+    private DatabaseHandler dbh = null;
     private List<YearEntity> years;
     private long employeeId = -1;
     @Override
@@ -49,6 +50,8 @@ public class YearsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar); // Use the toolbar as the app bar
 
+        dbh = new DatabaseHandler(getApplicationContext());
+
         Intent intent = getIntent();
         employeeId = intent.getIntExtra("employeeId", -1);
 
@@ -58,7 +61,6 @@ public class YearsActivity extends AppCompatActivity {
             return insets;
         });
 
-        dbc = AppDatabaseClient.getInstance(getApplicationContext());
         updateYearsList();
     }
 
@@ -87,7 +89,7 @@ public class YearsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    ActivityResultLauncher<Intent> mStartForResult =
+    ActivityResultLauncher<Intent> startActivityForResult =
         registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -109,7 +111,10 @@ public class YearsActivity extends AppCompatActivity {
     }
 
     private void addYearToYears(String year) {
-        Long empId = writeYearToDb(Integer.parseInt(year));
+        YearEntity ye = new YearEntity();
+        ye.year = Integer.parseInt(year);
+        ye.employeeId = (int)employeeId;
+        Long empId = dbh.insertYear(ye);
         updateYearsList();
     }
 
@@ -118,8 +123,7 @@ public class YearsActivity extends AppCompatActivity {
 
         ec.clearDisappearingChildren();
 
-        years = getYearsFromDb();
-        long yearsCount = 1;
+        years = dbh.getYears((int)employeeId);
 
         for (int i = ec.getChildCount() - 1; i >= 0; i--) {
             View child = ec.getChildAt(i);
@@ -130,11 +134,13 @@ public class YearsActivity extends AppCompatActivity {
             LayoutInflater inflater = LayoutInflater.from(this);
             View newEmployeeItem = inflater.inflate(R.layout.year_employee_item, ec, false);
 
-            double hours = getHoursForYearFromDb(ye.id);
+            double hours = dbh.getHours(ye.id);
+            double salary = dbh.getSalary(ye.id);
 
             // Create a new Button
             Button newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
-            newEmplButton.setText(String.valueOf(ye.year) + " : " + String.format("%.2f", hours));
+            newEmplButton.setText(String.valueOf(ye.year) + " : " +
+                    String.format("%.2f", hours) + " - " + String.format("%.2f", salary));
 
             Button newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
             Button newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
@@ -146,7 +152,7 @@ public class YearsActivity extends AppCompatActivity {
                     Intent intent = new Intent(YearsActivity.this, MonthsActivity.class);
                     intent.putExtra("yearId", ye.id);
                     intent.putExtra("year", ye.year);
-                    mStartForResult.launch(intent);
+                    startActivityForResult.launch(intent);
                 }
             });
 
@@ -160,7 +166,8 @@ public class YearsActivity extends AppCompatActivity {
 
                     ed.open(YearsActivity.this,
                             (String yr) -> {
-                                Long yrId = updateYearInDb(ye, yr);
+                                ye.year = Integer.parseInt(yr);
+                                Long yrId = dbh.updateYear(ye);
                                 updateYearsList();
                             }, String.valueOf(ye.year));
                 }
@@ -170,10 +177,10 @@ public class YearsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    double hours = getHoursForYearFromDb(ye.id);
+                    double hours = dbh.getHours(ye.id);
 
                     if(hours == 0) {
-                        deleteYearFromDb(ye);
+                        dbh.deleteYear(ye);
                         updateYearsList();
                     } else {
                         Toast.makeText(YearsActivity.this,
@@ -183,99 +190,8 @@ public class YearsActivity extends AppCompatActivity {
             });
 
             ec.addView(newEmployeeItem);
-
-            yearsCount++;
         }
     }
 
-    private List<YearEntity> getYearsFromDb() {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        List<YearEntity> years = null;
-        try {
-            Future<List<YearEntity>> yearsFuture = executorService.submit(() -> {
-                List<YearEntity> empl = dbc.getAppDatabase().yearDao().getYearsForEmployee((int)employeeId);
 
-                return empl;
-            });
-            years = yearsFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return years;
-    }
-    private Long writeYearToDb(int year) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Long id = (long) -1;
-        try {
-            Future<Long> idFuture = executorService.submit(() -> {
-                YearEntity e = new YearEntity();
-                e.year = year;
-                e.employeeId = (int)employeeId;
-                return dbc.getAppDatabase().yearDao().insert(e);
-            });
-            id = idFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return id;
-    }
-
-    private Long updateYearInDb(YearEntity yearEntity, String year) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Long id = (long) -1;
-        try {
-            Future<Long> idFuture = executorService.submit(() -> {
-                YearEntity e = yearEntity;
-                e.year = Integer.parseInt(year);
-                return (long) dbc.getAppDatabase().yearDao().update(e);
-            });
-            id = idFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return id;
-    }
-
-    private void deleteYearFromDb(YearEntity year) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        try {
-            executorService.execute(() -> {
-                dbc.getAppDatabase().yearDao().delete(year);
-            });
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-    }
-
-    private double getHoursForYearFromDb(int yearId){
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        double hours = 0.0;
-        try {
-            Future<Double> hoursFuture = executorService.submit(() -> {
-                double h = dbc.getAppDatabase().monthDao().getHoursForYear(yearId);
-
-                return h;
-            });
-            hours = hoursFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return hours;
-    }
 }

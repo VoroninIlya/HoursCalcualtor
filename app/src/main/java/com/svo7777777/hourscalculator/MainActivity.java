@@ -18,17 +18,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.svo7777777.dialogs.EmployeeDialog;
-import com.svo7777777.hc_database.AppDatabaseClient;
 import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.hc_database.YearEntity;
+import com.svo7777777.utils.DatabaseHandler;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class MainActivity extends AppCompatActivity {
-    private AppDatabaseClient dbc;
+    private DatabaseHandler dbh = null;
     private List<EmployeeEntity> employees;
 
     @Override
@@ -40,13 +37,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar); // Use the toolbar as the app bar
 
+        dbh = new DatabaseHandler(getApplicationContext());
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        dbc = AppDatabaseClient.getInstance(getApplicationContext());
         updateEmployeesList();
     }
 
@@ -86,7 +84,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addEmployeeToEmployees(String lastName, String firstName, String age) {
-        Long empId = writeEmployeeToDb(lastName, firstName, age);
+
+        EmployeeEntity ee = new EmployeeEntity();
+        ee.lastName = lastName;
+        ee.firstName = firstName;
+        ee.age = Integer.parseInt(age);
+
+        Long empId = dbh.writeEmployee(ee);
         updateEmployeesList();
     }
 
@@ -94,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout ec = findViewById(R.id.employees_container);
         ec.clearDisappearingChildren();
 
-        employees = getEmployeesFromDb();
+        employees = dbh.getEmployees();
         long employeesCount = 1;
 
         for (int i = ec.getChildCount() - 1; i >= 0; i--) {
@@ -133,7 +137,10 @@ public class MainActivity extends AppCompatActivity {
 
                     ed.open(MainActivity.this,
                         (String ln, String fn, String ag) -> {
-                            Long empId = updateEmployeeInDb(ee, ln, fn, ag);
+                            ee.lastName = ln;
+                            ee.firstName = fn;
+                            ee.age = Integer.parseInt(ag);
+                            Long empId = dbh.updateEmployee(ee);
                             updateEmployeesList();
                         }, ee.lastName, ee.firstName, String.valueOf(ee.age));
                 }
@@ -143,10 +150,10 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    List<YearEntity> years = getYearsFromDb(ee.id);
+                    List<YearEntity> years = dbh.getYears(ee.id);
 
                     if(years == null || years.size() == 0) {
-                        deleteEmployeeFromDb(ee);
+                        dbh.deleteEmployee(ee);
                         updateEmployeesList();
                     } else {
                         Toast.makeText(MainActivity.this,
@@ -159,131 +166,5 @@ public class MainActivity extends AppCompatActivity {
 
             employeesCount++;
         }
-    }
-
-    private List<EmployeeEntity> getEmployeesFromDb() {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        List<EmployeeEntity> employees = null;
-        try {
-            Future<List<EmployeeEntity>> employeesFuture = executorService.submit(() -> {
-                List<EmployeeEntity> empl = dbc.getAppDatabase().employeeDao().getAll();
-                // Можно выполнить дополнительные действия, например, логгирование
-                //runOnUiThread(() -> {
-                //    // Обновите UI, если нужно
-                //    Log.d("MainActivity", "User added successfully");
-                //});
-
-                return empl;
-            });
-            employees = employeesFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return employees;
-    }
-
-    private EmployeeEntity findEmployeeInDb(int id) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        EmployeeEntity employee = null;
-        try {
-            Future<EmployeeEntity> employeeFuture = executorService.submit(() -> {
-                EmployeeEntity empl = dbc.getAppDatabase().employeeDao().findById(id);
-                // Можно выполнить дополнительные действия, например, логгирование
-                //runOnUiThread(() -> {
-                //    // Обновите UI, если нужно
-                //    Log.d("MainActivity", "User added successfully");
-                //});
-
-                return empl;
-            });
-            employee = employeeFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return employee;
-    }
-
-    private Long writeEmployeeToDb(String lastName, String firstName, String age) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Long id = (long) -1;
-        try {
-            Future<Long> idFuture = executorService.submit(() -> {
-                EmployeeEntity e = new EmployeeEntity();
-                e.lastName = lastName;
-                e.firstName = firstName;
-                e.age = Integer.parseInt(age);
-
-                return dbc.getAppDatabase().employeeDao().insert(e);
-            });
-            id = idFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return id;
-    }
-
-    private Long updateEmployeeInDb(EmployeeEntity emplEntity, String lastName, String firstName, String age) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Long id = (long) -1;
-        try {
-            Future<Long> idFuture = executorService.submit(() -> {
-                EmployeeEntity e = emplEntity;
-                e.lastName = lastName;
-                e.firstName = firstName;
-                e.age = Integer.parseInt(age);
-
-                return (long) dbc.getAppDatabase().employeeDao().update(e);
-            });
-            id = idFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return id;
-    }
-
-    private void deleteEmployeeFromDb(EmployeeEntity employee) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        try {
-            executorService.execute(() -> {
-                dbc.getAppDatabase().employeeDao().delete(employee);
-            });
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-    }
-
-    private List<YearEntity> getYearsFromDb(int employeeId) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        List<YearEntity> years = null;
-        try {
-            Future<List<YearEntity>> yearsFuture = executorService.submit(() -> {
-                List<YearEntity> empl = dbc.getAppDatabase().yearDao().getYearsForEmployee(employeeId);
-
-                return empl;
-            });
-            years = yearsFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return years;
     }
 }

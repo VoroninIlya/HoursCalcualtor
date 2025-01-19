@@ -24,6 +24,9 @@ public interface MonthDao {
     @Query("SELECT SUM(hours*price) FROM months LEFT JOIN days ON (months.id = days.monthId) WHERE yearId = :yearId")
     double getSalaryForYear(int yearId);
 
+    @Query("SELECT SUM(hours*price) FROM months LEFT JOIN days ON (months.id = days.monthId) WHERE (yearId = :yearId AND months.month = :month)")
+    double getSalaryForMonth(int yearId, int month);
+
     @Insert
     long insert(MonthEntity month);
 

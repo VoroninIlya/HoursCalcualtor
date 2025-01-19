@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.svo7777777.hc_database.AppDatabaseClient;
 import com.svo7777777.hc_database.DayEntity;
 import com.svo7777777.hc_database.SettingsEntity;
+import com.svo7777777.utils.DatabaseHandler;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,7 +22,7 @@ import java.util.concurrent.Future;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private AppDatabaseClient dbc;
+    private DatabaseHandler dbh = null;
 
     private SettingsEntity settings = null;
 
@@ -34,15 +35,15 @@ public class SettingsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.settings_menu);
 
-        dbc = AppDatabaseClient.getInstance(getApplicationContext());
+        dbh = new DatabaseHandler(getApplicationContext());
 
-        settings = getSettingsFromDb();
+        settings = dbh.getSettings();
 
         if(settings == null) {
             settings = new SettingsEntity();
             settings.hours = 8;
             settings.price = 0;
-            writeSettingsToDb(settings);
+            dbh.writeSettings(settings);
         }
 
         EditText defaultHours = findViewById(R.id.defaultHours);
@@ -64,60 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
         settings.hours = Double.parseDouble(defaultHours.getText().toString());
         settings.price = Double.parseDouble(defaultPrice.getText().toString());
 
-        updateSettingsInDb(settings);
+        dbh.updateSettings(settings);
     }
 
-    private SettingsEntity getSettingsFromDb() {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        SettingsEntity settings = null;
-        try {
-            Future<SettingsEntity> daysFuture = executorService.submit(() -> {
-                SettingsEntity stg = dbc.getAppDatabase().settingsDao().get();
-
-                return stg;
-            });
-            settings = daysFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return settings;
-    }
-
-    private int updateSettingsInDb(SettingsEntity settings) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        int id = -1;
-        try {
-            Future<Integer> idFuture = (Future<Integer>) executorService.submit(() -> {
-                dbc.getAppDatabase().settingsDao().update(settings);
-            });
-            id = idFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return id;
-    }
-
-    private long writeSettingsToDb(SettingsEntity settings){
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        long id = -1;
-        try {
-            Future<Long> idFuture = executorService.submit(() -> {
-
-                return dbc.getAppDatabase().settingsDao().insert(settings);
-            });
-            id = idFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Shut down the executor
-            executorService.shutdown();
-        }
-        return id;
-    }
 }
