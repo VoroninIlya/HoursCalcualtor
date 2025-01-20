@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -17,24 +17,17 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.svo7777777.dialogs.EmployeeDialog;
 import com.svo7777777.dialogs.YearDialog;
-import com.svo7777777.hc_database.AppDatabaseClient;
-import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.hc_database.YearEntity;
 import com.svo7777777.utils.DatabaseHandler;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class YearsActivity extends AppCompatActivity {
 
@@ -132,7 +125,7 @@ public class YearsActivity extends AppCompatActivity {
 
         for (YearEntity ye : years) {
             LayoutInflater inflater = LayoutInflater.from(this);
-            View newEmployeeItem = inflater.inflate(R.layout.year_employee_item, ec, false);
+            View newEmployeeItem = inflater.inflate(R.layout.item_year_employee, ec, false);
 
             double hours = dbh.getHours(ye.id);
             double salary = dbh.getSalary(ye.id);
@@ -142,8 +135,8 @@ public class YearsActivity extends AppCompatActivity {
             newEmplButton.setText(String.valueOf(ye.year) + " : " +
                     String.format("%.2f", hours) + " - " + String.format("%.2f", salary));
 
-            Button newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
-            Button newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
+            ImageButton newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
+            ImageButton newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
 
             // Set click listener for the new button
             newEmplButton.setOnClickListener(new View.OnClickListener() {

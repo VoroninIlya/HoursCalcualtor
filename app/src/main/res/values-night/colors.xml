@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="day_db1_wk1_psd1">#484264</color>
+    <color name="day_db1_wk1_psd0">#322C4C</color>
+    <color name="day_db1_wk0_psd1">#003549</color>
+    <color name="day_db1_wk0_psd0">#091E28</color>
+    <color name="day_db0_wk1_psd1">#1D1736</color>
+    <color name="day_db0_wk1_psd0">#000000</color>
+    <color name="day_db0_wk0_psd1">#000000</color>
+    <color name="day_db0_wk0_psd0">#000000</color>
+
+    <color name="element">#091E28</color>
+
+</resources>

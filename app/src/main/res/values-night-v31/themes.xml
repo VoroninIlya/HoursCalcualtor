@@ -1,18 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.HoursCalculator" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
-
-    <style name="Theme.HoursCalculator" parent="Base.Theme.HoursCalculator" />
 
     <style name="ToolbarStyle" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="titleTextAppearance">@style/ToolbarTextStyle</item>
     </style>
 
     <style name="ToolbarTextStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">#FFFBFF</item>
+        <item name="android:textColor">@color/material_dynamic_tertiary10</item>
     </style>
 
 </resources>

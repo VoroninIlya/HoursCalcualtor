@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -99,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
         ec.clearDisappearingChildren();
 
         employees = dbh.getEmployees();
-        long employeesCount = 1;
 
         for (int i = ec.getChildCount() - 1; i >= 0; i--) {
             View child = ec.getChildAt(i);
@@ -109,12 +109,12 @@ public class MainActivity extends AppCompatActivity {
         for (EmployeeEntity ee : employees) {
             // Inflate the custom LinearLayout from XML
             LayoutInflater inflater = LayoutInflater.from(this);
-            View newEmployeeItem = inflater.inflate(R.layout.year_employee_item, ec, false);
+            View newEmployeeItem = inflater.inflate(R.layout.item_year_employee, ec, false);
             Button newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
             newEmplButton.setText(ee.lastName + " " + ee.firstName  + " (" + ee.age + ")");
 
-            Button newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
-            Button newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
+            ImageButton newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
+            ImageButton newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
 
             // Set click listener for the new button
             newEmplButton.setOnClickListener(new View.OnClickListener() {
@@ -163,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
             ec.addView(newEmployeeItem);
-
-            employeesCount++;
         }
     }
 }

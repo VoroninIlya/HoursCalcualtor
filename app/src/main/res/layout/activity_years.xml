@@ -10,26 +10,21 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        style="@style/ToolbarTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
 
-    <LinearLayout
+    <Button
+        android:id="@+id/add_year"
+        style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:onClick="addYearClickHandler"
+        android:text="@string/add_year_btn" />
 
-        <Button
-            android:id="@+id/add_year"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:onClick="addYearClickHandler"
-            android:text="@string/add_year_btn" />
-
-    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

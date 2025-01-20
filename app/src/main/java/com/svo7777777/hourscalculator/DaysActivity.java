@@ -127,6 +127,13 @@ public class DaysActivity extends AppCompatActivity {
 
                     SettingsEntity se = dbh.getSettings();
 
+                    if(se == null) {
+                        se = new SettingsEntity();
+                        se.hours = 8;
+                        se.price = 0;
+                        dbh.writeSettings(se);
+                    }
+
                     if(monthEntity == null) {
                         monthEntity = new MonthEntity();
                         monthEntity.yearId = yearId;

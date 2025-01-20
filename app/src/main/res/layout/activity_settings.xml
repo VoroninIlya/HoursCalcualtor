@@ -10,6 +10,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        style="@style/ToolbarTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -44,6 +45,7 @@
 
     <Button
         android:id="@+id/saveSettings"
+        style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="saveClickHandler"

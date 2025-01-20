@@ -2,4 +2,16 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="day_db1_wk1_psd1">#AEA6CE</color>
+    <color name="day_db1_wk1_psd0">#CAC1EA</color>
+    <color name="day_db1_wk0_psd1">#76D1FF</color>
+    <color name="day_db1_wk0_psd0">#D1E5F4</color>
+    <color name="day_db0_wk1_psd1">#E6DEFF</color>
+    <color name="day_db0_wk1_psd0">#F5EEFF</color>
+    <color name="day_db0_wk0_psd1">#F9FCFF</color>
+    <color name="day_db0_wk0_psd0">#FFFFFF</color>
+
+    <color name="element">#D1E5F4</color>
+
 </resources>
