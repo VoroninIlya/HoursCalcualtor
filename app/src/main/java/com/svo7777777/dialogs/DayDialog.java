@@ -10,57 +10,28 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.svo7777777.hc_database.DayEntity;
+import com.svo7777777.hourscalculator.R;
 
 public class DayDialog {
-    public boolean isInitialized = false;
-    private int dialogTitleId = -1;
-    private int dialogLayoutId = -1;
-    private int hoursEditTextId = -1;
-    private int priceEditTextId = -1;
-    private int buttonConfirmId = -1;
-    private int buttonDeleteId = -1;
-    private int buttonCancelId = -1;
-
-    public DayDialog(int dialogTitleId, int dialogLayoutId,
-                     int hoursEditTextId, int priceEditTextId,
-                     int buttonConfirmId, int buttonDeleteId, int buttonCancelId) {
-
-        isInitialized = false;
-
-        this.dialogTitleId = dialogTitleId > 0 ? dialogTitleId : -1;
-        this.dialogLayoutId = dialogLayoutId > 0 ? dialogLayoutId : -1;
-        this.hoursEditTextId = hoursEditTextId > 0 ? hoursEditTextId : -1;
-        this.priceEditTextId = priceEditTextId > 0 ? priceEditTextId : -1;
-        this.buttonConfirmId = buttonConfirmId > 0 ? buttonConfirmId : -1;
-        this.buttonDeleteId = buttonDeleteId > 0 ? buttonDeleteId : -1;
-        this.buttonCancelId = buttonCancelId > 0 ? buttonCancelId : -1;
-
-        if (this.dialogTitleId > 0 && this.dialogLayoutId > 0 &&
-                this.hoursEditTextId > 0 && this.priceEditTextId > 0 &&
-                this.buttonConfirmId > 0 && this.buttonDeleteId > 0 && this.buttonCancelId > 0) {
-            isInitialized = true;
-        }
-    }
+    public DayDialog() {}
     public boolean open(Context ctx, DayDialogCallback cb,
                         DayDeleteCallback cbD,
                         DayEntity de) {
 
-        if(!isInitialized) return false;
-
         // Create a custom dialog
         Dialog dialog = new Dialog(ctx);
-        dialog.setTitle(dialogTitleId /*R.string.add_employee_btn*/);
+        //dialog.setTitle(R.string.add_day_btn);
         LinearLayout dialogView =
                 (LinearLayout) LayoutInflater.from(ctx)
-                        .inflate(dialogLayoutId /*R.layout.dialog_employee_picker*/, null);
+                        .inflate(R.layout.dialog_day_picker, null);
         dialog.setContentView(dialogView);
 
         // Get references to the EditText and Buttons
-        EditText editTextHours = dialogView.findViewById(hoursEditTextId);
-        EditText editTextPrice = dialogView.findViewById(priceEditTextId);
-        Button buttonConfirm = dialogView.findViewById(buttonConfirmId);
-        Button buttonDelete = dialogView.findViewById(buttonDeleteId);
-        Button buttonCancel = dialogView.findViewById(buttonCancelId);
+        EditText editTextHours = dialogView.findViewById(R.id.editTextHours);
+        EditText editTextPrice = dialogView.findViewById(R.id.editTextPrice);
+        Button buttonConfirm = dialogView.findViewById(R.id.buttonConfirm);
+        Button buttonDelete = dialogView.findViewById(R.id.buttonDelete);
+        Button buttonCancel = dialogView.findViewById(R.id.buttonCancel);
 
         if (de != null) {
             editTextHours.setText(String.valueOf(de.hours));

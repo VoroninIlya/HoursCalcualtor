@@ -369,6 +369,22 @@ public class DatabaseHandler {
         return settings;
     }
 
+    public SettingsEntity getSettings(int employeeId) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        SettingsEntity settings = null;
+        try {
+            Future<SettingsEntity> daysFuture = executorService.submit(() ->
+                    dbc.getAppDatabase().settingsDao().get(employeeId));
+            settings = daysFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executorService.shutdown();
+        }
+        return settings;
+    }
+
     public int updateSettings(SettingsEntity settings) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         int id = -1;
@@ -399,5 +415,20 @@ public class DatabaseHandler {
             executorService.shutdown();
         }
         return id;
+    }
+
+    public void deleteSettings(SettingsEntity settings) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        long id = -1;
+        try {
+            Future<Void> idFuture = (Future<Void>) executorService.submit(() ->
+                    dbc.getAppDatabase().settingsDao().delete(settings));
+            idFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executorService.shutdown();
+        }
     }
 }

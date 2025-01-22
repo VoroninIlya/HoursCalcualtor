@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.svo7777777.dialogs.DayDialog;
 import com.svo7777777.hc_database.DayEntity;
+import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.hc_database.MonthEntity;
 import com.svo7777777.hc_database.SettingsEntity;
 import com.svo7777777.utils.DatabaseHandler;
@@ -31,6 +33,7 @@ import java.util.Map;
 
 public class DaysActivity extends AppCompatActivity {
     private DatabaseHandler dbh = null;
+    private int employeeId = -1;
     private int yearId = -1;
     private int year = -1;
     private int month = -1;
@@ -49,11 +52,21 @@ public class DaysActivity extends AppCompatActivity {
         setSupportActionBar(toolbar); // Use the toolbar as the app bar
 
         Intent intent = getIntent();
+        employeeId = intent.getIntExtra("employeeId", -1);
         yearId = intent.getIntExtra("yearId", -1);
         year = intent.getIntExtra("year", -1);
         month = intent.getIntExtra("month", -1);
 
         dbh = new DatabaseHandler(getApplicationContext());
+
+        TextView path = findViewById(R.id.path);
+
+        EmployeeEntity ee = dbh.getEmployee((int)employeeId);
+
+        String[] months = getResources().getStringArray(R.array.months);
+
+        path.setText(">" + ee.lastName + "_" + ee.firstName.substring(0,1) +
+                "_" + ee.age + ">" + year + ">" + months[month] + ">");
 
         cldr.set(Calendar.YEAR, year);
         cldr.set(Calendar.MONTH, month);
@@ -125,13 +138,17 @@ public class DaysActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    SettingsEntity se = dbh.getSettings();
+                    SettingsEntity se = dbh.getSettings(employeeId);
 
                     if(se == null) {
-                        se = new SettingsEntity();
-                        se.hours = 8;
-                        se.price = 0;
-                        dbh.writeSettings(se);
+                        se = dbh.getSettings();
+
+                        if (se == null) {
+                            se = new SettingsEntity();
+                            se.hours = 8;
+                            se.price = 0;
+                            dbh.writeSettings(se);
+                        }
                     }
 
                     if(monthEntity == null) {
@@ -154,17 +171,14 @@ public class DaysActivity extends AppCompatActivity {
                         dbh.writeDay(de);
                         button.setIsInsideDb(true);
                         button.setText(daysOfWeek[dayOfWeek-1].trim() + " " +
-                                String.valueOf(day) + "\n" + String.valueOf(hours) + "\n" +
-                                String.valueOf(hours*price));
+                            day + "\n" + hours + "\n" +
+                            String.format("%.2f", hours*price));
 
                         Intent intent = new Intent();
                         intent.putExtra("month", month);
                         setResult(RESULT_OK, intent);
                     } else {
-                        DayDialog ed = new DayDialog(
-                                R.string.add_year_btn, R.layout.dialog_day_picker,
-                                R.id.editTextHours, R.id.editTextPrice,
-                                R.id.buttonConfirm, R.id.buttonDelete, R.id.buttonCancel);
+                        DayDialog ed = new DayDialog();
 
                         ed.open(DaysActivity.this, DaysActivity.this::updateDay,
                                 DaysActivity.this::deleteDay, dayEntity);
@@ -250,9 +264,9 @@ public class DaysActivity extends AppCompatActivity {
             DayButton button = findViewById(buttonsIds.get(i));
             button.setBackgroundTintList(getResources().getColorStateList(R.color.day_buttons, null));
 
-            button.setText("" + daysOfWeek[dayOfWeek-1].trim() + " " + String.valueOf(i) + "\n" +
-                    String.valueOf(dayEntity.hours) + "\n" +
-                    String.valueOf(dayEntity.hours*dayEntity.price));
+            button.setText("" + daysOfWeek[dayOfWeek-1].trim() + " " + i + "\n" +
+                    dayEntity.hours + "\n" +
+                    String.format("%.2f", dayEntity.hours*dayEntity.price));
 
             if (dayOfWeek == Calendar.SUNDAY || dayOfWeek == Calendar.SATURDAY)
                 button.setIsWeekend(true);

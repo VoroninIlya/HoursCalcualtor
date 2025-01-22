@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,14 +21,13 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
+import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.utils.DatabaseHandler;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MonthsActivity extends AppCompatActivity {
 
     private DatabaseHandler dbh = null;
+    private int employeeId = -1;
     private int yearId = -1;
     private int year = -1;
     private Button[] buttons = null;
@@ -42,10 +42,18 @@ public class MonthsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar); // Use the toolbar as the app bar
 
         Intent intent = getIntent();
+        employeeId = intent.getIntExtra("employeeId", -1);
         yearId = intent.getIntExtra("yearId", -1);
         year = intent.getIntExtra("year", -1);
 
         dbh = new DatabaseHandler(getApplicationContext());
+
+        TextView path = findViewById(R.id.path);
+
+        EmployeeEntity ee = dbh.getEmployee((int)employeeId);
+
+        path.setText(">" + ee.lastName + "_" + ee.firstName.substring(0,1) +
+                "_" + ee.age + ">" + year + ">");
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.months), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -80,6 +88,7 @@ public class MonthsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MonthsActivity.this, DaysActivity.class);
+                    intent.putExtra("employeeId", employeeId);
                     intent.putExtra("yearId", yearId);
                     intent.putExtra("year", year);
                     intent.putExtra("month", month);

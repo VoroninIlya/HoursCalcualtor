@@ -12,52 +12,28 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.svo7777777.hourscalculator.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class YearDialog {
-    public boolean isInitialized = false;
-    private int dialogTitleId = -1;
-    private int dialogLayoutId = -1;
-    private int yearEditTextId = -1;
-    private int buttonConfirmId = -1;
-    private int buttonCancelId = -1;
-
-    public YearDialog(int dialogTitleId, int dialogLayoutId,
-                          int yearEditTextId,
-                          int buttonConfirmId, int buttonCancelId) {
-
-        isInitialized = false;
-
-        this.dialogTitleId = dialogTitleId > 0 ? dialogTitleId : -1;
-        this.dialogLayoutId = dialogLayoutId > 0 ? dialogLayoutId : -1;
-        this.yearEditTextId = yearEditTextId > 0 ? yearEditTextId : -1;
-        this.buttonConfirmId = buttonConfirmId > 0 ? buttonConfirmId : -1;
-        this.buttonCancelId = buttonCancelId > 0 ? buttonCancelId : -1;
-
-        if (this.dialogTitleId > 0 && this.dialogLayoutId > 0 &&
-                this.yearEditTextId > 0 &&
-                this.buttonConfirmId > 0 && this.buttonCancelId > 0) {
-            isInitialized = true;
-        }
-    }
+    public YearDialog() {}
 
     public boolean open(Context ctx, YearDialogCallback cb, String year) {
 
-        if(!isInitialized) return false;
-
         // Create a custom dialog
         Dialog dialog = new Dialog(ctx);
-        dialog.setTitle(dialogTitleId /*R.string.add_employee_btn*/);
+        dialog.setTitle(R.string.add_year_btn);
         LinearLayout dialogView =
                 (LinearLayout) LayoutInflater.from(ctx)
-                        .inflate(dialogLayoutId /*R.layout.dialog_employee_picker*/, null);
+                        .inflate(R.layout.dialog_year_picker, null);
         dialog.setContentView(dialogView);
 
         // Get references to the EditText and Buttons
-        Spinner editTextYear = dialogView.findViewById(yearEditTextId /*R.id.editTextEmployeeLastName*/);
-        Button buttonConfirm = dialogView.findViewById(buttonConfirmId /*R.id.buttonConfirm*/);
-        Button buttonCancel = dialogView.findViewById(buttonCancelId /*R.id.buttonCancel*/);
+        Spinner editTextYear = dialogView.findViewById(R.id.editTextYear);
+        Button buttonConfirm = dialogView.findViewById(R.id.buttonConfirm);
+        Button buttonCancel = dialogView.findViewById(R.id.buttonCancel);
 
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         int startYear = 2000;

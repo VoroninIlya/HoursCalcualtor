@@ -5,7 +5,7 @@
 
     <color name="day_db1_wk1_psd1">@color/material_dynamic_tertiary70</color>
     <color name="day_db1_wk1_psd0">@color/material_dynamic_tertiary80</color>
-    <color name="day_db1_wk0_psd1">@color/material_dynamic_primary80</color>
+    <color name="day_db1_wk0_psd1">@color/material_dynamic_secondary80</color>
     <color name="day_db1_wk0_psd0">@color/material_dynamic_secondary90</color>
     <color name="day_db0_wk1_psd1">@color/material_dynamic_tertiary90</color>
     <color name="day_db0_wk1_psd0">@color/material_dynamic_tertiary95</color>

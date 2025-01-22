@@ -41,7 +41,9 @@
     <string name="december_month">Декабрь</string>
 
     <string name="default_hours_worked">Рабочих часов в день по умолчанию</string>
+    <string name="default_hours_worked_filler">Введите кол-во часов</string>
     <string name="default_hours_price">Цена одного часа по умолчанию</string>
+    <string name="default_hours_price_filler">Введите цену</string>
 
     <string-array name="months">
         <item>Январь</item>

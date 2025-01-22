@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,6 +25,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.svo7777777.dialogs.YearDialog;
+import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.hc_database.YearEntity;
 import com.svo7777777.utils.DatabaseHandler;
 
@@ -47,6 +49,13 @@ public class YearsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         employeeId = intent.getIntExtra("employeeId", -1);
+
+        TextView path = findViewById(R.id.path);
+
+        EmployeeEntity ee = dbh.getEmployee((int)employeeId);
+
+        path.setText(">" + ee.lastName + "_" + ee.firstName.substring(0,1) +
+                "_" + ee.age + ">");
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.years), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -95,10 +104,7 @@ public class YearsActivity extends AppCompatActivity {
             });
 
     public void addYearClickHandler(View view) {
-        YearDialog ed = new YearDialog(
-                R.string.add_year_btn, R.layout.dialog_year_picker,
-                R.id.editTextYear,
-                R.id.buttonConfirm, R.id.buttonCancel);
+        YearDialog ed = new YearDialog();
 
         ed.open(this, this::addYearToYears, "");
     }
@@ -132,7 +138,7 @@ public class YearsActivity extends AppCompatActivity {
 
             // Create a new Button
             Button newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
-            newEmplButton.setText(String.valueOf(ye.year) + " : " +
+            newEmplButton.setText(ye.year + " : " +
                     String.format("%.2f", hours) + " - " + String.format("%.2f", salary));
 
             ImageButton newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
@@ -143,6 +149,7 @@ public class YearsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(YearsActivity.this, MonthsActivity.class);
+                    intent.putExtra("employeeId", ye.employeeId);
                     intent.putExtra("yearId", ye.id);
                     intent.putExtra("year", ye.year);
                     startActivityForResult.launch(intent);
@@ -152,10 +159,7 @@ public class YearsActivity extends AppCompatActivity {
             newEmplEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    YearDialog ed = new YearDialog(
-                            R.string.add_year_btn, R.layout.dialog_year_picker,
-                            R.id.editTextYear,
-                            R.id.buttonConfirm, R.id.buttonCancel);
+                    YearDialog ed = new YearDialog();
 
                     ed.open(YearsActivity.this,
                             (String yr) -> {

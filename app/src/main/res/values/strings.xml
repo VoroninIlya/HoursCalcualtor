@@ -41,7 +41,9 @@
     <string name="december_month">December</string>
 
     <string name="default_hours_worked">Default hours worked</string>
+    <string name="default_hours_worked_filler">Enter default hours worked</string>
     <string name="default_hours_price">Default price of a hour</string>
+    <string name="default_hours_price_filler">Enter default price of a hour</string>
 
     <string-array name="months">
         <item>January</item>
