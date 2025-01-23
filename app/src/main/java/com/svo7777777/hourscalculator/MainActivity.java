@@ -23,6 +23,7 @@ import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.hc_database.SettingsEntity;
 import com.svo7777777.hc_database.YearEntity;
 import com.svo7777777.utils.DatabaseHandler;
+import com.svo7777777.views.ItemButton;
 
 import java.util.List;
 
@@ -118,8 +119,11 @@ public class MainActivity extends AppCompatActivity {
             // Inflate the custom LinearLayout from XML
             LayoutInflater inflater = LayoutInflater.from(this);
             View newEmployeeItem = inflater.inflate(R.layout.item_year_employee, ec, false);
-            Button newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
-            newEmplButton.setText(ee.lastName + " " + ee.firstName  + " (" + ee.age + ")");
+            ItemButton newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
+            newEmplButton.setText(ee.lastName + " " + ee.firstName);
+            newEmplButton.setTopRightText(String.valueOf(ee.age));
+            newEmplButton.setSubTextSize(34f);
+            newEmplButton.setTextSize(16f);
 
             ImageButton newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
             ImageButton newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);

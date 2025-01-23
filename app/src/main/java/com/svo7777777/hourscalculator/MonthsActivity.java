@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.utils.DatabaseHandler;
+import com.svo7777777.views.ItemButton;
 
 public class MonthsActivity extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class MonthsActivity extends AppCompatActivity {
     private int employeeId = -1;
     private int yearId = -1;
     private int year = -1;
-    private Button[] buttons = null;
+    private ItemButton[] buttons = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class MonthsActivity extends AppCompatActivity {
         });
 
         String[] months = getResources().getStringArray(R.array.months);
-        buttons = new Button[]{
+        buttons = new ItemButton[]{
                 findViewById(R.id.january_btn),
                 findViewById(R.id.february_btn),
                 findViewById(R.id.march_btn),
@@ -80,8 +81,12 @@ public class MonthsActivity extends AppCompatActivity {
             double monthHours = dbh.getHours(yearId, i);
             double monthSalary = dbh.getSalary(yearId, i);
 
-            buttons[i].setText(months[i] + " : " + String.format("%.2f", monthHours) + " - " +
-                    String.format("%.2f", monthSalary));
+            buttons[i].setText(String.format("%.2f", monthHours));
+            //buttons[i].setTopLeftText(months[i]);
+            buttons[i].setTopRightText(String.valueOf(year));
+            buttons[i].setBottomRightText(String.format("%.2f", monthSalary));
+            buttons[i].setSubTextSize(34f);
+            buttons[i].setTextSize(16f);
 
             int month = i;
             buttons[i].setOnClickListener(new View.OnClickListener() {
@@ -137,8 +142,10 @@ public class MonthsActivity extends AppCompatActivity {
 
                 double hours = dbh.getHours(yearId, month);
                 double salary = dbh.getSalary(yearId, month);
-                buttons[month].setText(months[month] + " : " + String.format("%.2f", hours) + " - " +
-                        String.format("%.2f", salary));
+                buttons[month].setText(String.format("%.2f", hours));
+                //buttons[month].setTopLeftText(months[month]);
+                buttons[month].setTopRightText(String.valueOf(year));
+                buttons[month].setBottomRightText(String.format("%.2f", salary));
 
                 Intent resintent = new Intent();
                 setResult(RESULT_OK, resintent);

@@ -28,6 +28,7 @@ import com.svo7777777.dialogs.YearDialog;
 import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.hc_database.YearEntity;
 import com.svo7777777.utils.DatabaseHandler;
+import com.svo7777777.views.ItemButton;
 
 import java.util.List;
 
@@ -131,21 +132,24 @@ public class YearsActivity extends AppCompatActivity {
 
         for (YearEntity ye : years) {
             LayoutInflater inflater = LayoutInflater.from(this);
-            View newEmployeeItem = inflater.inflate(R.layout.item_year_employee, ec, false);
+            View newYearItem = inflater.inflate(R.layout.item_year_employee, ec, false);
 
             double hours = dbh.getHours(ye.id);
             double salary = dbh.getSalary(ye.id);
 
             // Create a new Button
-            Button newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
-            newEmplButton.setText(ye.year + " : " +
-                    String.format("%.2f", hours) + " - " + String.format("%.2f", salary));
+            ItemButton newYearButton = newYearItem.findViewById(R.id.item_button);
+            newYearButton.setText(String.format("%.2f", hours));
+            newYearButton.setTopRightText(String.valueOf(ye.year));
+            newYearButton.setBottomRightText(String.format("%.2f", salary));
+            newYearButton.setSubTextSize(34f);
+            newYearButton.setTextSize(16f);
 
-            ImageButton newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
-            ImageButton newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
+            ImageButton newEmplEditButton = newYearItem.findViewById(R.id.edit_button);
+            ImageButton newEmplDeleteButton = newYearItem.findViewById(R.id.delete_button);
 
             // Set click listener for the new button
-            newEmplButton.setOnClickListener(new View.OnClickListener() {
+            newYearButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(YearsActivity.this, MonthsActivity.class);
@@ -186,7 +190,7 @@ public class YearsActivity extends AppCompatActivity {
                 }
             });
 
-            ec.addView(newEmployeeItem);
+            ec.addView(newYearItem);
         }
     }
 

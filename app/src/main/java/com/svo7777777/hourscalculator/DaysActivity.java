@@ -117,9 +117,13 @@ public class DaysActivity extends AppCompatActivity {
             // Set a unique ID
             buttonsIds.put(i, View.generateViewId());
             button.setId(buttonsIds.get(i));
-            button.setText(daysOfWeek[dayOfWeek-1].trim() + " " + String.valueOf(i) + "\n" +
-                    String.valueOf(dayEntity.hours) + "\n" +
-                    String.valueOf(dayEntity.hours*dayEntity.price));
+            button.setSubTextSize(34f);
+            button.setTextSize(24f);
+
+            button.setText(String.valueOf(dayEntity.hours));
+            button.setTopLeftText(daysOfWeek[dayOfWeek-1].trim());
+            button.setTopRightText(String.valueOf(i));
+            button.setBottomRightText(String.format("%.2f", dayEntity.hours*dayEntity.price));
 
             button.setBackgroundTintList(getResources().getColorStateList(R.color.day_buttons, null));
 
@@ -170,9 +174,11 @@ public class DaysActivity extends AppCompatActivity {
 
                         dbh.writeDay(de);
                         button.setIsInsideDb(true);
-                        button.setText(daysOfWeek[dayOfWeek-1].trim() + " " +
-                            day + "\n" + hours + "\n" +
-                            String.format("%.2f", hours*price));
+
+                        button.setText(String.valueOf(hours));
+                        button.setTopLeftText(daysOfWeek[dayOfWeek-1].trim());
+                        button.setTopRightText(String.valueOf(day));
+                        button.setBottomRightText(String.format("%.2f", hours*price));
 
                         Intent intent = new Intent();
                         intent.putExtra("month", month);
@@ -264,9 +270,10 @@ public class DaysActivity extends AppCompatActivity {
             DayButton button = findViewById(buttonsIds.get(i));
             button.setBackgroundTintList(getResources().getColorStateList(R.color.day_buttons, null));
 
-            button.setText("" + daysOfWeek[dayOfWeek-1].trim() + " " + i + "\n" +
-                    dayEntity.hours + "\n" +
-                    String.format("%.2f", dayEntity.hours*dayEntity.price));
+            button.setText(String.valueOf(dayEntity.hours));
+            button.setTopLeftText(daysOfWeek[dayOfWeek-1].trim());
+            button.setTopRightText(String.valueOf(i ));
+            button.setBottomRightText(String.format("%.2f", dayEntity.hours*dayEntity.price));
 
             if (dayOfWeek == Calendar.SUNDAY || dayOfWeek == Calendar.SATURDAY)
                 button.setIsWeekend(true);

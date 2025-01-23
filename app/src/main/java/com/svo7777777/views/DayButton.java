@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.svo7777777.hourscalculator.R;
 
-public class DayButton extends androidx.appcompat.widget.AppCompatButton {
+public class DayButton extends ItemButton {
     private static final int[] STATE_INSIDE_DB = { R.attr.state_inside_db };
     private static final int[] STATE_IS_WEEKEND = { R.attr.state_is_weekend };
 
