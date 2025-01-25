@@ -80,7 +80,26 @@
         <item>Sat</item>
     </string-array>
 
-    <string name="error_delete_year">"Could not delete a year because it has working hours"</string>
-    <string name="error_delete_employee">"Could not delete an employee because it has working years"</string>
+    <string name="error_delete_year">"Could not delete, there are working hours"</string>
+    <string name="error_delete_employee">"Could not delete, there are considered years"</string>
+    <string name="error_confirm_employee">"Please enter employee's first name, last name and age!"</string>
+    <string name="error_confirm_year">"Please enter a year!"</string>
+
+    <string name="about_markdown">
+"## Hours Calculator v1.0
+
+This is a small Android app designed to calculate the hours worked by employees. It allows you to add multiple employees, enter their years of service and record their working hours for each day. You can also set the price of a working hour, and the app will then calculate the employee's salary based on worked hours and the set hours price.
+
+This software is free and comes 'as is' with **ABSOLUTELY NO WARRANTY**.
+
+### Disclaimer
+
+The use of this application is at the user's own risk. The owner, developers and any related parties (hereinafter referred to as "Administration") shall not be liable for any damage, loss or other consequences resulting from the use of the application by third parties.
+The User assumes full responsibility for the security of his/her data, accounts and confidential information, as well as for any use by third parties. The Administration does not guarantee the security, accuracy and uninterrupted operation of the Application and disclaims any responsibility for any failure, loss of data or unauthorised access.
+By using this application, the user agrees that the Administration shall not be liable, legally or otherwise, for any actions of third parties committed through the use of the application.
+If the user does not agree with the terms of this disclaimer, he/she must stop using the application.
+
+Copyright (C) 2025 Voronin Ilia, Voronina Svetlana
+    </string>
 
 </resources>

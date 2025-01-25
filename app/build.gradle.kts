@@ -43,8 +43,10 @@ dependencies {
     implementation(libs.room.common)
     implementation(libs.room.runtime)
     implementation(project(":hc_database"))
+    implementation("io.noties.markwon:core:4.6.2")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     annotationProcessor(libs.room.compiler)
+
 }

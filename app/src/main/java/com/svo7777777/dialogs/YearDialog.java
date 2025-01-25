@@ -75,7 +75,7 @@ public class YearDialog {
                     cb.onComplete(year);
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(ctx, "Please enter a year!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, R.string.error_confirm_year, Toast.LENGTH_SHORT).show();
                 }
             }
         });
