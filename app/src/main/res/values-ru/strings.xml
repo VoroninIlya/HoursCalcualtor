@@ -3,9 +3,9 @@
     <string name="app_name">Калькулятор часов</string>
     <string name="add_employee_btn">Добавить сотрудника</string>
     <string name="add_year_btn">Добавить год</string>
+    <string name="report_menu">Отчёт</string>
     <string name="settings_menu">Настройки</string>
     <string name="about_menu">О программе</string>
-    <string name="back_menu">Назад</string>
 
     <string name="year">Год</string>
     <string name="year_filler">Введите год</string>

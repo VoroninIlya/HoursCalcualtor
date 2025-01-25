@@ -3,9 +3,9 @@
     <string name="app_name">Hours Calculator</string>
     <string name="add_employee_btn">Add Employee</string>
     <string name="add_year_btn">Add Year</string>
+    <string name="report_menu">Report</string>
     <string name="settings_menu">Settings</string>
     <string name="about_menu">About</string>
-    <string name="back_menu">Back</string>
 
     <string name="year">Year</string>
     <string name="year_filler">Enter year</string>

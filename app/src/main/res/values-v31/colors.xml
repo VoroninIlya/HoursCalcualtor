@@ -14,4 +14,6 @@
 
     <color name="element">@color/material_dynamic_secondary90</color>
 
+    <color name="toolbar_text">@color/material_dynamic_tertiary99</color>
+
 </resources>
