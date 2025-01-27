@@ -9,6 +9,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.color.DynamicColors;
+
 import io.noties.markwon.Markwon;
 
 public class AboutActivity extends AppCompatActivity {

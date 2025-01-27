@@ -11,11 +11,10 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 
-import androidx.core.content.res.ResourcesCompat;
-
+import com.google.android.material.button.MaterialButton;
 import com.svo7777777.hourscalculator.R;
 
-public class ItemButton extends androidx.appcompat.widget.AppCompatButton {
+public class ItemButton extends MaterialButton {
     private String topLeftText = "";
     private String topRightText = "";
     private String bottomLeftText = "";
@@ -24,10 +23,7 @@ public class ItemButton extends androidx.appcompat.widget.AppCompatButton {
     private Paint textPaint;
 
     private int subTextColor = Color.WHITE;
-
     private float subTextSize = 12f;
-
-    private Typeface mainTextFont = Typeface.DEFAULT;
     private Typeface subTextFont = Typeface.DEFAULT;
 
     public ItemButton(Context context) {
@@ -64,7 +60,6 @@ public class ItemButton extends androidx.appcompat.widget.AppCompatButton {
             subTextSize = typedArray.getDimension(R.styleable.ItemButton_subTextSize,
                     TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, subTextSize, getResources().getDisplayMetrics()));
 
-            mainTextFont = getTypeface();
             subTextFont = getTypeface();
 
             typedArray.recycle();
@@ -73,7 +68,6 @@ public class ItemButton extends androidx.appcompat.widget.AppCompatButton {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         super.onDraw(canvas);
 
         // drawing sub texts
@@ -145,11 +139,6 @@ public class ItemButton extends androidx.appcompat.widget.AppCompatButton {
 
     public void setSubTextSize(float size) {
         this.subTextSize = size;
-        invalidate();
-    }
-
-    public void setMainTextFont(Typeface mainTextFont) {
-        this.mainTextFont = mainTextFont;
         invalidate();
     }
 

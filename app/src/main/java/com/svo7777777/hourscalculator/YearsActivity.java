@@ -3,6 +3,7 @@ package com.svo7777777.hourscalculator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.button.MaterialButton;
 import com.svo7777777.dialogs.YearDialog;
 import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.hc_database.YearEntity;
@@ -142,11 +144,15 @@ public class YearsActivity extends AppCompatActivity {
             newYearButton.setText(String.format("%.2f", hours));
             newYearButton.setTopRightText(String.valueOf(ye.year));
             newYearButton.setBottomRightText(String.format("%.2f", salary));
-            newYearButton.setSubTextSize(34f);
-            newYearButton.setTextSize(16f);
+            newYearButton.setSubTextSize(
+                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14,
+                            this.getResources().getDisplayMetrics()));
+            newYearButton.setTextSize(
+                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 6,
+                            this.getResources().getDisplayMetrics()));
 
-            ImageButton newEmplEditButton = newYearItem.findViewById(R.id.edit_button);
-            ImageButton newEmplDeleteButton = newYearItem.findViewById(R.id.delete_button);
+            MaterialButton newEmplEditButton = newYearItem.findViewById(R.id.edit_button);
+            MaterialButton newEmplDeleteButton = newYearItem.findViewById(R.id.delete_button);
 
             // Set click listener for the new button
             newYearButton.setOnClickListener(new View.OnClickListener() {

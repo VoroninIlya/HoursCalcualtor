@@ -2,6 +2,7 @@ package com.svo7777777.hourscalculator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.button.MaterialButton;
 import com.svo7777777.dialogs.EmployeeDialog;
 import com.svo7777777.hc_database.EmployeeEntity;
 import com.svo7777777.hc_database.SettingsEntity;
@@ -122,11 +124,9 @@ public class MainActivity extends AppCompatActivity {
             ItemButton newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
             newEmplButton.setText(ee.lastName + " " + ee.firstName);
             newEmplButton.setTopRightText(String.valueOf(ee.age));
-            newEmplButton.setSubTextSize(34f);
-            newEmplButton.setTextSize(16f);
 
-            ImageButton newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
-            ImageButton newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
+            MaterialButton newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
+            MaterialButton newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
 
             // Set click listener for the new button
             newEmplButton.setOnClickListener(new View.OnClickListener() {

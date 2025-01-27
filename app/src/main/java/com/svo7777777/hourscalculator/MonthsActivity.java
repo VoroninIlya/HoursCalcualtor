@@ -3,10 +3,10 @@ package com.svo7777777.hourscalculator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -85,8 +85,10 @@ public class MonthsActivity extends AppCompatActivity {
             //buttons[i].setTopLeftText(months[i]);
             buttons[i].setTopRightText(String.valueOf(year));
             buttons[i].setBottomRightText(String.format("%.2f", monthSalary));
-            buttons[i].setSubTextSize(34f);
-            buttons[i].setTextSize(16f);
+            buttons[i].setSubTextSize(
+                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14,
+                            this.getResources().getDisplayMetrics()));
+            buttons[i].setTextSize(18);
 
             int month = i;
             buttons[i].setOnClickListener(new View.OnClickListener() {

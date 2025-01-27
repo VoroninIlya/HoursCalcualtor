@@ -16,10 +16,11 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+        android:textColor="?attr/colorOnPrimary"/>
 
     <TextView
         android:id="@+id/about"
+        android:textColor="?attr/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="5dp"

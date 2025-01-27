@@ -1,34 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/Widget.Material3.DrawerLayout"
+    style="@style/Widget.Material3.TabLayout.Secondary"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/element"
+    android:layout_margin="0dp"
+    android:padding="0dp"
     android:orientation="horizontal">
 
     <com.svo7777777.views.ItemButton
         android:id="@+id/item_button"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        style="@style/ItemButtonStyle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_margin="0dp"
         android:layout_weight="5"
-        android:padding="10dp"
+        app:cornerRadius="10dp"
+        app:subTextSize="14sp"
+        android:textSize="18sp"
         />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/edit_button"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        style="@style/ItemButtonStyle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_margin="0dp"
         android:layout_weight="1"
-        android:src="@android:drawable/ic_menu_edit" />
+        app:cornerRadius="10dp"
+        app:icon="@mipmap/edit"
+        app:iconTint="?attr/colorPrimary"
+        app:iconPadding="5dp"
+        app:iconSize="35dp"
+        app:iconGravity="textStart"
+        />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/delete_button"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        style="@style/ItemButtonStyle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_margin="0dp"
         android:layout_weight="1"
-        android:src="@android:drawable/ic_menu_delete" />
+        app:cornerRadius="10dp"
+        app:icon="@mipmap/delete"
+        app:iconTint="?attr/colorPrimary"
+        app:iconPadding="5dp"
+        app:iconSize="35dp"
+        app:iconGravity="textStart"
+        />
 </LinearLayout>

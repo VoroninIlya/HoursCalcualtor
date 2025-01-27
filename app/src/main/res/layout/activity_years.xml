@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
+        android:textColor="?attr/colorOnPrimary"
         android:minHeight="?attr/actionBarSize" />
 
     <TextView
@@ -21,23 +22,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:background="?attr/colorPrimary"
+        android:textColor="?attr/colorOnPrimary"
         android:text=">" />
 
     <Button
         android:id="@+id/add_year"
-        style="@style/Widget.AppCompat.Button.Small"
+        style="@style/Widget.Material3.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="addYearClickHandler"
+        android:textAllCaps="false"
+        android:minHeight="60dp"
+        app:cornerRadius="10dp"
         android:text="@string/add_year_btn" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        >
         <LinearLayout
             android:id="@+id/years_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:padding="0dp"
             android:orientation="vertical">
         </LinearLayout>
     </ScrollView>

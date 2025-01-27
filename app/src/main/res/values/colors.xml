@@ -3,22 +3,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="day_db1_wk1_psd1">#AEA6CE</color>
-    <color name="day_db1_wk1_psd0">#CAC1EA</color>
-    <color name="day_db1_wk0_psd1">#B5CAD7</color>
-    <color name="day_db1_wk0_psd0">#D1E5F4</color>
-    <color name="day_db0_wk1_psd1">#E6DEFF</color>
-    <color name="day_db0_wk1_psd0">#F5EEFF</color>
-    <color name="day_db0_wk0_psd1">#F9FCFF</color>
-    <color name="day_db0_wk0_psd0">#FFFFFF</color>
+    <color name="day_db1_wk1">?attr/colorTertiaryContainer</color>
+    <color name="day_db0_wk1">?attr/colorSecondaryContainer</color>
 
-    <color name="element">#D1E5F4</color>
-    <color name="light_blue_600">#FF039BE5</color>
-    <color name="light_blue_900">#FF01579B</color>
-    <color name="light_blue_A200">#FF40C4FF</color>
-    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="day_db1_wk0">?attr/colorSurfaceContainerLow</color>
+    <color name="day_db0_wk0">?attr/colorSurfaceContainerLowest</color>
+
     <color name="black_overlay">#66000000</color>
-
-    <color name="toolbar_text">#FFFBFF</color>
 
 </resources>

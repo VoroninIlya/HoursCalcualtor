@@ -91,7 +91,7 @@
 
         <Button
             android:id="@+id/buttonConfirm"
-            style="@style/Widget.AppCompat.Button.Small"
+            style="@style/Widget.Material3.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -100,7 +100,7 @@
 
         <Button
             android:id="@+id/buttonCancel"
-            style="@style/Widget.AppCompat.Button.Small"
+            style="@style/Widget.Material3.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -5,6 +5,7 @@ import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.svo7777777.hc_database.MonthEntity;
 import com.svo7777777.hc_database.SettingsEntity;
 import com.svo7777777.utils.DatabaseHandler;
 import com.svo7777777.views.DayButton;
+import com.svo7777777.views.ItemButton;
 
 import java.util.HashMap;
 import java.util.List;
@@ -112,20 +114,10 @@ public class DaysActivity extends AppCompatActivity {
 
             String[] daysOfWeek = getResources().getStringArray(R.array.days_of_week_short);
 
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View newDayItem = inflater.inflate(R.layout.item_day, dc, false);
             // Create a Button programmatically
-            DayButton button = new DayButton(DaysActivity.this);
-            // Set a unique ID
-            buttonsIds.put(i, View.generateViewId());
-            button.setId(buttonsIds.get(i));
-            button.setSubTextSize(34f);
-            button.setTextSize(24f);
-
-            button.setText(String.valueOf(dayEntity.hours));
-            button.setTopLeftText(daysOfWeek[dayOfWeek-1].trim());
-            button.setTopRightText(String.valueOf(i));
-            button.setBottomRightText(String.format("%.2f", dayEntity.hours*dayEntity.price));
-
-            button.setBackgroundTintList(getResources().getColorStateList(R.color.day_buttons, null));
+            DayButton button = newDayItem.findViewById(R.id.item_button);
 
             if (dayOfWeek == Calendar.SUNDAY || dayOfWeek == Calendar.SATURDAY)
                 button.setIsWeekend(true);
@@ -136,6 +128,15 @@ public class DaysActivity extends AppCompatActivity {
                 button.setIsInsideDb(true);
             else
                 button.setIsInsideDb(false);
+
+            // Set a unique ID
+            buttonsIds.put(i, View.generateViewId());
+            newDayItem.setId(buttonsIds.get(i));
+
+            button.setText(String.valueOf(dayEntity.hours));
+            button.setTopLeftText(daysOfWeek[dayOfWeek-1].trim());
+            button.setTopRightText(String.valueOf(i));
+            button.setBottomRightText(String.format("%.2f", dayEntity.hours*dayEntity.price));
 
             int day = i;
             button.setOnClickListener(new View.OnClickListener() {
@@ -197,9 +198,9 @@ public class DaysActivity extends AppCompatActivity {
             params.columnSpec = GridLayout.spec((i-1)%numColumns); // Column index
             params.width = itemWidthPx;
             params.height = itemWidthPx;
-            button.setLayoutParams(params);
+            newDayItem.setLayoutParams(params);
 
-            dc.addView(button);
+            dc.addView(newDayItem);
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.days), (v, insets) -> {
@@ -267,9 +268,8 @@ public class DaysActivity extends AppCompatActivity {
             cldr.set(Calendar.DATE, i);
             int dayOfWeek = cldr.get(Calendar.DAY_OF_WEEK);
 
-            DayButton button = findViewById(buttonsIds.get(i));
-            button.setBackgroundTintList(getResources().getColorStateList(R.color.day_buttons, null));
-
+            View dayItem = findViewById(buttonsIds.get(i));
+            DayButton button = dayItem.findViewById(R.id.item_button);
             button.setText(String.valueOf(dayEntity.hours));
             button.setTopLeftText(daysOfWeek[dayOfWeek-1].trim());
             button.setTopRightText(String.valueOf(i ));
@@ -285,12 +285,12 @@ public class DaysActivity extends AppCompatActivity {
             else
                 button.setIsInsideDb(false);
 
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.rowSpec = GridLayout.spec((i-1)/numColumns); // Row index
-            params.columnSpec = GridLayout.spec((i-1)%numColumns); // Column index
-            params.width = itemWidthPx;
-            params.height = itemWidthPx;
-            button.setLayoutParams(params);
+            //GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            //params.rowSpec = GridLayout.spec((i-1)/numColumns); // Row index
+            //params.columnSpec = GridLayout.spec((i-1)%numColumns); // Column index
+            //params.width = itemWidthPx;
+            //params.height = itemWidthPx;
+            //dayItem.setLayoutParams(params);
         }
 
         Intent intent = new Intent();

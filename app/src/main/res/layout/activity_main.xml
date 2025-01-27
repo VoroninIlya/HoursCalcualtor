@@ -6,7 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -15,30 +18,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
+        android:textColor="?attr/colorOnPrimary"
         android:minHeight="?attr/actionBarSize" />
 
     <TextView
         android:id="@+id/path"
+        style="@style/Widget.AppCompat.TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:background="?attr/colorPrimary"
+        android:textColor="?attr/colorOnPrimary"
         android:text=">" />
 
     <Button
         android:id="@+id/add_employee"
-        style="@style/Widget.AppCompat.Button.Small"
+        style="@style/Widget.Material3.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="addEmployeeClickHandler"
+        android:textAllCaps="false"
+        android:minHeight="60dp"
+        app:cornerRadius="10dp"
         android:text="@string/add_employee_btn" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        >
         <LinearLayout
             android:id="@+id/employees_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:padding="0dp"
             android:orientation="vertical">
         </LinearLayout>
     </ScrollView>

@@ -44,7 +44,7 @@
 
     <Button
         android:id="@+id/saveSettings"
-        style="@style/Widget.AppCompat.Button.Small"
+        style="@style/Widget.Material3.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="saveClickHandler"

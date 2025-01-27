@@ -2,22 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Custom state -->
-    <item app:state_inside_db="true" app:state_is_weekend="true" android:state_pressed="true"  android:color="@color/day_db1_wk1_psd1" />
-    <item app:state_inside_db="true" app:state_is_weekend="true" android:state_pressed="false"  android:color="@color/day_db1_wk1_psd0" />
-    <item app:state_inside_db="true" app:state_is_weekend="true" android:state_hovered="true"  android:color="@color/day_db1_wk1_psd1" />
-    <item app:state_inside_db="true" app:state_is_weekend="true" android:state_hovered="false"  android:color="@color/day_db1_wk1_psd0" />
-    <item app:state_inside_db="true" app:state_is_weekend="false" android:state_pressed="true"  android:color="@color/day_db1_wk0_psd1" />
-    <item app:state_inside_db="true" app:state_is_weekend="false" android:state_pressed="false"  android:color="@color/day_db1_wk0_psd0" />
-    <item app:state_inside_db="true" app:state_is_weekend="false" android:state_hovered="true"  android:color="@color/day_db1_wk0_psd1" />
-    <item app:state_inside_db="true" app:state_is_weekend="false" android:state_hovered="false"  android:color="@color/day_db1_wk0_psd0" />
-    <item app:state_inside_db="false" app:state_is_weekend="true" android:state_pressed="true"  android:color="@color/day_db0_wk1_psd1" />
-    <item app:state_inside_db="false" app:state_is_weekend="true" android:state_pressed="false"  android:color="@color/day_db0_wk1_psd0" />
-    <item app:state_inside_db="false" app:state_is_weekend="true" android:state_hovered="true"  android:color="@color/day_db0_wk1_psd1" />
-    <item app:state_inside_db="false" app:state_is_weekend="true" android:state_hovered="false"  android:color="@color/day_db0_wk1_psd0" />
-    <item app:state_inside_db="false" app:state_is_weekend="false" android:state_pressed="true"  android:color="@color/day_db0_wk0_psd1" />
-    <item app:state_inside_db="false" app:state_is_weekend="false" android:state_pressed="false"  android:color="@color/day_db0_wk0_psd0" />
-    <item app:state_inside_db="false" app:state_is_weekend="false" android:state_hovered="true"  android:color="@color/day_db0_wk0_psd1" />
-    <item app:state_inside_db="false" app:state_is_weekend="false" android:state_hovered="false"  android:color="@color/day_db0_wk0_psd0" />
-    <!-- Default state -->
-    <item android:color="#4CAF50" />
+    <item app:state_inside_db="true" app:state_is_weekend="true" android:color="@color/day_db1_wk1" />
+    <item app:state_inside_db="true" app:state_is_weekend="false" android:color="@color/day_db1_wk0" />
+    <item app:state_inside_db="false" app:state_is_weekend="true" android:color="@color/day_db0_wk1" />
+    <item app:state_inside_db="false" app:state_is_weekend="false" android:color="@color/day_db0_wk0" />
+    <item android:color="?attr/colorSurfaceContainerLowest" />
 </selector>
