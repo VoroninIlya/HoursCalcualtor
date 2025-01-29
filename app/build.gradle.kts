@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.svo7777777.hourscalculator"
+    namespace = "com.svilvo.hourscalculator"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.svo7777777.hourscalculator"
+        applicationId = "com.svilvo.hourscalculator"
         minSdk = 21
         targetSdk = 34
         versionCode = 1

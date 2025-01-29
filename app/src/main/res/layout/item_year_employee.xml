@@ -8,7 +8,7 @@
     android:padding="0dp"
     android:orientation="horizontal">
 
-    <com.svo7777777.views.ItemButton
+    <com.svilvo.views.ItemButton
         android:id="@+id/item_button"
         style="@style/ItemButtonStyle"
         android:layout_width="0dp"
