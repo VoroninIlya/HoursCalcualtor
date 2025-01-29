@@ -55,6 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/january_month"/>
             </LinearLayout>
             <LinearLayout
@@ -70,6 +71,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/february_month"/>
             </LinearLayout>
             <LinearLayout
@@ -85,6 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/march_month"/>
             </LinearLayout>
             <LinearLayout
@@ -100,6 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/april_month"/>
             </LinearLayout>
             <LinearLayout
@@ -115,6 +119,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/may_month"/>
             </LinearLayout>
             <LinearLayout
@@ -130,6 +135,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/june_month"/>
             </LinearLayout>
             <LinearLayout
@@ -145,6 +151,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/july_month"/>
             </LinearLayout>
             <LinearLayout
@@ -160,6 +167,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/august_month"/>
             </LinearLayout>
             <LinearLayout
@@ -175,6 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/september_month"/>
             </LinearLayout>
             <LinearLayout
@@ -190,6 +199,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/october_month"/>
             </LinearLayout>
             <LinearLayout
@@ -205,6 +215,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/november_month"/>
             </LinearLayout>
             <LinearLayout
@@ -220,6 +231,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cornerRadius="10dp"
+                    app:subTextColor="?attr/colorPrimary"
                     app:topLeftText="@string/december_month"/>
             </LinearLayout>
         </LinearLayout>
