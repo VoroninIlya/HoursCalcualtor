@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- Custom state -->
+    <item app:state_inside_db="true" android:color="@color/day_db1" />
+    <!-- Default state -->
+    <item android:color="@color/day_db0" />
+</selector>

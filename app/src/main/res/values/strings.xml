@@ -1,3 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Hours Calculator</string>
+    <string name="add_employee_btn">Add Employee</string>
+    <string name="add_year_btn">Add Year</string>
+    <string name="report_menu">Report</string>
+    <string name="settings_menu">Settings</string>
+    <string name="about_menu">About</string>
+
+    <string name="year">Year</string>
+    <string name="year_filler">Enter year</string>
+
+    <string name="employee_first_name">Employee\'s first name</string>
+    <string name="employee_first_name_filler">Enter employee\'s first name</string>
+    <string name="employee_last_name">Employee\'s last name</string>
+    <string name="employee_last_name_filler">Enter employee\'s last name</string>
+    <string name="employee_age">Employee\'s age</string>
+    <string name="employee_age_filler">Enter employee\'s age</string>
+
+    <string name="confirm">Confirm</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+
+    <string name="hours_worked">Hours worked</string>
+    <string name="hours_worked_filler">Enter hours worked</string>
+    <string name="hours_price">Price of a hour</string>
+    <string name="hours_price_filler">Enter price of a hour</string>
+
+    <string name="january_month">January</string>
+    <string name="february_month">February</string>
+    <string name="march_month">March</string>
+    <string name="april_month">April</string>
+    <string name="may_month">May</string>
+    <string name="june_month">June</string>
+    <string name="july_month">July</string>
+    <string name="august_month">August</string>
+    <string name="september_month">September</string>
+    <string name="october_month">October</string>
+    <string name="november_month">November</string>
+    <string name="december_month">December</string>
+
+    <string name="default_hours_worked">Default hours worked</string>
+    <string name="default_hours_worked_filler">Enter default hours worked</string>
+    <string name="default_hours_price">Default price of a hour</string>
+    <string name="default_hours_price_filler">Enter default price of a hour</string>
+
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+    <string-array name="days_of_week">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string-array name="days_of_week_short">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </string-array>
+
+    <string name="error_delete_year">"Could not delete, there are working hours"</string>
+    <string name="error_delete_employee">"Could not delete, there are considered years"</string>
+    <string name="error_confirm_employee">"Please enter employee's first name, last name and age!"</string>
+    <string name="error_confirm_year">"Please enter a year!"</string>
+
+    <string name="about_markdown">
+"## Hours Calculator v1.0
+
+This is a small Android app designed to calculate the hours worked by employees. It allows you to add multiple employees, enter their years of service and record their working hours for each day. You can also set the price of a working hour, and the app will then calculate the employee's salary based on worked hours and the set hours price.
+
+This software is free and comes 'as is' with **ABSOLUTELY NO WARRANTY**.
+
+### Disclaimer
+
+The use of this application is at the user's own risk. The owner, developers and any related parties (hereinafter referred to as "Administration") shall not be liable for any damage, loss or other consequences resulting from the use of the application by third parties.
+The User assumes full responsibility for the security of his/her data, accounts and confidential information, as well as for any use by third parties. The Administration does not guarantee the security, accuracy and uninterrupted operation of the Application and disclaims any responsibility for any failure, loss of data or unauthorised access.
+By using this application, the user agrees that the Administration shall not be liable, legally or otherwise, for any actions of third parties committed through the use of the application.
+If the user does not agree with the terms of this disclaimer, he/she must stop using the application.
+
+Copyright (C) 2025 Voronin Ilia, Voronina Svetlana
+    </string>
+
 </resources>

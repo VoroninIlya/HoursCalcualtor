@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DayButton">
+        <attr name="state_inside_db" format="boolean" />
+        <attr name="state_is_weekend" format="boolean" />
+    </declare-styleable>
+	
+    <declare-styleable name="FullscreenAttrs">
+        <attr name="fullscreenBackgroundColor" format="color" />
+        <attr name="fullscreenTextColor" format="color" />
+    </declare-styleable>
+	
+	<declare-styleable name="ItemButton">
+        <attr name="topLeftText" format="string" />
+        <attr name="topRightText" format="string" />
+        <attr name="bottomLeftText" format="string" />
+        <attr name="bottomRightText" format="string" />
+        <attr name="subTextColor" format="color|reference" />
+        <attr name="subTextSize" format="dimension" />
+    </declare-styleable>
+
+</resources>

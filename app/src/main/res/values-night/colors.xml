@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="day_db1">?attr/colorSurfaceContainerLow</color>
+    <color name="day_db0">?attr/colorSurfaceContainerLowest</color>
+
+    <color name="subtext">?attr/colorSecondary</color>
+
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Material3.TabLayout.Secondary"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="0dp"
+    android:padding="2dp"
+    android:orientation="horizontal">
+
+    <com.svo7777777.views.DayButton
+        android:id="@+id/item_button"
+        style="@style/Widget.Material3.Button.TonalButton"
+        app:backgroundTint="@color/day_buttons"
+        android:foreground="@drawable/day_overlay_drawable"
+        android:textColor="?attr/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAllCaps="false"
+        android:padding="5dp"
+        android:textSize="18sp"
+        app:cornerRadius="10dp"
+        app:subTextSize="14sp"
+        app:subTextColor="?attr/colorOnSurface"
+        />
+
+</LinearLayout>

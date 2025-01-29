@@ -1,3 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Калькулятор часов</string>
+    <string name="add_employee_btn">Добавить сотрудника</string>
+    <string name="add_year_btn">Добавить год</string>
+    <string name="report_menu">Отчёт</string>
+    <string name="settings_menu">Настройки</string>
+    <string name="about_menu">О программе</string>
+
+    <string name="year">Год</string>
+    <string name="year_filler">Введите год</string>
+
+    <string name="employee_first_name">Имя сотрудника</string>
+    <string name="employee_first_name_filler">Введите имя сотрудника</string>
+    <string name="employee_last_name">Фамилия сотрудника</string>
+    <string name="employee_last_name_filler">Введите фамилию сотрудника</string>
+    <string name="employee_age">Возраст сотрудника</string>
+    <string name="employee_age_filler">Введите возраст сотрудника</string>
+
+    <string name="confirm">Применить</string>
+    <string name="delete">Удалить</string>
+    <string name="cancel">Отменить</string>
+    <string name="save">Сохранить</string>
+
+    <string name="hours_worked">Отработанные часы</string>
+    <string name="hours_worked_filler">Введите отработанные часы</string>
+    <string name="hours_price">Цена часа</string>
+    <string name="hours_price_filler">Введите цену часа</string>
+
+    <string name="january_month">Январь</string>
+    <string name="february_month">Февраль</string>
+    <string name="march_month">Март</string>
+    <string name="april_month">Апрель</string>
+    <string name="may_month">Май</string>
+    <string name="june_month">Июнь</string>
+    <string name="july_month">Июль</string>
+    <string name="august_month">Август</string>
+    <string name="september_month">Сентябрь</string>
+    <string name="october_month">Октябрь</string>
+    <string name="november_month">Ноябрь</string>
+    <string name="december_month">Декабрь</string>
+
+    <string name="default_hours_worked">Рабочих часов в день по умолчанию</string>
+    <string name="default_hours_worked_filler">Введите кол-во часов</string>
+    <string name="default_hours_price">Цена одного часа по умолчанию</string>
+    <string name="default_hours_price_filler">Введите цену</string>
+
+    <string-array name="months">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
+
+    <string-array name="days_of_week">
+        <item>Воскресенье</item>
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+    </string-array>
+
+    <string-array name="days_of_week_short">
+        <item>Вс</item>
+        <item>Пн</item>
+        <item>Вт</item>
+        <item>Ср</item>
+        <item>Чт</item>
+        <item>Пт</item>
+        <item>Сб</item>
+    </string-array>
+
+    <string name="error_delete_year">"Невозможно удалить, есть отработанные часы"</string>
+    <string name="error_delete_employee">"Невозможно удалить, есть учтенные года"</string>
+    <string name="error_confirm_employee">"Введите пожалуйста фамилию, имя и возраст сотрудника!"</string>
+    <string name="error_confirm_year">"Введите пожалуйста год!"</string>
+
+    <string name="about_markdown">
+"## Калькулятор часов v1.0
+
+Это небольшое приложение для Android, предназначенно для подсчета отработанных сотрудниками часов. Оно позволяет добавлять нескольких сотрудников, и вносить их отработанное время в часах по дням в месяцах и годах. Также возможно установить стоимость рабочего часа, после чего приложение рассчитает зарплату сотрудника на основе отработанных часов и установленной цены за час работы.
+
+Это программное обеспечение является бесплатным и предоставляется "как есть" БЕЗ КАКОЙ ЛИБО ГАРАНТИИ.
+
+### Отказ от ответственности
+
+Использование данного приложения осуществляется исключительно на свой страх и риск пользователя. Владелец, разработчики и любые связанные лица (далее — «Администрация») не несут ответственности за любой ущерб, убытки или иные последствия, возникшие в результате использования приложения третьими лицами.
+Пользователь принимает на себя полную ответственность за сохранность своих данных, учетных записей и конфиденциальной информации, а также за любое их использование третьими лицами. Администрация не гарантирует безопасность, точность и бесперебойность работы приложения и снимает с себя ответственность за возможные сбои, утечку данных или несанкционированный доступ.
+Используя данное приложение, пользователь соглашается с тем, что Администрация не несет юридической или иной ответственности за любые действия третьих лиц, совершенные с использованием приложения.
+Если пользователь не согласен с условиями данного отказа от ответственности, он должен прекратить использование приложения.
+
+Авторское право (C) 2025 Илья Воронин, Светлана Воронина
+    </string>
+
 </resources>
