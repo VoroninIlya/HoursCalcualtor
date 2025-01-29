@@ -10,15 +10,18 @@
 
     <com.svo7777777.views.DayButton
         android:id="@+id/item_button"
-        style="@style/ItemButtonStyle"
-        android:backgroundTint="@color/day_buttons"
+        style="@style/Widget.Material3.Button.TonalButton"
+        app:backgroundTint="@color/day_buttons"
+        android:foreground="@drawable/day_overlay_drawable"
+        android:textColor="?attr/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textAllCaps="false"
         android:padding="5dp"
+        android:textSize="18sp"
         app:cornerRadius="10dp"
         app:subTextSize="14sp"
-        android:textSize="18sp"
+        app:subTextColor="?attr/colorOnSurface"
         />
 
 </LinearLayout>

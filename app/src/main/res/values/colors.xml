@@ -3,12 +3,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="day_db1_wk1">?attr/colorTertiaryContainer</color>
-    <color name="day_db0_wk1">?attr/colorSecondaryContainer</color>
+    <color name="day_db1">?attr/colorSurfaceContainerLow</color>
+    <color name="day_db0">?attr/colorSurfaceContainerLowest</color>
 
-    <color name="day_db1_wk0">?attr/colorSurfaceContainerLow</color>
-    <color name="day_db0_wk0">?attr/colorSurfaceContainerLowest</color>
+    <color name="subtext">?attr/colorSecondary</color>
 
-    <color name="black_overlay">#66000000</color>
+    <color name="black_overlay">#10000000</color>
+    <color name="red_db0_overlay">#20D00000</color>
+    <color name="red_db1_overlay">#30D00000</color>
 
 </resources>

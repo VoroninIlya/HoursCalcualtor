@@ -137,11 +137,12 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-            final SettingsEntity[] se = {dbh.getSettings(ee.id)};
 
             newEmplEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    SettingsEntity[] se = {dbh.getSettings(ee.id)};
+
                     EmployeeDialog ed = new EmployeeDialog();
 
                     ed.open(MainActivity.this,
@@ -153,14 +154,14 @@ public class MainActivity extends AppCompatActivity {
 
                             if(!h.isEmpty() || !p.isEmpty()) {
                                 if(se[0] != null) {
-                                    se[0].hours = Double.parseDouble(h);
-                                    se[0].price = Double.parseDouble(p);
+                                    se[0].hours = h.isEmpty() ? 0.0 : Double.parseDouble(h);
+                                    se[0].price = p.isEmpty() ? 0.0 : Double.parseDouble(p);
                                     long stId = dbh.updateSettings(se[0]);
                                 } else {
                                     se[0] = new SettingsEntity();
-                                    se[0].employeeId = (int)empId;
-                                    se[0].hours = Double.parseDouble(h);
-                                    se[0].price = Double.parseDouble(p);
+                                    se[0].employeeId = (int)ee.id;
+                                    se[0].hours = h.isEmpty() ? 0.0 : Double.parseDouble(h);
+                                    se[0].price = p.isEmpty() ? 0.0 : Double.parseDouble(p);
                                     long stId = dbh.writeSettings(se[0]);
                                 }
                             } else {

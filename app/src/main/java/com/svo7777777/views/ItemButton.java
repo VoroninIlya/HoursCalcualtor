@@ -3,7 +3,6 @@ package com.svo7777777.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -22,7 +21,7 @@ public class ItemButton extends MaterialButton {
 
     private Paint textPaint;
 
-    private int subTextColor = Color.WHITE;
+    private int subTextColor = getTextColors().getDefaultColor();
     private float subTextSize = 12f;
     private Typeface subTextFont = Typeface.DEFAULT;
 
@@ -57,6 +56,8 @@ public class ItemButton extends MaterialButton {
             bottomRightText = typedArray.getString(R.styleable.ItemButton_bottomRightText);
             bottomRightText = bottomRightText == null ? "" : bottomRightText;
 
+            subTextColor = typedArray.getColor(R.styleable.ItemButton_subTextColor, subTextColor);
+
             subTextSize = typedArray.getDimension(R.styleable.ItemButton_subTextSize,
                     TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, subTextSize, getResources().getDisplayMetrics()));
 
@@ -73,34 +74,40 @@ public class ItemButton extends MaterialButton {
         // drawing sub texts
         textPaint.setTypeface(subTextFont);
         textPaint.setTextSize(subTextSize);
-        textPaint.setColor(getTextColors().getDefaultColor());
+        textPaint.setColor(subTextColor);
         textPaint.setTextAlign(Paint.Align.LEFT);
 
-        Rect topLeftTextBounds = new Rect();
-        textPaint.getTextBounds(topLeftText, 0, topLeftText.length(), topLeftTextBounds);
+        if(!topLeftText.isEmpty()) {
+            Rect topLeftTextBounds = new Rect();
+            textPaint.getTextBounds(topLeftText, 0, topLeftText.length(), topLeftTextBounds);
 
-        Rect topRightTextBounds = new Rect();
-        textPaint.getTextBounds(topRightText, 0, topRightText.length(), topRightTextBounds);
+            canvas.drawText(topLeftText,
+                    getPaddingLeft(),
+                    topLeftTextBounds.height() + getPaddingTop(), textPaint);
+        }
 
-        Rect bottomLeftTextBounds = new Rect();
-        textPaint.getTextBounds(bottomLeftText, 0, bottomLeftText.length(), bottomLeftTextBounds);
+        if(!bottomLeftText.isEmpty()) {
+            Rect bottomLeftTextBounds = new Rect();
+            textPaint.getTextBounds(bottomLeftText, 0, bottomLeftText.length(), bottomLeftTextBounds);
 
-        Rect bottomRightTextBounds = new Rect();
-        textPaint.getTextBounds(bottomRightText, 0, bottomRightText.length(), bottomRightTextBounds);
+            canvas.drawText(bottomLeftText,
+                    getPaddingLeft(),
+                    getHeight() - getPaddingBottom(), textPaint);
+        }
 
-        canvas.drawText(topLeftText,
-                getPaddingLeft(),
-                topLeftTextBounds.height() + getPaddingTop(), textPaint);
+        if(!topRightText.isEmpty()) {
+            Rect topRightTextBounds = new Rect();
+            textPaint.getTextBounds(topRightText, 0, topRightText.length(), topRightTextBounds);
 
-        canvas.drawText(bottomLeftText,
-                getPaddingLeft(),
-                getHeight() - getPaddingBottom(), textPaint);
-
-        canvas.drawText(topRightText,
-                getWidth() - topRightTextBounds.width() - getPaddingRight(),
-                topRightTextBounds.height() + getPaddingTop(), textPaint);
+            canvas.drawText(topRightText,
+                    getWidth() - topRightTextBounds.width() - getPaddingRight(),
+                    topRightTextBounds.height() + getPaddingTop(), textPaint);
+        }
 
         if(!bottomRightText.isEmpty()) {
+            Rect bottomRightTextBounds = new Rect();
+            textPaint.getTextBounds(bottomRightText, 0, bottomRightText.length(), bottomRightTextBounds);
+
             canvas.drawText(bottomRightText,
                     getWidth() - bottomRightTextBounds.width() - getPaddingRight(),
                     getHeight() - getPaddingBottom(), textPaint);

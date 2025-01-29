@@ -2,9 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Custom state -->
-    <item app:state_inside_db="true" app:state_is_weekend="true" android:color="@color/day_db1_wk1" />
-    <item app:state_inside_db="true" app:state_is_weekend="false" android:color="@color/day_db1_wk0" />
-    <item app:state_inside_db="false" app:state_is_weekend="true" android:color="@color/day_db0_wk1" />
-    <item app:state_inside_db="false" app:state_is_weekend="false" android:color="@color/day_db0_wk0" />
-    <item android:color="?attr/colorSurfaceContainerLowest" />
+    <item app:state_inside_db="true" android:color="@color/day_db1" />
+    <!-- Default state -->
+    <item android:color="@color/day_db0" />
 </selector>
