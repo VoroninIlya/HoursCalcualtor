@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.svo7777777.hc_database"
+    namespace = "com.svilvo.hc_database"
     compileSdk = 34
 
     defaultConfig {
