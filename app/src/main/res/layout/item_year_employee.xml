@@ -18,6 +18,7 @@
         app:cornerRadius="10dp"
         app:subTextSize="14sp"
         android:textSize="18sp"
+        app:subTextColor="?attr/colorPrimary"
         />
 
     <com.google.android.material.button.MaterialButton
