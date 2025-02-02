@@ -3,15 +3,17 @@ package com.svilvo.hourscalculator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -23,7 +25,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.svilvo.hc_database.EmployeeEntity;
 import com.svilvo.utils.DatabaseHandler;
-import com.svilvo.views.ItemButton;
 
 public class MonthsActivity extends AppCompatActivity {
 
@@ -31,7 +32,7 @@ public class MonthsActivity extends AppCompatActivity {
     private int employeeId = -1;
     private int yearId = -1;
     private int year = -1;
-    private ItemButton[] buttons = null;
+    private FrameLayout[] items = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +54,9 @@ public class MonthsActivity extends AppCompatActivity {
 
         EmployeeEntity ee = dbh.getEmployee((int)employeeId);
 
-        path.setText(">" + ee.lastName + "_" + ee.firstName.substring(0,1) +
-                "_" + ee.age + ">" + year + ">");
+        path.setText(ee.lastName + " " + ee.firstName +
+                ", " + ee.age + " : " + year);
+        path.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.months), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -63,42 +65,61 @@ public class MonthsActivity extends AppCompatActivity {
         });
 
         String[] months = getResources().getStringArray(R.array.months);
-        buttons = new ItemButton[]{
-                findViewById(R.id.january_btn),
-                findViewById(R.id.february_btn),
-                findViewById(R.id.march_btn),
-                findViewById(R.id.april_btn),
-                findViewById(R.id.may_btn),
-                findViewById(R.id.june_btn),
-                findViewById(R.id.july_btn),
-                findViewById(R.id.august_btn),
-                findViewById(R.id.september_btn),
-                findViewById(R.id.october_btn),
-                findViewById(R.id.november_btn),
-                findViewById(R.id.december_btn)};
+        items = new FrameLayout[]{
+                findViewById(R.id.january_btn_container),
+                findViewById(R.id.february_btn_container),
+                findViewById(R.id.march_btn_container),
+                findViewById(R.id.april_btn_container),
+                findViewById(R.id.may_btn_container),
+                findViewById(R.id.june_btn_container),
+                findViewById(R.id.july_btn_container),
+                findViewById(R.id.august_btn_container),
+                findViewById(R.id.september_btn_container),
+                findViewById(R.id.october_btn_container),
+                findViewById(R.id.november_btn_container),
+                findViewById(R.id.december_btn_container)};
 
         for(int i = 0; i < 12; i++) {
             double monthHours = dbh.getHours(yearId, i);
             double monthSalary = dbh.getSalary(yearId, i);
 
-            buttons[i].setText(String.format("%.2f", monthHours));
-            //buttons[i].setTopLeftText(months[i]);
-            buttons[i].setTopRightText(String.valueOf(year));
-            buttons[i].setBottomRightText(String.format("%.2f", monthSalary));
-            buttons[i].setSubTextSize(
-                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14,
-                            this.getResources().getDisplayMetrics()));
-            buttons[i].setTextSize(18);
+            CardView newEmplButton = items[i].findViewById(R.id.item_button);
 
-            int month = i;
-            buttons[i].setOnClickListener(new View.OnClickListener() {
+
+            TextView tlt = items[i].findViewById(R.id.textLeftTop);
+            tlt.setText(ee.lastName);
+            TextView tlb = items[i].findViewById(R.id.textLeftBottom);
+            tlb.setText(ee.firstName + ", " + ee.age);
+            TextView tc = items[i].findViewById(R.id.textCenter);
+            tc.setText(months[i]);
+            TextView trt = items[i].findViewById(R.id.textRightTop);
+            trt.setText(String.valueOf(year));
+            TextView trb = items[i].findViewById(R.id.textRightBottom);
+            trb.setVisibility(View.INVISIBLE);
+
+            CardView newEmplInfo = items[i].findViewById(R.id.item_info);
+
+            TextView ttlt = newEmplInfo.findViewById(R.id.titleLeftTop);
+            ttlt.setText(this.getString(R.string.hours) + ":");
+            TextView vlt = newEmplInfo.findViewById(R.id.valueLeftTop);
+            vlt.setText(String.format("%.2f", monthHours));
+            TextView ttct = newEmplInfo.findViewById(R.id.titleCenterTop);
+            ttct.setText(this.getString(R.string.salary) + ":");
+            TextView vct = newEmplInfo.findViewById(R.id.valueCenterTop);
+            vct.setText(String.format("%.2f", monthSalary));
+
+            ImageButton moreButton = items[i].findViewById(R.id.more_button);
+            moreButton.setVisibility(View.INVISIBLE);
+
+            int mon = i;
+            newEmplButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MonthsActivity.this, DaysActivity.class);
                     intent.putExtra("employeeId", employeeId);
                     intent.putExtra("yearId", yearId);
                     intent.putExtra("year", year);
-                    intent.putExtra("month", month);
+                    intent.putExtra("month", mon);
                     startActivityForResult.launch(intent);
                 }
             });
@@ -144,11 +165,18 @@ public class MonthsActivity extends AppCompatActivity {
 
                 double hours = dbh.getHours(yearId, month);
                 double salary = dbh.getSalary(yearId, month);
-                buttons[month].setText(String.format("%.2f", hours));
-                //buttons[month].setTopLeftText(months[month]);
-                buttons[month].setTopRightText(String.valueOf(year));
-                buttons[month].setBottomRightText(String.format("%.2f", salary));
 
+                CardView newEmplInfo = items[month].findViewById(R.id.item_info);
+
+                TextView ttlt = newEmplInfo.findViewById(R.id.titleLeftTop);
+                ttlt.setText(MonthsActivity.this.getString(R.string.hours) + ":");
+                TextView vlt = newEmplInfo.findViewById(R.id.valueLeftTop);
+                vlt.setText(String.format("%.2f", hours));
+                TextView ttct = newEmplInfo.findViewById(R.id.titleCenterTop);
+                ttct.setText(MonthsActivity.this.getString(R.string.salary) + ":");
+                TextView vct = newEmplInfo.findViewById(R.id.valueCenterTop);
+                vct.setText(String.format("%.2f", salary));
+                
                 Intent resintent = new Intent();
                 setResult(RESULT_OK, resintent);
             }

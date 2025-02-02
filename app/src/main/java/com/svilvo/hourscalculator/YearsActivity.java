@@ -3,12 +3,13 @@ package com.svilvo.hourscalculator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,16 +20,15 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.material.button.MaterialButton;
 import com.svilvo.dialogs.YearDialog;
 import com.svilvo.hc_database.EmployeeEntity;
 import com.svilvo.hc_database.YearEntity;
 import com.svilvo.utils.DatabaseHandler;
-import com.svilvo.views.ItemButton;
 
 import java.util.List;
 
@@ -36,6 +36,7 @@ public class YearsActivity extends AppCompatActivity {
 
     private DatabaseHandler dbh = null;
     private List<YearEntity> years;
+    private EmployeeEntity ee = null;
     private long employeeId = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +54,11 @@ public class YearsActivity extends AppCompatActivity {
 
         TextView path = findViewById(R.id.path);
 
-        EmployeeEntity ee = dbh.getEmployee((int)employeeId);
+        ee = dbh.getEmployee((int)employeeId);
 
-        path.setText(">" + ee.lastName + "_" + ee.firstName.substring(0,1) +
-                "_" + ee.age + ">");
+        path.setText(ee.lastName + " " + ee.firstName +
+                ", " + ee.age);
+        path.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.years), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -132,28 +134,39 @@ public class YearsActivity extends AppCompatActivity {
 
         for (YearEntity ye : years) {
             LayoutInflater inflater = LayoutInflater.from(this);
-            View newYearItem = inflater.inflate(R.layout.item_year_employee, ec, false);
+            View newEmployeeItem = inflater.inflate(R.layout.item_card, ec, false);
+
+            CardView newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
+
+            TextView tlt = newEmployeeItem.findViewById(R.id.textLeftTop);
+            tlt.setText(ee.lastName);
+            TextView tlb = newEmployeeItem.findViewById(R.id.textLeftBottom);
+            tlb.setText(ee.firstName + ", " + ee.age);
+            TextView tc = newEmployeeItem.findViewById(R.id.textCenter);
+            tc.setText(String.valueOf(ye.year));
+            TextView trt = newEmployeeItem.findViewById(R.id.textRightTop);
+            trt.setText(""); trt.setVisibility(View.INVISIBLE);
+            TextView trb = newEmployeeItem.findViewById(R.id.textRightBottom);
+            trb.setText(""); trb.setVisibility(View.INVISIBLE);
+
+            CardView newEmplInfo = newEmployeeItem.findViewById(R.id.item_info);
 
             double hours = dbh.getHours(ye.id);
             double salary = dbh.getSalary(ye.id);
 
-            // Create a new Button
-            ItemButton newYearButton = newYearItem.findViewById(R.id.item_button);
-            newYearButton.setText(String.format("%.2f", hours));
-            newYearButton.setTopRightText(String.valueOf(ye.year));
-            newYearButton.setBottomRightText(String.format("%.2f", salary));
-            newYearButton.setSubTextSize(
-                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14,
-                            this.getResources().getDisplayMetrics()));
-            newYearButton.setTextSize(
-                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 6,
-                            this.getResources().getDisplayMetrics()));
+            TextView ttlt = newEmplInfo.findViewById(R.id.titleLeftTop);
+            ttlt.setText(this.getString(R.string.hours) + ":");
+            TextView vlt = newEmplInfo.findViewById(R.id.valueLeftTop);
+            vlt.setText(String.format("%.2f", hours));
+            TextView ttct = newEmplInfo.findViewById(R.id.titleCenterTop);
+            ttct.setText(this.getString(R.string.salary) + ":");
+            TextView vct = newEmplInfo.findViewById(R.id.valueCenterTop);
+            vct.setText(String.format("%.2f", salary));
 
-            MaterialButton newEmplEditButton = newYearItem.findViewById(R.id.edit_button);
-            MaterialButton newEmplDeleteButton = newYearItem.findViewById(R.id.delete_button);
+            ImageButton moreButton = newEmployeeItem.findViewById(R.id.more_button);
 
             // Set click listener for the new button
-            newYearButton.setOnClickListener(new View.OnClickListener() {
+            newEmplButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(YearsActivity.this, MonthsActivity.class);
@@ -164,39 +177,42 @@ public class YearsActivity extends AppCompatActivity {
                 }
             });
 
-            newEmplEditButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    YearDialog ed = new YearDialog();
+            moreButton.setOnClickListener(v -> {
+                PopupMenu menu = new PopupMenu(YearsActivity.this, v);
+                menu.getMenuInflater().inflate(R.menu.menu_item, menu.getMenu());
 
-                    ed.open(YearsActivity.this,
-                            (String yr) -> {
-                                ye.year = Integer.parseInt(yr);
-                                Long yrId = dbh.updateYear(ye);
-                                updateYearsList();
-                            }, String.valueOf(ye.year));
-                }
-            });
+                menu.setOnMenuItemClickListener(item -> {
+                    int id = item.getItemId();
+                    if (R.id.action_edit == id) {
+                        YearDialog ed = new YearDialog();
 
-            newEmplDeleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    double hours = dbh.getHours(ye.id);
-
-                    if(hours == 0) {
-                        dbh.deleteYear(ye);
-                        updateYearsList();
-                    } else {
-                        Toast.makeText(YearsActivity.this,
-                                R.string.error_delete_year, Toast.LENGTH_SHORT).show();
+                        ed.open(YearsActivity.this,
+                                (String yr) -> {
+                                    ye.year = Integer.parseInt(yr);
+                                    Long yrId = dbh.updateYear(ye);
+                                    updateYearsList();
+                                }, String.valueOf(ye.year));
+                        return true;
                     }
-                }
+                    else if (R.id.action_delete == id) {
+                        double h = dbh.getHours(ye.id);
+
+                        if(h == 0) {
+                            dbh.deleteYear(ye);
+                            updateYearsList();
+                        } else {
+                            Toast.makeText(YearsActivity.this,
+                                    R.string.error_delete_year, Toast.LENGTH_SHORT).show();
+                        }
+                        return true;
+                    };
+                    return false;
+                });
+
+                menu.show();
             });
 
-            ec.addView(newYearItem);
+            ec.addView(newEmployeeItem);
         }
     }
-
-
 }

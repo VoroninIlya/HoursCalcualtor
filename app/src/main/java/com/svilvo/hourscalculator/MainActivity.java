@@ -6,23 +6,25 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.material.button.MaterialButton;
 import com.svilvo.dialogs.EmployeeDialog;
 import com.svilvo.hc_database.EmployeeEntity;
 import com.svilvo.hc_database.SettingsEntity;
 import com.svilvo.hc_database.YearEntity;
 import com.svilvo.utils.DatabaseHandler;
-import com.svilvo.views.ItemButton;
 
 import java.util.List;
 
@@ -117,38 +119,56 @@ public class MainActivity extends AppCompatActivity {
         for (EmployeeEntity ee : employees) {
             // Inflate the custom LinearLayout from XML
             LayoutInflater inflater = LayoutInflater.from(this);
-            View newEmployeeItem = inflater.inflate(R.layout.item_year_employee, ec, false);
-            ItemButton newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
-            newEmplButton.setText(ee.lastName + " " + ee.firstName);
-            newEmplButton.setTopRightText(String.valueOf(ee.age));
+            View newEmployeeItem = inflater.inflate(R.layout.item_card, ec, false);
 
-            MaterialButton newEmplEditButton = newEmployeeItem.findViewById(R.id.edit_button);
-            MaterialButton newEmplDeleteButton = newEmployeeItem.findViewById(R.id.delete_button);
+            CardView newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
 
-            // Set click listener for the new button
-            newEmplButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, YearsActivity.class);
-                    intent.putExtra("employeeId", ee.id);
-                    startActivity(intent);
-                }
+            TextView tc = newEmployeeItem.findViewById(R.id.textCenter);
+            tc.setText(ee.lastName + " " + ee.firstName);
+            TextView tlt = newEmployeeItem.findViewById(R.id.textLeftTop);
+            tlt.setText(this.getString(R.string.age) + ": " + ee.age);
+            TextView tlb = newEmployeeItem.findViewById(R.id.textLeftBottom);
+            tlb.setVisibility(View.INVISIBLE);
+            TextView trc = newEmployeeItem.findViewById(R.id.textRightTop);
+            trc.setVisibility(View.INVISIBLE);
+            TextView trb = newEmployeeItem.findViewById(R.id.textRightBottom);
+            trb.setVisibility(View.INVISIBLE);
+
+            CardView newEmplInfo = newEmployeeItem.findViewById(R.id.item_info);
+
+            TextView ttlt = newEmplInfo.findViewById(R.id.titleLeftTop);
+            ttlt.setText(""); ttlt.setVisibility(View.INVISIBLE);
+            TextView vlt = newEmplInfo.findViewById(R.id.valueLeftTop);
+            vlt.setText(""); vlt.setVisibility(View.INVISIBLE);
+            TextView ttct = newEmplInfo.findViewById(R.id.titleCenterTop);
+            ttct.setText(""); ttct.setVisibility(View.INVISIBLE);
+            TextView vct = newEmplInfo.findViewById(R.id.valueCenterTop);
+            vct.setText(""); vct.setVisibility(View.INVISIBLE);
+
+            ImageButton moreButton = newEmployeeItem.findViewById(R.id.more_button);
+
+            //// Set click listener for the new button
+            newEmplButton.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, YearsActivity.class);
+                intent.putExtra("employeeId", ee.id);
+                startActivity(intent);
             });
 
-            newEmplEditButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SettingsEntity[] se = {dbh.getSettings(ee.id)};
+            moreButton.setOnClickListener(v -> {
+                PopupMenu menu = new PopupMenu(MainActivity.this, v);
+                menu.getMenuInflater().inflate(R.menu.menu_item, menu.getMenu());
 
-                    EmployeeDialog ed = new EmployeeDialog();
-
-                    ed.open(MainActivity.this,
-                        (String ln, String fn, String ag, String h, String p) -> {
+                menu.setOnMenuItemClickListener(item -> {
+                    int id = item.getItemId();
+                    if (R.id.action_edit == id) {
+                        SettingsEntity[] se = {dbh.getSettings(ee.id)};
+                        EmployeeDialog ed = new EmployeeDialog();
+                        ed.open(MainActivity.this,
+                                (String ln, String fn, String ag, String h, String p) -> {
                             ee.lastName = ln;
                             ee.firstName = fn;
                             ee.age = Integer.parseInt(ag);
                             long empId = dbh.updateEmployee(ee);
-
                             if(!h.isEmpty() || !p.isEmpty()) {
                                 if(se[0] != null) {
                                     se[0].hours = h.isEmpty() ? 0.0 : Double.parseDouble(h);
@@ -166,28 +186,27 @@ public class MainActivity extends AppCompatActivity {
                                     dbh.deleteSettings(se[0]);
                                 }
                             }
-
                             updateEmployeesList();
-                        }, ee.lastName, ee.firstName, String.valueOf(ee.age),
-                            se[0] != null ? String.valueOf(se[0].hours) : "",
-                            se[0] != null ? String.valueOf(se[0].price) : "");
-                }
-            });
-
-            newEmplDeleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    List<YearEntity> years = dbh.getYears(ee.id);
-
-                    if(years == null || years.size() == 0) {
-                        dbh.deleteEmployee(ee);
-                        updateEmployeesList();
-                    } else {
-                        Toast.makeText(MainActivity.this,
-                                R.string.error_delete_employee, Toast.LENGTH_SHORT).show();
+                            }, ee.lastName, ee.firstName, String.valueOf(ee.age),
+                                se[0] != null ? String.valueOf(se[0].hours) : "",
+                                se[0] != null ? String.valueOf(se[0].price) : "");
+                        return true;
                     }
-                }
+                    else if (R.id.action_delete == id) {
+                        List<YearEntity> years = dbh.getYears(ee.id);
+                        if(years == null || years.size() == 0) {
+                            dbh.deleteEmployee(ee);
+                            updateEmployeesList();
+                        } else {
+                            Toast.makeText(MainActivity.this,
+                                    R.string.error_delete_employee, Toast.LENGTH_SHORT).show();
+                        }
+                        return true;
+                    };
+                    return false;
+                });
+
+                menu.show();
             });
 
             ec.addView(newEmployeeItem);

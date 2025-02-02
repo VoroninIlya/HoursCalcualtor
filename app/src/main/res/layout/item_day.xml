@@ -13,7 +13,7 @@
         style="@style/Widget.Material3.Button.TonalButton"
         app:backgroundTint="@color/day_buttons"
         android:foreground="@drawable/day_overlay_drawable"
-        android:textColor="?attr/colorOnPrimaryContainer"
+        android:textColor="?attr/colorOnSecondaryContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textAllCaps="false"
@@ -21,7 +21,7 @@
         android:textSize="18sp"
         app:cornerRadius="10dp"
         app:subTextSize="14sp"
-        app:subTextColor="?attr/colorPrimary"
+        app:subTextColor="?attr/colorSecondary"
         />
 
 </LinearLayout>

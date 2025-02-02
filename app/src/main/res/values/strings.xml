@@ -16,8 +16,10 @@
     <string name="employee_last_name_filler">Enter employee\'s last name</string>
     <string name="employee_age">Employee\'s age</string>
     <string name="employee_age_filler">Enter employee\'s age</string>
+    <string name="age">Age</string>
 
     <string name="confirm">Confirm</string>
+    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
@@ -26,6 +28,8 @@
     <string name="hours_worked_filler">Enter hours worked</string>
     <string name="hours_price">Price of a hour</string>
     <string name="hours_price_filler">Enter price of a hour</string>
+    <string name="hours">Hours</string>
+    <string name="salary">Salary</string>
 
     <string name="january_month">January</string>
     <string name="february_month">February</string>

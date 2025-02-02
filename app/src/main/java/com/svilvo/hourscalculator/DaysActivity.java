@@ -66,8 +66,9 @@ public class DaysActivity extends AppCompatActivity {
 
         String[] months = getResources().getStringArray(R.array.months);
 
-        path.setText(">" + ee.lastName + "_" + ee.firstName.substring(0,1) +
-                "_" + ee.age + ">" + year + ">" + months[month] + ">");
+        path.setText(ee.lastName + " " + ee.firstName +
+                ", " + ee.age + " : " + year + " " + months[month]);
+        path.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         cldr.set(Calendar.YEAR, year);
         cldr.set(Calendar.MONTH, month);
