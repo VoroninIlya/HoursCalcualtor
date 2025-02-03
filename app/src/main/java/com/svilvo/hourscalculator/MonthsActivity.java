@@ -2,12 +2,14 @@ package com.svilvo.hourscalculator;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +25,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.hc_database.EmployeeEntity;
 import com.svilvo.utils.DatabaseHandler;
 
@@ -124,6 +128,13 @@ public class MonthsActivity extends AppCompatActivity {
                 }
             });
         }
+
+        SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
+        boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+
+        if(!tutorialShown) {
+            showTutorial();
+        }
     }
 
     @Override
@@ -140,12 +151,17 @@ public class MonthsActivity extends AppCompatActivity {
             Intent intent = new Intent(MonthsActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        }
-        else if (R.id.action_about == id) {
+        } else if (R.id.action_about == id) {
             // Handle about action
             Intent intent = new Intent(MonthsActivity.this, AboutActivity.class);
             startActivity(intent);
             return true;
+        } else if (R.id.action_tutorial == id) {
+            SharedPreferences.Editor editor = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE).edit();
+            editor.putBoolean("tutorial_shown", false);
+            editor.apply();
+
+            showTutorial();
         }
 
         return super.onOptionsItemSelected(item);
@@ -180,6 +196,43 @@ public class MonthsActivity extends AppCompatActivity {
                 Intent resintent = new Intent();
                 setResult(RESULT_OK, resintent);
             }
+
+            SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
+            boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+
+            if(!tutorialShown) {
+                showTutorial();
+            }
         }
     });
+
+    private void showTutorial() {
+        int month = 4;
+        TapTargetView.showFor(this,
+                TapTarget.forView(items[month],
+                                getString(R.string.tutorial_month_item_title),
+                                getString(R.string.tutorial_month_item_description))
+                        .id(1)
+                        .tintTarget(false)
+                        .transparentTarget(true)
+                        .targetRadius(60)
+                        .outerCircleColor(R.color.notice_100)
+                        .targetCircleColor(R.color.white)
+                        .titleTextSize(20)
+                        .descriptionTextSize(16)
+                        .cancelable(false),
+                new TapTargetView.Listener() {
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);
+                        Intent intent = new Intent(MonthsActivity.this, DaysActivity.class);
+                        intent.putExtra("employeeId", employeeId);
+                        intent.putExtra("yearId", yearId);
+                        intent.putExtra("year", year);
+                        intent.putExtra("month", month);
+                        startActivityForResult.launch(intent);
+                    }
+                }
+        );
+    }
 }

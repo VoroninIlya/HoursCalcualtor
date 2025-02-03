@@ -6,6 +6,7 @@
     <string name="report_menu">Отчёт</string>
     <string name="settings_menu">Настройки</string>
     <string name="about_menu">О программе</string>
+    <string name="tutorial_menu">Обучение</string>
 
     <string name="year">Год</string>
     <string name="year_filler">Введите год</string>
@@ -105,5 +106,37 @@
 
 Авторское право (C) 2025 Илья Воронин, Светлана Воронина
     </string>
+
+    <string name="tutorial_add_employee_title">Нажмите кнопкау \"Добавить работника\",</string>
+    <string name="tutorial_add_employee_description">чтобы добавить нового работника!</string>
+    <string name="tutorial_employee_age_title">Заполните данные сотрудника</string>
+    <string name="tutorial_employee_age_description">Если необходимо, задайте рабочие часы в день и цену одного часа по умолчанию для сотрудника.
+Это опциональные поля, если они пустые, будут применены значение по умолчанию из настроек приложения.</string>
+    <string name="tutorial_employee_confirm_title">Нажмите кнопка \"Применить\",</string>
+    <string name="tutorial_employee_confirm_description">когда поля заполнены, чтобы сохранить работника!</string>
+    <string name="tutorial_employee_item_title">Нажмите только что созданный элемент \"Сотрудник\",</string>
+    <string name="tutorial_employee_item_description">чтобы перейти к следующему шагу</string>
+    <string name="tutorial_add_year_title">>Нажмите кнопкау \"Добавить год\",</string>
+    <string name="tutorial_add_year_description">чтобы добавить новый рабочий год!</string>
+    <string name="tutorial_year_title">Выберете рабочий год</string>
+    <string name="tutorial_year_description">и затем нажмите кнопку \"Применить\" чтобы добавить год.</string>
+    <string name="tutorial_year_item_title">Нажмите только что созданный элемент \"Год\",</string>
+    <string name="tutorial_year_item_description">чтобы перейти к следующему шагу</string>
+    <string name="tutorial_month_item_title">Нажмите элемент \"Месяц\"</string>
+    <string name="tutorial_month_item_description"> (на пример Май), чтобы перейти к следующему шагу</string>
+    <string name="tutorial_day_item_title">Это элемент \"День\"</string>
+    <string name="tutorial_day_item_description">В центре элемента отображаются рабочие часы.
+Справ снизу отображается рассчитанная зарплата.
+При первом клике эти значения заполняются в соответствии со значениеми по умолчанию для сотрудника или настройками приложения.
+Повторный клик открывает окно для редактирования.
+Нажмите один раз, чтобы установить время по умолчанию!
+    </string>
+    <string name="tutorial_day_item2_title">Это элемент \"День\"</string>
+    <string name="tutorial_day_item2_description">Нажмите снова, чтобы открыть окно редактирования</string>
+    <string name="tutorial_day_dialog_title">Окно реадктирования эемента \"День\"</string>
+    <string name="tutorial_day_dialog_description">В данном окне можно задать рабочие часы и цену часа для данного конкретного дня,
+либо удаить данные. Нажмите кнопку \"Удалить\", чтобы продолжить</string>
+    <string name="tutorial_overflow_title">Превосходно!</string>
+    <string name="tutorial_overflow_description">Вы можете в любой момент активировать днное обучение нажав на кнопку \"Обучение\" в меню</string>
 
 </resources>

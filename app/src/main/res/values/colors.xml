@@ -2,6 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="notice_30">#4DB5A070</color>
+    <color name="notice_100">#B5A070</color>
 
     <color name="day_db1">?attr/colorSurfaceContainerHigh</color>
     <color name="day_db0">?attr/colorSurfaceContainer</color>

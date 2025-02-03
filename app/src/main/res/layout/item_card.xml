@@ -20,7 +20,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:minWidth="250dp"
-            app:cardBackgroundColor="?android:attr/colorBackground">
+            app:cardBackgroundColor="#00FFFFFF">
 
             <FrameLayout
                 android:id="@+id/item_button_container"
@@ -42,10 +42,10 @@
             android:id="@+id/item_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
+            android:layout_marginTop="0dp"
             android:background="@drawable/item_card_layout_shape"
             android:minWidth="250dp"
-            app:cardBackgroundColor="?android:attr/colorBackground">
+            app:cardBackgroundColor="#00FFFFFF">
 
             <FrameLayout
                 android:id="@+id/item_info_container"

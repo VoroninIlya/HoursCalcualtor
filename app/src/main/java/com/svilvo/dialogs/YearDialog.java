@@ -2,6 +2,7 @@ package com.svilvo.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.hourscalculator.R;
 
 import java.util.ArrayList;
@@ -19,7 +23,8 @@ import java.util.List;
 public class YearDialog {
     public YearDialog() {}
 
-    public boolean open(Context ctx, YearDialogCallback cb, String year) {
+    public boolean open(Context ctx, YearDialogCallback cb,
+                        YearDialogOnDismissCallback dmcb, String year) {
 
         // Create a custom dialog
         Dialog dialog = new Dialog(ctx);
@@ -86,9 +91,35 @@ public class YearDialog {
             }
         });
 
+        SharedPreferences prefs = ctx.getSharedPreferences("hours_calculator_tutorial", ctx.MODE_PRIVATE);
+        boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+        if(!tutorialShown) {
+            dialog.setOnShowListener(dialog1 -> showTutorial(ctx, dialog));
+            buttonCancel.setEnabled(false);
+        }
+
+        // call dismiss callback
+        dialog.setOnDismissListener(dialog1 -> dmcb.onComplete());
         // Show the dialog
         dialog.show();
 
         return true;
+    }
+
+    private void showTutorial(Context ctx, Dialog d) {
+        TapTargetView.showFor(d,
+            TapTarget.forView(d.findViewById(R.id.editTextYear),
+                    ctx.getString(R.string.tutorial_year_title),
+                    ctx.getString(R.string.tutorial_year_description))
+                .id(3)
+                .tintTarget(false)
+                .transparentTarget(true)
+                .targetRadius(100)
+                .outerCircleColor(R.color.notice_100)
+                .targetCircleColor(R.color.white)
+                .titleTextSize(20)
+                .descriptionTextSize(16)
+                .cancelable(false)
+        );
     }
 }

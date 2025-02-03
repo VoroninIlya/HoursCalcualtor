@@ -1,6 +1,7 @@
 package com.svilvo.hourscalculator;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -20,6 +25,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.dialogs.EmployeeDialog;
 import com.svilvo.hc_database.EmployeeEntity;
 import com.svilvo.hc_database.SettingsEntity;
@@ -27,10 +33,14 @@ import com.svilvo.hc_database.YearEntity;
 import com.svilvo.utils.DatabaseHandler;
 
 import java.util.List;
+import com.getkeepsafe.taptargetview.TapTarget;
 
 public class MainActivity extends AppCompatActivity {
     private DatabaseHandler dbh = null;
     private List<EmployeeEntity> employees;
+
+    private EmployeeEntity lastAddedEmployee = null;
+    private int indexOfLastAddedEmployee = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         updateEmployeesList();
+
+        SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
+        boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+
+        if(!tutorialShown) {
+            LinearLayout ec = findViewById(R.id.employees_container);
+            if(ec.getChildCount() > 0)
+                showTutorial(2);
+            else
+                showTutorial(1);
+        }
     }
 
     @Override
@@ -72,27 +93,53 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
             return true;
+        } else if (R.id.action_tutorial == id) {
+            SharedPreferences.Editor editor = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE).edit();
+            editor.putBoolean("tutorial_shown", false);
+            editor.apply();
+
+            showTutorial(1);
         }
 
        return super.onOptionsItemSelected(item);
     }
 
+    ActivityResultLauncher<Intent> startActivityForResult =
+        registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
+                    boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+
+                    if(!tutorialShown) {
+                        LinearLayout ec = findViewById(R.id.employees_container);
+                        if(ec.getChildCount() > 0)
+                            showTutorial(2);
+                        else
+                            showTutorial(1);
+                    }
+                }
+            });
+
     public void addEmployeeClickHandler(View view) {
         EmployeeDialog ed = new EmployeeDialog();
 
-        ed.open(this, this::addEmployeeToEmployees,
+        ed.open(this, this::addEmployeeToEmployees, this::dialogDismissHandler,
                 "", "", "", "", "");
     }
 
     private void addEmployeeToEmployees(String lastName, String firstName, String age,
                                         String hours, String price) {
 
-        EmployeeEntity ee = new EmployeeEntity();
-        ee.lastName = lastName;
-        ee.firstName = firstName;
-        ee.age = Integer.parseInt(age);
+        lastAddedEmployee = new EmployeeEntity();
+        lastAddedEmployee.lastName = lastName;
+        lastAddedEmployee.firstName = firstName;
+        lastAddedEmployee.age = Integer.parseInt(age);
 
-        long empId = dbh.writeEmployee(ee);
+        long empId = dbh.writeEmployee(lastAddedEmployee);
+        lastAddedEmployee.id = (int)empId;
 
         if(!hours.isEmpty() || !price.isEmpty()) {
             SettingsEntity se = new SettingsEntity();
@@ -103,6 +150,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         updateEmployeesList();
+    }
+
+    private void dialogDismissHandler() {
+        SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
+        boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+
+        if(!tutorialShown) {
+            showTutorial(2);
+        }
     }
 
     private void updateEmployeesList() {
@@ -116,7 +172,13 @@ public class MainActivity extends AppCompatActivity {
             ec.removeView(child);
         }
 
+        int i = 0;
         for (EmployeeEntity ee : employees) {
+
+            if (lastAddedEmployee != null && lastAddedEmployee.id == ee.id)
+                indexOfLastAddedEmployee = i;
+            i++;
+
             // Inflate the custom LinearLayout from XML
             LayoutInflater inflater = LayoutInflater.from(this);
             View newEmployeeItem = inflater.inflate(R.layout.item_card, ec, false);
@@ -187,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             updateEmployeesList();
-                            }, ee.lastName, ee.firstName, String.valueOf(ee.age),
+                            }, this::dialogDismissHandler, ee.lastName, ee.firstName, String.valueOf(ee.age),
                                 se[0] != null ? String.valueOf(se[0].hours) : "",
                                 se[0] != null ? String.valueOf(se[0].price) : "");
                         return true;
@@ -211,5 +273,61 @@ public class MainActivity extends AppCompatActivity {
 
             ec.addView(newEmployeeItem);
         }
+    }
+
+    private void showTutorial(int part) {
+        LinearLayout ec = findViewById(R.id.employees_container);
+        if (part == 2 && ec.getChildCount() > 0) {
+            employees = dbh.getEmployees();
+            EmployeeEntity ee = employees.get(indexOfLastAddedEmployee >= 0 ? indexOfLastAddedEmployee : 0);
+
+            View newEmployeeItem = ec.getChildAt(indexOfLastAddedEmployee >= 0 ? indexOfLastAddedEmployee : 0);
+
+        TapTargetView.showFor(this,
+            TapTarget.forView(newEmployeeItem,
+                    getString(R.string.tutorial_employee_item_title),
+                    getString(R.string.tutorial_employee_item_description))
+                .id(1)
+                .tintTarget(false)
+                .transparentTarget(true)
+                .targetRadius(60)
+                .outerCircleColor(R.color.notice_100)
+                .targetCircleColor(R.color.white)
+                .titleTextSize(20)
+                .descriptionTextSize(16)
+                .cancelable(false),
+                new TapTargetView.Listener() {
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);
+                        Intent intent = new Intent(MainActivity.this, YearsActivity.class);
+                        intent.putExtra("employeeId", ee.id);
+                        startActivityForResult.launch(intent);
+                    }
+                }
+
+        );
+    } else {
+        TapTargetView.showFor(this,
+            TapTarget.forView(findViewById(R.id.fab_add),
+                    getString(R.string.tutorial_add_employee_title),
+                    getString(R.string.tutorial_add_employee_description))
+                .id(1)
+                .tintTarget(false)
+                .transparentTarget(false)
+                .outerCircleColor(R.color.notice_100)
+                .targetCircleColor(R.color.white)
+                .titleTextSize(20)
+                .descriptionTextSize(16)
+                .cancelable(false),
+            new TapTargetView.Listener() {
+                @Override
+                public void onTargetClick(TapTargetView view) {
+                    super.onTargetClick(view);
+                    addEmployeeClickHandler(findViewById(R.id.fab_add));
+                }
+            }
+        );
+    }
     }
 }

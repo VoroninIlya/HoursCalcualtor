@@ -2,6 +2,7 @@ package com.svilvo.hourscalculator;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +26,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.dialogs.YearDialog;
 import com.svilvo.hc_database.EmployeeEntity;
 import com.svilvo.hc_database.YearEntity;
@@ -38,6 +41,9 @@ public class YearsActivity extends AppCompatActivity {
     private List<YearEntity> years;
     private EmployeeEntity ee = null;
     private long employeeId = -1;
+
+    private YearEntity lastAddedYear = null;
+    private int indexOfLastAddedYear = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +73,17 @@ public class YearsActivity extends AppCompatActivity {
         });
 
         updateYearsList();
+
+        SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
+        boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+
+        if(!tutorialShown) {
+            LinearLayout yc = findViewById(R.id.years_container);
+            if(yc.getChildCount() > 0)
+                showTutorial(2);
+            else
+                showTutorial(1);
+        }
     }
 
     @Override
@@ -83,12 +100,17 @@ public class YearsActivity extends AppCompatActivity {
             Intent intent = new Intent(YearsActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        }
-        else if (R.id.action_about == id) {
+        } else if (R.id.action_about == id) {
             // Handle about action
             Intent intent = new Intent(YearsActivity.this, AboutActivity.class);
             startActivity(intent);
             return true;
+        } else if (R.id.action_tutorial == id) {
+            SharedPreferences.Editor editor = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE).edit();
+            editor.putBoolean("tutorial_shown", false);
+            editor.apply();
+
+            showTutorial(1);
         }
 
         return super.onOptionsItemSelected(item);
@@ -103,21 +125,42 @@ public class YearsActivity extends AppCompatActivity {
                     if(result.getResultCode() == Activity.RESULT_OK) {
                         updateYearsList();
                     }
+
+                    SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
+                    boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+
+                    if(!tutorialShown) {
+                        LinearLayout yc = findViewById(R.id.years_container);
+                        if(yc.getChildCount() > 0)
+                            showTutorial(2);
+                        else
+                            showTutorial(1);
+                    }
                 }
             });
 
     public void addYearClickHandler(View view) {
         YearDialog ed = new YearDialog();
 
-        ed.open(this, this::addYearToYears, "");
+        ed.open(this, this::addYearToYears, this::dialogDismissHandler, "");
     }
 
     private void addYearToYears(String year) {
-        YearEntity ye = new YearEntity();
-        ye.year = Integer.parseInt(year);
-        ye.employeeId = (int)employeeId;
-        Long empId = dbh.insertYear(ye);
+        lastAddedYear = new YearEntity();
+        lastAddedYear.year = Integer.parseInt(year);
+        lastAddedYear.employeeId = (int)employeeId;
+        long empId = dbh.insertYear(lastAddedYear);
+        lastAddedYear.id = (int)empId;
         updateYearsList();
+    }
+
+    private void dialogDismissHandler() {
+        SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
+        boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+
+        if(!tutorialShown) {
+            showTutorial(2);
+        }
     }
 
     private void updateYearsList() {
@@ -132,7 +175,13 @@ public class YearsActivity extends AppCompatActivity {
             ec.removeView(child);
         }
 
+        int i = 0;
         for (YearEntity ye : years) {
+
+            if (lastAddedYear != null && lastAddedYear.id == ye.id)
+                indexOfLastAddedYear = i;
+            i++;
+
             LayoutInflater inflater = LayoutInflater.from(this);
             View newEmployeeItem = inflater.inflate(R.layout.item_card, ec, false);
 
@@ -191,7 +240,7 @@ public class YearsActivity extends AppCompatActivity {
                                     ye.year = Integer.parseInt(yr);
                                     Long yrId = dbh.updateYear(ye);
                                     updateYearsList();
-                                }, String.valueOf(ye.year));
+                                }, this::dialogDismissHandler, String.valueOf(ye.year));
                         return true;
                     }
                     else if (R.id.action_delete == id) {
@@ -213,6 +262,64 @@ public class YearsActivity extends AppCompatActivity {
             });
 
             ec.addView(newEmployeeItem);
+        }
+    }
+
+    private void showTutorial(int part) {
+        LinearLayout yc = findViewById(R.id.years_container);
+        if (part == 2 && yc.getChildCount() > 0) {
+
+            years = dbh.getYears((int)employeeId);
+            YearEntity ye = years.get(indexOfLastAddedYear >= 0 ? indexOfLastAddedYear : 0);
+
+            View newYearItem = yc.getChildAt(indexOfLastAddedYear >= 0 ? indexOfLastAddedYear : 0);
+
+            TapTargetView.showFor(this,
+                TapTarget.forView(newYearItem,
+                        getString(R.string.tutorial_year_item_title),
+                        getString(R.string.tutorial_year_item_description))
+                    .id(1)
+                    .tintTarget(false)
+                    .transparentTarget(true)
+                    .targetRadius(60)
+                    .outerCircleColor(R.color.notice_100)
+                    .targetCircleColor(R.color.white)
+                    .titleTextSize(20)
+                    .descriptionTextSize(16)
+                    .cancelable(false),
+                new TapTargetView.Listener() {
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);
+                        Intent intent = new Intent(YearsActivity.this, MonthsActivity.class);
+                        intent.putExtra("employeeId", ye.employeeId);
+                        intent.putExtra("yearId", ye.id);
+                        intent.putExtra("year", ye.year);
+                        startActivityForResult.launch(intent);
+                    }
+                }
+            );
+        } else {
+            TapTargetView.showFor(this,
+                TapTarget.forView(findViewById(R.id.fab_add),
+                                getString(R.string.tutorial_add_year_title),
+                                getString(R.string.tutorial_add_year_description))
+                        .id(1)
+                        .tintTarget(false)
+                        .transparentTarget(false)
+                        .outerCircleColor(R.color.notice_100)
+                        .targetCircleColor(R.color.white)
+                        .titleTextSize(20)
+                        .descriptionTextSize(16)
+                        .cancelable(false),
+                new TapTargetView.Listener() {
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);
+                        addYearClickHandler(findViewById(R.id.fab_add));
+                    }
+                }
+            );
         }
     }
 }
