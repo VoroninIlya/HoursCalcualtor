@@ -12,7 +12,6 @@
     <com.svilvo.views.DayButton
         android:id="@+id/item_button"
         style="@style/Widget.Material3.Button.TonalButton"
-        android:background="#00000000"
         app:backgroundTint="@color/day_buttons"
         android:foreground="@drawable/day_overlay_drawable"
         android:textColor="?attr/colorOnSecondaryContainer"
