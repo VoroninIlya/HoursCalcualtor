@@ -91,7 +91,7 @@
     <string name="error_confirm_year">"Please enter a year!"</string>
 
     <string name="about_markdown">
-"## Hours Calculator v1.0.1
+"## Hours Calculator v1.0.2
 
 This is a small Android app designed to calculate the hours worked by employees. It allows you to add multiple employees, enter their years of service and record their working hours for each day. You can also set the price of a working hour, and the app will then calculate the employee's salary based on worked hours and the set hours price.
 
