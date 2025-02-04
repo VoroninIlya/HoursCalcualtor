@@ -2,11 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="notice_30">#4DB5A070</color>
+    <color name="notice_100">#B5A070</color>
 
-    <color name="day_db1">?attr/colorSurfaceContainerLow</color>
-    <color name="day_db0">?attr/colorSurfaceContainerLowest</color>
+    <color name="day_db1">?attr/colorSurfaceContainerHigh</color>
+    <color name="day_db0">?attr/colorSurfaceContainer</color>
 
-    <color name="subtext">?attr/colorSecondary</color>
+    <color name="main_text">?attr/colorOnSecondaryContainer</color>
+    <color name="sub_text">?attr/colorSecondary</color>
 
     <color name="black_overlay">#10000000</color>
     <color name="red_db0_overlay">#20D00000</color>

@@ -6,6 +6,7 @@
     <string name="report_menu">Report</string>
     <string name="settings_menu">Settings</string>
     <string name="about_menu">About</string>
+    <string name="tutorial_menu">Tutorial</string>
 
     <string name="year">Year</string>
     <string name="year_filler">Enter year</string>
@@ -16,16 +17,20 @@
     <string name="employee_last_name_filler">Enter employee\'s last name</string>
     <string name="employee_age">Employee\'s age</string>
     <string name="employee_age_filler">Enter employee\'s age</string>
+    <string name="age">Age</string>
 
     <string name="confirm">Confirm</string>
+    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
 
     <string name="hours_worked">Hours worked</string>
-    <string name="hours_worked_filler">Enter hours worked</string>
+    <string name="hours_worked_filler">Enter working hours</string>
     <string name="hours_price">Price of a hour</string>
     <string name="hours_price_filler">Enter price of a hour</string>
+    <string name="hours">Hours</string>
+    <string name="salary">Salary</string>
 
     <string name="january_month">January</string>
     <string name="february_month">February</string>
@@ -41,7 +46,7 @@
     <string name="december_month">December</string>
 
     <string name="default_hours_worked">Default hours worked</string>
-    <string name="default_hours_worked_filler">Enter default hours worked</string>
+    <string name="default_hours_worked_filler">Enter default working hours</string>
     <string name="default_hours_price">Default price of a hour</string>
     <string name="default_hours_price_filler">Enter default price of a hour</string>
 
@@ -101,5 +106,37 @@ If the user does not agree with the terms of this disclaimer, he/she must stop u
 
 Copyright (C) 2025 Voronin Ilia, Voronina Svetlana
     </string>
+
+    <string name="tutorial_add_employee_title">Press the \"Add employee\" button</string>
+    <string name="tutorial_add_employee_description">to add a new employee!</string>
+    <string name="tutorial_employee_age_title">Fill in all employee\'s data"</string>
+    <string name="tutorial_employee_age_description">If required, set the default working hours and price per day for the employee.
+These are optional fields, if left empty the default values from the app settings will be used.</string>
+    <string name="tutorial_employee_confirm_title">Press the \"Confirm\" button</string>
+    <string name="tutorial_employee_confirm_description">When fields are filled, click it to save the new employee!</string>
+    <string name="tutorial_employee_item_title">Press the currently created \"Employee\" item</string>
+    <string name="tutorial_employee_item_description">to go to the next step</string>
+    <string name="tutorial_add_year_title">Press the \"Add year\" button</string>
+    <string name="tutorial_add_year_description">to add a new working year!</string>
+    <string name="tutorial_year_title">Select a working year</string>
+    <string name="tutorial_year_description"> and then press the \"Confirm\" button to add a new year.</string>
+    <string name="tutorial_year_item_title">Press the currently created \"Year\" item,</string>
+    <string name="tutorial_year_item_description">to go to the next step</string>
+    <string name="tutorial_month_item_title">Press a \"Month\" item</string>
+    <string name="tutorial_month_item_description"> (for example May) to go to the next step</string>
+    <string name="tutorial_day_item_title">This is a \"Day\" item</string>
+    <string name="tutorial_day_item_description">The working hours for the day are shown in the middle of the item.
+The counted salary for the day is shown on the bottom right.
+The first click on the button will fill hours and price of an hour with default values from either employee settings or app settings.
+A second click will open a dialog to edit these values for the day.
+Click one time to apply default values!
+    </string>
+    <string name="tutorial_day_item2_title">This is a \"Day\" item</string>
+    <string name="tutorial_day_item2_description">Press again to open edit dialog!</string>
+    <string name="tutorial_day_dialog_title">\"Day\" item edit dialog</string>
+    <string name="tutorial_day_dialog_description">In this window you can set the working hours and the price per hour for a given day,
+or delete the data. Click on the \"Delete\" button to continue</string>
+    <string name="tutorial_overflow_title">Well done!</string>
+    <string name="tutorial_overflow_description">You can start this tutorial again by pressing the \"Tutorial\" button in menu</string>
 
 </resources>

@@ -2,6 +2,8 @@ package com.svilvo.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -9,12 +11,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.svilvo.hourscalculator.R;
 
 public class EmployeeDialog {
 
     public EmployeeDialog() {}
     public boolean open(Context ctx, EmployeeDialogCallback cb,
+                        EmployeeDialogOnDismissCallback dmcb,
                         String lastName, String firstName, String age,
                         String hours, String price) {
 
@@ -75,9 +80,47 @@ public class EmployeeDialog {
             }
         });
 
-        // Show the dialog
+        SharedPreferences prefs = ctx.getSharedPreferences("hours_calculator_tutorial", ctx.MODE_PRIVATE);
+        boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+        if(!tutorialShown) {
+            dialog.setOnShowListener(dialog1 -> showTutorial(ctx, dialog));
+            buttonCancel.setEnabled(false);
+        }
+
+        dialog.setOnDismissListener(dialog1 -> dmcb.onComplete());
         dialog.show();
 
         return true;
+    }
+
+    private void showTutorial(Context ctx, Dialog d) {
+        new TapTargetSequence(d)
+            .targets(
+                TapTarget.forView(d.findViewById(R.id.editTextEmployeeAge),
+                        ctx.getString(R.string.tutorial_employee_age_title),
+                        ctx.getString(R.string.tutorial_employee_age_description))
+                    .id(3)
+                    .tintTarget(false)
+                    .transparentTarget(true)
+                    .targetRadius(150)
+                    .outerCircleColor(R.color.notice_100)
+                    .targetCircleColor(R.color.white)
+                    .titleTextSize(20)
+                    .descriptionTextSize(16)
+                    .cancelable(false),
+                TapTarget.forView(d.findViewById(R.id.buttonConfirm),
+                        ctx.getString(R.string.tutorial_employee_confirm_title),
+                        ctx.getString(R.string.tutorial_employee_confirm_description))
+                    .id(5)
+                    .tintTarget(false)
+                    .transparentTarget(true)
+                    .targetRadius(50)
+                    .outerCircleColor(R.color.notice_100)
+                    .targetCircleColor(R.color.white)
+                    .titleTextSize(20)
+                    .descriptionTextSize(16)
+                    .cancelable(false)
+            )
+            .start();
     }
 }

@@ -2,6 +2,7 @@ package com.svilvo.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.hc_database.DayEntity;
 import com.svilvo.hourscalculator.R;
 
@@ -16,6 +19,7 @@ public class DayDialog {
     public DayDialog() {}
     public boolean open(Context ctx, DayDialogCallback cb,
                         DayDeleteCallback cbD,
+                        DayDialogDismissCallback dmcb,
                         DayEntity de) {
 
         // Create a custom dialog
@@ -71,9 +75,43 @@ public class DayDialog {
             }
         });
 
+        SharedPreferences prefs = ctx.getSharedPreferences("hours_calculator_tutorial", ctx.MODE_PRIVATE);
+        boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
+        if(!tutorialShown) {
+            dialog.setOnShowListener(dialog1 -> showTutorial(ctx, dialog, cbD, de));
+            buttonCancel.setEnabled(false);
+            buttonConfirm.setEnabled(false);
+        }
+
+        dialog.setOnDismissListener(dialog1 -> dmcb.onComplete());
         // Show the dialog
         dialog.show();
 
         return true;
+    }
+
+    private void showTutorial(Context ctx, Dialog d, DayDeleteCallback cbD, DayEntity de) {
+        TapTargetView.showFor(d,
+            TapTarget.forView(d.findViewById(R.id.textView2),
+                    ctx.getString(R.string.tutorial_day_dialog_title),
+                    ctx.getString(R.string.tutorial_day_dialog_description))
+                .id(3)
+                .tintTarget(false)
+                .transparentTarget(true)
+                .targetRadius(150)
+                .outerCircleColor(R.color.notice_100)
+                .targetCircleColor(R.color.white)
+                .titleTextSize(20)
+                .descriptionTextSize(16)
+                .cancelable(false),
+            new TapTargetView.Listener() {
+                @Override
+                public void onTargetClick(TapTargetView view) {
+                    super.onTargetClick(view);
+                    cbD.onComplete(de);
+                    d.dismiss();
+                }
+            }
+        );
     }
 }
