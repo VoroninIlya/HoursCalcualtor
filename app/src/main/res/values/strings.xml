@@ -138,5 +138,8 @@ Click one time to apply default values!
 or delete the data. Click on the \"Delete\" button to continue</string>
     <string name="tutorial_overflow_title">Well done!</string>
     <string name="tutorial_overflow_description">You can start this tutorial again by pressing the \"Tutorial\" button in menu</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 
 </resources>
