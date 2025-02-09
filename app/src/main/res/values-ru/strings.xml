@@ -11,6 +11,7 @@
     <string name="year">Год</string>
     <string name="year_filler">Введите год</string>
 
+    <string name="employee">Cотрудник</string>
     <string name="employee_first_name">Имя сотрудника</string>
     <string name="employee_first_name_filler">Введите имя сотрудника</string>
     <string name="employee_last_name">Фамилия сотрудника</string>
@@ -138,5 +139,8 @@
 либо удаить данные. Нажмите кнопку \"Удалить\", чтобы продолжить</string>
     <string name="tutorial_overflow_title">Превосходно!</string>
     <string name="tutorial_overflow_description">Вы можете в любой момент активировать днное обучение нажав на кнопку \"Обучение\" в меню</string>
+
+    <string name="app_widget_description">Калькулятор часов виджет</string>
+    <string name="day_widget_settings">Настройки виджета</string>
 
 </resources>

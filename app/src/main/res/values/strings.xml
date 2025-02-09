@@ -11,6 +11,7 @@
     <string name="year">Year</string>
     <string name="year_filler">Enter year</string>
 
+    <string name="employee">Employee</string>
     <string name="employee_first_name">Employee\'s first name</string>
     <string name="employee_first_name_filler">Enter employee\'s first name</string>
     <string name="employee_last_name">Employee\'s last name</string>
@@ -138,8 +139,8 @@ Click one time to apply default values!
 or delete the data. Click on the \"Delete\" button to continue</string>
     <string name="tutorial_overflow_title">Well done!</string>
     <string name="tutorial_overflow_description">You can start this tutorial again by pressing the \"Tutorial\" button in menu</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
+
+    <string name="app_widget_description">Hours calculator widget</string>
+    <string name="day_widget_settings">Widget settings</string>
 
 </resources>

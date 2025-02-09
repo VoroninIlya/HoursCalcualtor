@@ -12,11 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HoursCalculator"
         tools:targetApi="31">
+        <activity
+            android:name=".DayWidgetSettingsActivity"
+            android:theme="@style/TransparentActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:exported="false" />
+
         <receiver
             android:name=".DayWidget"
-            android:exported="false">
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_APPWIDGET">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.svilvo.hourscalculator.ACTION_WIDGET_CLICK" />
             </intent-filter>
 
             <meta-data
@@ -52,7 +61,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

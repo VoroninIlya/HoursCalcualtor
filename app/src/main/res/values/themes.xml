@@ -40,7 +40,7 @@
 
     <style name="Theme.HoursCalculator.AppWidgetContainer" parent="Theme.HoursCalculator.AppWidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
-        <item name="appWidgetPadding">16dp</item>
+        <item name="appWidgetPadding">1dp</item>
     </style>
 
 </resources>
