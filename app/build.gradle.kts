@@ -45,6 +45,8 @@ dependencies {
     implementation(project(":hc_database"))
     implementation("io.noties.markwon:core:4.6.2")
     implementation("com.getkeepsafe.taptargetview:taptargetview:1.13.3")
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

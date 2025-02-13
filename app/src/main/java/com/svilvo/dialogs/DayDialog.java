@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.svilvo.hc_database.DayEntity;
+import com.svilvo.hc_database.entities.DayEntity;
 import com.svilvo.hourscalculator.R;
 
 public class DayDialog {

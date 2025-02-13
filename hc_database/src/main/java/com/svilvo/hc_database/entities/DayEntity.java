@@ -1,18 +1,18 @@
-package com.svilvo.hc_database;
+package com.svilvo.hc_database.entities;
 
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(
-        tableName = "settings",
-        indices = {@Index(value = {"employeeId"}, unique = true) }
+        tableName = "days",
+        indices = {@Index(value = {"day", "monthId"}, unique = true)}
 )
-public class SettingsEntity {
+public class DayEntity {
     @PrimaryKey(autoGenerate = true)
     public int id;
-    public int employeeId;
-
+    public int monthId;
+    public int day;
     public double hours;
     public double price;
 }

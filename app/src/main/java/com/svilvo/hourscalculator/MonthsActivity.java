@@ -27,7 +27,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.svilvo.hc_database.EmployeeEntity;
+import com.svilvo.hc_database.entities.EmployeeEntity;
 import com.svilvo.utils.DatabaseHandler;
 
 public class MonthsActivity extends AppCompatActivity {
@@ -162,6 +162,11 @@ public class MonthsActivity extends AppCompatActivity {
             editor.apply();
 
             showTutorial();
+        } else if (R.id.action_report == id) {
+            // Handle about action
+            Intent intent = new Intent(MonthsActivity.this, ReportActivity.class);
+            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

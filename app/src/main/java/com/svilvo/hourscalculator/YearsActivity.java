@@ -29,8 +29,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.dialogs.YearDialog;
-import com.svilvo.hc_database.EmployeeEntity;
-import com.svilvo.hc_database.YearEntity;
+import com.svilvo.hc_database.entities.EmployeeEntity;
+import com.svilvo.hc_database.entities.YearEntity;
 import com.svilvo.utils.DatabaseHandler;
 
 import java.util.List;
@@ -111,6 +111,11 @@ public class YearsActivity extends AppCompatActivity {
             editor.apply();
 
             showTutorial(1);
+        } else if (R.id.action_report == id) {
+            // Handle about action
+            Intent intent = new Intent(YearsActivity.this, ReportActivity.class);
+            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

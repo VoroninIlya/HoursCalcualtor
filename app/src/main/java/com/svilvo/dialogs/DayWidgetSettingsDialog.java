@@ -2,17 +2,15 @@ package com.svilvo.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.svilvo.hc_database.EmployeeEntity;
+import com.svilvo.hc_database.entities.EmployeeEntity;
 import com.svilvo.hourscalculator.R;
 
 import java.util.ArrayList;

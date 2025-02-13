@@ -1,4 +1,4 @@
-package com.svilvo.hc_database;
+package com.svilvo.hc_database.entities;
 
 import androidx.room.Entity;
 import androidx.room.Index;

@@ -2,28 +2,20 @@ package com.svilvo.hourscalculator;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.svilvo.dialogs.DayDialog;
 import com.svilvo.dialogs.DayWidgetSettingsDialog;
-import com.svilvo.dialogs.EmployeeDialog;
-import com.svilvo.hc_database.DayEntity;
-import com.svilvo.hc_database.EmployeeEntity;
+import com.svilvo.hc_database.entities.DayEntity;
+import com.svilvo.hc_database.entities.EmployeeEntity;
 import com.svilvo.utils.DatabaseHandler;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class DayWidgetSettingsActivity extends AppCompatActivity {

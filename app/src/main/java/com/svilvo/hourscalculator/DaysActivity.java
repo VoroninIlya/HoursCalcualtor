@@ -24,10 +24,10 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.dialogs.DayDialog;
-import com.svilvo.hc_database.DayEntity;
-import com.svilvo.hc_database.EmployeeEntity;
-import com.svilvo.hc_database.MonthEntity;
-import com.svilvo.hc_database.SettingsEntity;
+import com.svilvo.hc_database.entities.DayEntity;
+import com.svilvo.hc_database.entities.EmployeeEntity;
+import com.svilvo.hc_database.entities.MonthEntity;
+import com.svilvo.hc_database.entities.SettingsEntity;
 import com.svilvo.utils.DatabaseHandler;
 import com.svilvo.views.DayButton;
 
@@ -249,6 +249,11 @@ public class DaysActivity extends AppCompatActivity {
             editor.apply();
 
             showTutorial(1);
+        } else if (R.id.action_report == id) {
+            // Handle about action
+            Intent intent = new Intent(DaysActivity.this, ReportActivity.class);
+            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

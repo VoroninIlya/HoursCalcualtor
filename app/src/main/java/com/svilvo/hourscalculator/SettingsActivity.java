@@ -11,7 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.svilvo.hc_database.SettingsEntity;
+import com.svilvo.hc_database.entities.SettingsEntity;
 import com.svilvo.utils.DatabaseHandler;
 
 public class SettingsActivity extends AppCompatActivity {

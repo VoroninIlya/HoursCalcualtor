@@ -9,11 +9,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
-import com.svilvo.hc_database.DayEntity;
-import com.svilvo.hc_database.EmployeeEntity;
-import com.svilvo.hc_database.MonthEntity;
-import com.svilvo.hc_database.SettingsEntity;
-import com.svilvo.hc_database.YearEntity;
+import com.svilvo.hc_database.entities.DayEntity;
+import com.svilvo.hc_database.entities.EmployeeEntity;
+import com.svilvo.hc_database.entities.MonthEntity;
+import com.svilvo.hc_database.entities.SettingsEntity;
+import com.svilvo.hc_database.entities.YearEntity;
 import com.svilvo.utils.DatabaseHandler;
 
 import java.text.SimpleDateFormat;

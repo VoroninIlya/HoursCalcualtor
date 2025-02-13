@@ -2,12 +2,16 @@ package com.svilvo.utils;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
+
 import com.svilvo.hc_database.AppDatabaseClient;
-import com.svilvo.hc_database.DayEntity;
-import com.svilvo.hc_database.EmployeeEntity;
-import com.svilvo.hc_database.MonthEntity;
-import com.svilvo.hc_database.SettingsEntity;
-import com.svilvo.hc_database.YearEntity;
+import com.svilvo.hc_database.entities.DayEntity;
+import com.svilvo.hc_database.entities.EmployeeEntity;
+import com.svilvo.hc_database.entities.MonthEntity;
+import com.svilvo.hc_database.entities.SettingsEntity;
+import com.svilvo.hc_database.entities.YearEntity;
+import com.svilvo.hc_database.views.MonthSummary;
+import com.svilvo.hc_database.views.YearSummary;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -26,7 +30,7 @@ public class DatabaseHandler {
         List<EmployeeEntity> employees = null;
         try {
             Future<List<EmployeeEntity>> employeesFuture = executorService.submit(() -> {
-                List<EmployeeEntity> empl = dbc.getAppDatabase().employeeDao().getAll();
+                List<EmployeeEntity> empl = dbc.getAppDatabase().employeeDao().getEmployees();
                 // Можно выполнить дополнительные действия, например, логгирование
                 //runOnUiThread(() -> {
                 //    // Обновите UI, если нужно
@@ -43,6 +47,10 @@ public class DatabaseHandler {
             executorService.shutdown();
         }
         return employees;
+    }
+
+    public LiveData<List<EmployeeEntity>> getEmployeesLd() {
+        return dbc.getAppDatabase().employeeDao().getEmployeesLd();
     }
 
     public EmployeeEntity getEmployee(int id) {
@@ -132,6 +140,10 @@ public class DatabaseHandler {
         return years;
     }
 
+    public LiveData<YearSummary> getYearSummary(int employeeId, int year) {
+        return dbc.getAppDatabase().yearDao().getYearSummary(employeeId, year);
+    }
+
     public Long insertYear(YearEntity year) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Long id = (long) -1;
@@ -208,6 +220,10 @@ public class DatabaseHandler {
             executorService.shutdown();
         }
         return id;
+    }
+
+    public LiveData<MonthSummary> getMonthSummary(int employeeId, int year, int month) {
+        return dbc.getAppDatabase().monthDao().getMonthSummary(employeeId, year, month);
     }
 
     public List<DayEntity> getDays(int monthId) {
@@ -289,7 +305,7 @@ public class DatabaseHandler {
         return id;
     }
 
-    public double getHours(int yearId){
+    public double getHours(int yearId) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         double hours = 0.0;
         try {

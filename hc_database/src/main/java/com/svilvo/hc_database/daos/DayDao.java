@@ -1,10 +1,13 @@
-package com.svilvo.hc_database;
+package com.svilvo.hc_database.daos;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
+
+import com.svilvo.hc_database.entities.DayEntity;
 
 import java.util.List;
 
@@ -15,13 +18,7 @@ public interface DayDao {
 
     @Query("SELECT * FROM days WHERE (monthId = :monthId AND day = :day)")
     DayEntity getDay(int monthId, int day);
-
-    @Query("SELECT SUM(hours) FROM days WHERE monthId = :monthId")
-    long getHoursForMonth(int monthId);
-
-    @Query("SELECT SUM(hours*price) FROM days WHERE monthId = :monthId")
-    long getSalaryForMonth(int monthId);
-
+    
     @Update
     int update(DayEntity day);
     @Insert

@@ -10,6 +10,7 @@
 
     <string name="year">Year</string>
     <string name="year_filler">Enter year</string>
+    <string name="month">Month</string>
 
     <string name="employee">Employee</string>
     <string name="employee_first_name">Employee\'s first name</string>
