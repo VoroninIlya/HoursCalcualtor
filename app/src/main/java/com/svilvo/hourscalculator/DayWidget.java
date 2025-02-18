@@ -1,5 +1,6 @@
 package com.svilvo.hourscalculator;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -9,18 +10,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import com.svilvo.hc_database.entities.DayEntity;
 import com.svilvo.hc_database.entities.EmployeeEntity;
 import com.svilvo.hc_database.entities.MonthEntity;
 import com.svilvo.hc_database.entities.SettingsEntity;
 import com.svilvo.hc_database.entities.YearEntity;
 import com.svilvo.utils.DatabaseHandler;
+import com.svilvo.workers.DayWidgetUpdateReceiver;
+import com.svilvo.workers.DayWidgetUpdateWorker;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Implementation of App Widget functionality.
@@ -28,7 +37,7 @@ import java.util.Calendar;
 public class DayWidget extends AppWidgetProvider {
 
     private static final Calendar cldr = Calendar.getInstance(Locale.ROOT);
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+    public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.day_widget);
@@ -114,8 +123,38 @@ public class DayWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
+    public static void scheduleAlarm(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, DayWidgetUpdateReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + 60 * 1000,
+                60 * 1000,
+                pendingIntent
+        );
+    }
+
+    public static void scheduleWork(Context context) {
+        Constraints constraints = new Constraints.Builder()
+                .build();
+
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(DayWidgetUpdateWorker.class, 15, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                "hc_day_widget_update_work",
+                ExistingPeriodicWorkPolicy.UPDATE,
+                request
+        );
+    }
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        scheduleAlarm(context);
+        scheduleWork(context);
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -136,7 +175,6 @@ public class DayWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        // Проверяем, что это наше уникальное действие
         if ("com.svilvo.hourscalculator.ACTION_WIDGET_CLICK".equals(intent.getAction())) {
 
             int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);

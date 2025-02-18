@@ -24,6 +24,12 @@ import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.work.Configuration;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.dialogs.EmployeeDialog;
@@ -33,7 +39,10 @@ import com.svilvo.hc_database.entities.YearEntity;
 import com.svilvo.utils.DatabaseHandler;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import com.getkeepsafe.taptargetview.TapTarget;
+import com.svilvo.workers.DayWidgetUpdateWorker;
 
 public class MainActivity extends AppCompatActivity {
     private DatabaseHandler dbh = null;
@@ -45,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
