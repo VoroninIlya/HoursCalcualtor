@@ -47,7 +47,6 @@ import com.svilvo.workers.DayWidgetUpdateWorker;
 public class MainActivity extends AppCompatActivity {
     private DatabaseHandler dbh = null;
     private List<EmployeeEntity> employees;
-
     private EmployeeEntity lastAddedEmployee = null;
     private int indexOfLastAddedEmployee = -1;
 

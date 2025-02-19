@@ -9,8 +9,10 @@
     <string name="tutorial_menu">Обучение</string>
 
     <string name="year">Год</string>
+    <string name="annual">Годовой</string>
     <string name="year_filler">Введите год</string>
     <string name="month">Месяц</string>
+    <string name="monthly">Месячный</string>
 
     <string name="employee">Cотрудник</string>
     <string name="employee_first_name">Имя сотрудника</string>

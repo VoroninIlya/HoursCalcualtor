@@ -9,8 +9,10 @@
     <string name="tutorial_menu">Tutorial</string>
 
     <string name="year">Year</string>
+    <string name="annual">Annual</string>
     <string name="year_filler">Enter year</string>
     <string name="month">Month</string>
+    <string name="monthly">Monthly</string>
 
     <string name="employee">Employee</string>
     <string name="employee_first_name">Employee\'s first name</string>
