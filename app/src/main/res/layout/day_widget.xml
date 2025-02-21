@@ -11,85 +11,111 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_weight="75">
+        android:layout_weight="102">
 
         <TextView
             android:id="@+id/employee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="1dp"
+            android:layout_centerInParent="true"
             android:text="Select Emploee"
             android:textStyle="bold" />
 
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_weight="25">
+        android:layout_weight="110">
 
-        <TextView
-            android:id="@+id/weekDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="1dp"
-            android:text="Day" />
+    <TextView
+        android:id="@+id/weekDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:text="Day"
+        android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="10dp"
-            android:text="Date" />
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="5dp"
+        android:text="Date"
+        android:textSize="12sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="105">
 
         <TextView
             android:id="@+id/hours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/weekDay"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="1dp"
+            android:layout_centerInParent="true"
             android:text="0.0"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/salary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/hours"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="1dp"
-            android:text="0.0" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="112">
+
+    <TextView
+        android:id="@+id/salary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="0.0"
+        android:textSize="11sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="95">
 
         <ImageButton
+            android:id="@+id/update_button"
             style="@style/Widget.Material3.Button.IconButton"
-            android:id="@+id/settings_button"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_below="@+id/date"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
+            android:layout_toStartOf="@+id/settings_button" />
+
+        <ImageButton
+            android:id="@+id/settings_button"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
             android:src="@mipmap/settings" />
 
-        <ImageButton
-            style="@style/Widget.Material3.Button.IconButton"
-            android:id="@+id/update_button"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_below="@+id/date"
+        <TextView
+            android:id="@+id/summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp" />
-
+            android:layout_marginStart="8dp"
+            android:text="Summary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 </LinearLayout>

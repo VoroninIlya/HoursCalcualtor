@@ -102,6 +102,16 @@ public class DaysActivity extends AppCompatActivity {
             days = dbh.getDays(monthEntity.id);
         }
 
+        TextView summary = findViewById(R.id.summary);
+
+        double monthHours = dbh.getHours(yearId, month);
+        double monthSalary = dbh.getSalary(yearId, month);
+
+        summary.setText(getResources().getText(R.string.hours) + ": " +
+                monthHours + " " +
+                getResources().getText(R.string.salary) + ": " +
+                monthSalary);
+
         for(int i = 1; i <= daysInMonth; i++) {
 
             DayEntity dayEntity = null;
@@ -275,18 +285,20 @@ public class DaysActivity extends AppCompatActivity {
         float screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
         float itemWidthDp = 70; // Example item width in dp
         int numColumns = (int) (screenWidthDp / itemWidthDp);
-        itemWidthDp = screenWidthDp/numColumns;
-
-        // Convert itemWidthDp to pixels for layout parameters
-        int itemWidthPx = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                itemWidthDp,
-                getResources().getDisplayMetrics()
-        );
 
         dc.setColumnCount(numColumns);
 
         String[] daysOfWeek = getResources().getStringArray(R.array.days_of_week_short);
+
+        TextView summary = findViewById(R.id.summary);
+
+        double monthHours = dbh.getHours(yearId, month);
+        double monthSalary = dbh.getSalary(yearId, month);
+
+        summary.setText(getResources().getText(R.string.hours) + ": " +
+                monthHours + " " +
+                getResources().getText(R.string.salary) + ": " +
+                monthSalary);
 
         for(int i = 1; i <= daysInMonth; i++) {
 

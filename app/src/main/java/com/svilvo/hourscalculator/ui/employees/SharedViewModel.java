@@ -11,6 +11,8 @@ public class SharedViewModel extends ViewModel {
     private MutableLiveData<Integer> selectedYear = new MutableLiveData<>();
     private MutableLiveData<Integer> selectedMonth = new MutableLiveData<>();
 
+    private MutableLiveData<Integer> selectedResult = new MutableLiveData<>();
+
     public MutableLiveData<List<EmployeeEntity>> getSelectedEmployee() {
         return selectedEmployee;
     }
@@ -31,5 +33,13 @@ public class SharedViewModel extends ViewModel {
 
     public void setSelectedMonth(Integer month) {
         selectedMonth.setValue(month);
+    }
+
+    public MutableLiveData<Integer> getSelectedResult() {
+        return selectedResult;
+    }
+
+    public void setSelectedResult(Integer result) {
+        selectedResult.setValue(result);
     }
 }

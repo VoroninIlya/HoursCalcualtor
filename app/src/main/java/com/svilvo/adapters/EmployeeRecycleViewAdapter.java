@@ -122,7 +122,10 @@ public class EmployeeRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVie
         void bind(MonthRecycleViewModel month) {
             MonthSummary me = month.getMonth();
             monthTextView.setText(months[me.month]);
-            hoursTextView.setText(String.valueOf(me.hours));
+            if(month.getValue() == 0)
+                hoursTextView.setText(String.valueOf(me.hours));
+            else
+                hoursTextView.setText(String.valueOf(me.salary));
         }
     }
 
@@ -141,7 +144,10 @@ public class EmployeeRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVie
         void bind(DayRecycleViewModel day) {
             DayEntity da = day.getDay();
             dayTextView.setText(String.valueOf(da.day));
-            hoursTextView.setText(String.valueOf(da.hours));
+            if(day.getValue() == 0)
+                hoursTextView.setText(String.valueOf(da.hours));
+            else
+                hoursTextView.setText(String.valueOf(da.hours * da.price));
         }
     }
 

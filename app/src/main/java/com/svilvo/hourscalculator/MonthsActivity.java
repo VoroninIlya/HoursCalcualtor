@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -82,6 +81,16 @@ public class MonthsActivity extends AppCompatActivity {
                 findViewById(R.id.october_btn_container),
                 findViewById(R.id.november_btn_container),
                 findViewById(R.id.december_btn_container)};
+
+        TextView summary = findViewById(R.id.summary);
+
+        double yearHours = dbh.getHours(yearId);
+        double yearSalary = dbh.getSalary(yearId);
+
+        summary.setText(getResources().getText(R.string.hours) + ": " +
+                yearHours + " " +
+                getResources().getText(R.string.salary) + ": " +
+                yearSalary);
 
         for(int i = 0; i < 12; i++) {
             double monthHours = dbh.getHours(yearId, i);
@@ -186,6 +195,16 @@ public class MonthsActivity extends AppCompatActivity {
 
                 double hours = dbh.getHours(yearId, month);
                 double salary = dbh.getSalary(yearId, month);
+
+                TextView summary = findViewById(R.id.summary);
+
+                double yearHours = dbh.getHours(yearId);
+                double yearSalary = dbh.getSalary(yearId);
+
+                summary.setText(getResources().getText(R.string.hours) + ": " +
+                        yearHours + " " +
+                        getResources().getText(R.string.salary) + ": " +
+                        yearSalary);
 
                 CardView newEmplInfo = items[month].findViewById(R.id.item_info);
 

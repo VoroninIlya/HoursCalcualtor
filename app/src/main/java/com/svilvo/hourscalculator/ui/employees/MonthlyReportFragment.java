@@ -36,6 +36,7 @@ public class MonthlyReportFragment extends Fragment {
     private List<EmployeeEntity> employees;
     private int year;
     private int month;
+    private int value = 0;
 
     public static MonthlyReportFragment newInstance() {
         return new MonthlyReportFragment();
@@ -74,6 +75,11 @@ public class MonthlyReportFragment extends Fragment {
             updateUi();
         });
 
+        sharedViewModel.getSelectedResult().observe(getViewLifecycleOwner(), value -> {
+            this.value = value;
+            updateUi();
+        });
+
         return v;
     }
 
@@ -98,7 +104,10 @@ public class MonthlyReportFragment extends Fragment {
                                     int daysInMonth = cldr.getActualMaximum(Calendar.DAY_OF_MONTH);
 
                                     if(ms != null) {
-                                        em.setTotalHours(ms.hours);
+                                        if(value == 0)
+                                            em.setTotalHours(ms.hours);
+                                        else
+                                            em.setTotalHours(ms.salary);
 
                                         for(int i = 1; i <= daysInMonth; i++) {
                                             DayEntity de = null;
@@ -109,14 +118,14 @@ public class MonthlyReportFragment extends Fragment {
                                                 }
                                             }
                                             if (de != null) {
-                                                dv.add(new DayRecycleViewModel(de));
+                                                dv.add(new DayRecycleViewModel(de, value));
                                             } else {
                                                 de = new DayEntity();
                                                 de.day = i;
                                                 de.hours = 0;
                                                 de.price = 0;
                                                 de.monthId = ms.id;
-                                                dv.add(new DayRecycleViewModel(de));
+                                                dv.add(new DayRecycleViewModel(de, value));
                                             }
                                         }
                                     } else {
@@ -127,7 +136,7 @@ public class MonthlyReportFragment extends Fragment {
                                             de.hours = 0;
                                             de.price = 0;
                                             de.monthId = 0;
-                                            dv.add(new DayRecycleViewModel(de));
+                                            dv.add(new DayRecycleViewModel(de, value));
                                         }
                                     }
 

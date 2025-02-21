@@ -27,12 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class YearlyReportFragment extends Fragment {
-
     private SharedViewModel sharedViewModel;
     private YearlyReportViewModel viewModel;
     private EmployeeRecycleViewAdapter adapter;
     private List<EmployeeEntity> employees;
     private int year;
+    private int value = 0;
 
     public static YearlyReportFragment newInstance() {
         return new YearlyReportFragment();
@@ -67,6 +67,11 @@ public class YearlyReportFragment extends Fragment {
             updateUi();
         });
 
+        sharedViewModel.getSelectedResult().observe(getViewLifecycleOwner(), value -> {
+            this.value = value;
+            updateUi();
+        });
+
         return v;
     }
 
@@ -87,7 +92,10 @@ public class YearlyReportFragment extends Fragment {
                                     List<MonthRecycleViewModel> mv = new ArrayList<>();
 
                                     if(ys != null) {
-                                        em.setTotalHours(ys.hours);
+                                        if(value == 0)
+                                            em.setTotalHours(ys.hours);
+                                        else
+                                            em.setTotalHours(ys.salary);
 
                                         for(int i = 0; i <= 11; i++) {
                                             MonthSummary ms = null;
@@ -98,14 +106,14 @@ public class YearlyReportFragment extends Fragment {
                                                 }
                                             }
                                             if (ms != null) {
-                                                mv.add(new MonthRecycleViewModel(ms));
+                                                mv.add(new MonthRecycleViewModel(ms, value));
                                             } else {
                                                 ms = new MonthSummary();
                                                 ms.month = i;
                                                 ms.hours = 0;
                                                 ms.salary = 0;
                                                 ms.yearId = ys.id;
-                                                mv.add(new MonthRecycleViewModel(ms));
+                                                mv.add(new MonthRecycleViewModel(ms, value));
                                             }
                                         }
                                     } else {
@@ -116,7 +124,7 @@ public class YearlyReportFragment extends Fragment {
                                             ms.hours = 0;
                                             ms.salary = 0;
                                             ms.yearId = 0;
-                                            mv.add(new MonthRecycleViewModel(ms));
+                                            mv.add(new MonthRecycleViewModel(ms, value));
                                         }
                                     }
 

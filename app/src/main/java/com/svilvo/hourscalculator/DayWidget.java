@@ -42,12 +42,12 @@ public class DayWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.day_widget);
 
-        Intent settingsIntent = new Intent(context, DayWidgetSettingsActivity.class);
+        Intent settingsIntent = new Intent(context, DayWidget.class);
+        settingsIntent.setAction("com.svilvo.hourscalculator.ACTION_OPEN_SETTINGS");
         settingsIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        settingsIntent.putExtra("dialogType", 1);
         settingsIntent.putExtra("monthId", -1);
         settingsIntent.putExtra("day", -1);
-        PendingIntent settingsPendingIntent = PendingIntent.getActivity(
+        PendingIntent settingsPendingIntent = PendingIntent.getBroadcast(
                 context, appWidgetId, settingsIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         views.setOnClickPendingIntent(R.id.settings_button, settingsPendingIntent);
@@ -63,6 +63,8 @@ public class DayWidget extends AppWidgetProvider {
 
         views.setTextViewText(R.id.date, sdf.format(date));
         views.setTextViewText(R.id.weekDay, daysOfWeek[dayOfWeek-1]);
+
+        double summary = 0;
 
         int employeeId = loadEmployeeId(context, appWidgetId);
         if(employeeId >= 0) {
@@ -82,19 +84,23 @@ public class DayWidget extends AppWidgetProvider {
                     DayEntity day = null;
                     int monthNmr = cldr.get(Calendar.MONTH);
                     MonthEntity month = dbh.getMonth(y.id, monthNmr);
-                    if(month != null)
+                    if(month != null) {
                         day = dbh.getDay(month.id, cldr.get(Calendar.DATE));
+                        summary = dbh.getHours(y.id, month.month);
+                    }
+
+                    views.setTextViewText(R.id.summary, String.format("%.2f", summary));
 
                     if(day != null) {
                         views.setTextViewText(R.id.hours, String.format("%.1f", day.hours));
                         views.setTextViewText(R.id.salary, String.format("%.2f", day.hours*day.price));
 
-                        Intent intent = new Intent(context, DayWidgetSettingsActivity.class);
+                        Intent intent = new Intent(context, DayWidget.class);
+                        intent.setAction("com.svilvo.hourscalculator.ACTION_OPEN_DAY");
                         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                        intent.putExtra("dialogType", 2);
                         intent.putExtra("monthId", month.id);
                         intent.putExtra("day", day.day);
-                        PendingIntent pendingIntent = PendingIntent.getActivity(
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(
                                 context, appWidgetId, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         views.setOnClickPendingIntent(R.id.widget, pendingIntent);
@@ -126,18 +132,20 @@ public class DayWidget extends AppWidgetProvider {
     public static void scheduleAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, DayWidgetUpdateReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        alarmManager.setRepeating(
+        alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis() + 60 * 1000,
-                60 * 1000,
                 pendingIntent
         );
+
     }
 
     public static void scheduleWork(Context context) {
         Constraints constraints = new Constraints.Builder()
+                .setRequiresBatteryNotLow(false) // Allow running even when battery is low
                 .build();
 
         PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(DayWidgetUpdateWorker.class, 15, TimeUnit.MINUTES)
@@ -224,6 +232,30 @@ public class DayWidget extends AppWidgetProvider {
 
             if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID)
                 DayWidget.updateAppWidget(context, AppWidgetManager.getInstance(context), widgetId);
+        }
+        else if ("com.svilvo.hourscalculator.ACTION_OPEN_SETTINGS".equals(intent.getAction())) {
+            int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+
+            Intent actintent = new Intent(context, DayWidgetSettingsActivity.class);
+            actintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            actintent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+            actintent.putExtra("dialogType", 1);
+            actintent.putExtra("monthId", -1);
+            actintent.putExtra("day", -1);
+            context.startActivity(actintent);
+        } else if ("com.svilvo.hourscalculator.ACTION_OPEN_DAY".equals(intent.getAction())) {
+
+            int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            int monthId = intent.getIntExtra("monthId", -1);
+            int dayNmr = intent.getIntExtra("day", -1);
+
+            Intent actintent = new Intent(context, DayWidgetSettingsActivity.class);
+            actintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            actintent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+            actintent.putExtra("dialogType", 2);
+            actintent.putExtra("monthId", monthId);
+            actintent.putExtra("day", dayNmr);
+            context.startActivity(actintent);
         }
     }
 

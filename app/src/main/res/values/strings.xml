@@ -13,6 +13,7 @@
     <string name="year_filler">Enter year</string>
     <string name="month">Month</string>
     <string name="monthly">Monthly</string>
+    <string name="value">Value</string>
 
     <string name="employee">Employee</string>
     <string name="employee_first_name">Employee\'s first name</string>
@@ -28,6 +29,7 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="summary">Summary</string>
 
     <string name="hours_worked">Hours worked</string>
     <string name="hours_worked_filler">Enter working hours</string>

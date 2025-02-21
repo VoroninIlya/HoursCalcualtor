@@ -59,6 +59,8 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.svilvo.hourscalculator.ACTION_WIDGET_CLICK" />
+                <action android:name="com.svilvo.hourscalculator.ACTION_OPEN_SETTINGS" />
+                <action android:name="com.svilvo.hourscalculator.ACTION_OPEN_DAY" />
             </intent-filter>
 
             <meta-data

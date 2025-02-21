@@ -13,6 +13,8 @@
     <string name="year_filler">Введите год</string>
     <string name="month">Месяц</string>
     <string name="monthly">Месячный</string>
+    <string name="value">Значение</string>
+    <string name="summary">Итог</string>
 
     <string name="employee">Cотрудник</string>
     <string name="employee_first_name">Имя сотрудника</string>

@@ -24,53 +24,89 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="?attr/colorPrimary"
+        android:orientation="horizontal"
         android:textColor="?attr/colorOnPrimary"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:layout_editor_absoluteX="5dp">
+        tools:layout_editor_absoluteX="3dp">
 
         <TextView
             android:id="@+id/textYear"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="28"
-            android:gravity="end"
+            android:text="@string/year"
             android:textColor="?attr/colorOnPrimary"
-            android:text="@string/year" />
+            app:layout_constraintBottom_toTopOf="@+id/guideline4"
+            app:layout_constraintEnd_toStartOf="@+id/spinnerYear"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
             android:id="@+id/spinnerYear"
             style="@style/Widget.AppCompat.Spinner"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_weight="22"
+            android:textAlignment="center"
             android:textColor="?attr/colorOnPrimary"
-            android:textAlignment="center" />
+            app:layout_constraintBottom_toTopOf="@+id/guideline4"
+            app:layout_constraintStart_toEndOf="@+id/textMonth"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textMonth"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="28"
-            android:gravity="end"
+            android:layout_marginStart="18dp"
+            android:text="@string/month"
             android:textColor="?attr/colorOnPrimary"
-            android:text="@string/month" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
         <Spinner
             android:id="@+id/spinnerMonth"
             style="@style/Widget.AppCompat.Spinner"
-            android:layout_weight="22"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textColor="?attr/colorOnPrimary"
-            android:textAlignment="center" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textMonth"
+            app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/textResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/value"
+            android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/guideline4"
+            app:layout_constraintEnd_toStartOf="@+id/spinnerResult"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/spinnerResult"
+            style="@style/Widget.AppCompat.Spinner"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/guideline4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:id="@+id/container"

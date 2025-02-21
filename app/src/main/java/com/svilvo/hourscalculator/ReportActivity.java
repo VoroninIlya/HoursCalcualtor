@@ -48,8 +48,6 @@ public class ReportActivity extends AppCompatActivity {
 
         ExtendedFloatingActionButton yearlyButton = findViewById(R.id.fab_yearly);
         ExtendedFloatingActionButton monthlyButton = findViewById(R.id.fab_monthly);
-        //Spinner spinnerYear = findViewById(R.id.spinnerYear);
-        //Spinner spinnerMonth = findViewById(R.id.spinnerMonth);
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             updateUI(true);
@@ -100,6 +98,10 @@ public class ReportActivity extends AppCompatActivity {
             textYear.setVisibility(View.INVISIBLE);
             TextView textMonth = findViewById(R.id.textMonth);
             textMonth.setVisibility(View.INVISIBLE);
+            Spinner spinnerResult = findViewById(R.id.spinnerResult);
+            spinnerResult.setVisibility(View.INVISIBLE);
+            TextView textResult = findViewById(R.id.textResult);
+            textResult.setVisibility(View.INVISIBLE);
         } else if (currentFragment instanceof YearlyReportFragment) {
             ExtendedFloatingActionButton yearlyButton = findViewById(R.id.fab_yearly);
             yearlyButton.setVisibility(View.INVISIBLE);
@@ -113,6 +115,10 @@ public class ReportActivity extends AppCompatActivity {
             textYear.setVisibility(View.VISIBLE);
             TextView textMonth = findViewById(R.id.textMonth);
             textMonth.setVisibility(View.INVISIBLE);
+            Spinner spinnerResult = findViewById(R.id.spinnerResult);
+            spinnerResult.setVisibility(View.VISIBLE);
+            TextView textResult = findViewById(R.id.textResult);
+            textResult.setVisibility(View.VISIBLE);
 
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
             int length = 10;
@@ -147,6 +153,31 @@ public class ReportActivity extends AppCompatActivity {
                 }
             });
 
+            List<String> resultList = new ArrayList<>();
+            resultList.add(getResources().getString(R.string.hours));
+            resultList.add(getResources().getString(R.string.salary));
+
+            ArrayAdapter<String> resultAdapter = new ArrayAdapter<>(
+                    this,
+                    R.layout.spinner_item,
+                    resultList
+            );
+
+            resultAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spinnerResult.setAdapter(resultAdapter);
+
+            spinnerResult.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    sharedViewModel.setSelectedResult(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
         } else if (currentFragment instanceof MonthlyReportFragment) {
             ExtendedFloatingActionButton yearlyButton = findViewById(R.id.fab_yearly);
             yearlyButton.setVisibility(View.INVISIBLE);
@@ -160,6 +191,10 @@ public class ReportActivity extends AppCompatActivity {
             textYear.setVisibility(View.VISIBLE);
             TextView textMonth = findViewById(R.id.textMonth);
             textMonth.setVisibility(View.VISIBLE);
+            Spinner spinnerResult = findViewById(R.id.spinnerResult);
+            spinnerResult.setVisibility(View.VISIBLE);
+            TextView textResult = findViewById(R.id.textResult);
+            textResult.setVisibility(View.VISIBLE);
 
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
             int length = 10;
@@ -217,6 +252,31 @@ public class ReportActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     sharedViewModel.setSelectedMonth(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
+            List<String> resultList = new ArrayList<>();
+            resultList.add(getResources().getString(R.string.hours));
+            resultList.add(getResources().getString(R.string.salary));
+
+            ArrayAdapter<String> resultAdapter = new ArrayAdapter<>(
+                    this,
+                    R.layout.spinner_item,
+                    resultList
+            );
+
+            resultAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spinnerResult.setAdapter(resultAdapter);
+
+            spinnerResult.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    sharedViewModel.setSelectedResult(position);
                 }
 
                 @Override
