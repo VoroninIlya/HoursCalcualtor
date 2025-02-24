@@ -52,7 +52,11 @@ public class DayWidgetSettingsActivity extends AppCompatActivity {
         if(dialogType == 1) {
             DayWidgetSettingsDialog dwsd = new DayWidgetSettingsDialog();
 
-            dwsd.open(this, this::selectEmployeeHandler, employees);
+            dwsd.open(this, this::daySettingsDialogHandler,
+                    this::daySettingsDialogOnDismissHandler, employees,
+                    DayWidget.loadEmployeeId(this, widgetId),
+                    DayWidget.loadDayId(this, widgetId));
+
         } else if (dialogType == 2) {
             DayDialog ed = new DayDialog();
 
@@ -66,11 +70,16 @@ public class DayWidgetSettingsActivity extends AppCompatActivity {
         }
     }
 
-    public void selectEmployeeHandler(int employeeId) {
+    public void daySettingsDialogHandler(int employeeId, int dayId) {
         if (employeeId >= 0) {
             DayWidget.saveEmployeeId(this, widgetId, employeeId);
+            DayWidget.saveDayId(this, widgetId, dayId);
             DayWidget.updateAppWidget(this, AppWidgetManager.getInstance(this), widgetId);
         }
+        this.finish();
+    }
+
+    public void daySettingsDialogOnDismissHandler() {
         this.finish();
     }
 

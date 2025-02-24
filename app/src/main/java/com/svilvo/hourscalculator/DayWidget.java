@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.provider.Settings;
 import android.widget.RemoteViews;
 
 import androidx.work.Constraints;
@@ -36,7 +38,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class DayWidget extends AppWidgetProvider {
 
-    private static final Calendar cldr = Calendar.getInstance(Locale.ROOT);
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         // Construct the RemoteViews object
@@ -54,7 +55,28 @@ public class DayWidget extends AppWidgetProvider {
 
         DatabaseHandler dbh = new DatabaseHandler(context);
 
+        Calendar cldr = Calendar.getInstance(Locale.ROOT);
+
+        int dayInd = loadDayId(context, appWidgetId);
+        switch (dayInd) {
+            case 0:
+                cldr.add(Calendar.DATE, 2);
+                break;
+            case 1:
+                cldr.add(Calendar.DATE, 1);
+                break;
+            case 2:
+                break;
+            case 3:
+                cldr.add(Calendar.DATE, -1);
+                break;
+            case 4:
+                cldr.add(Calendar.DATE, -2);
+                break;
+        }
+
         Date date = cldr.getTime();
+
         int dayOfWeek = cldr.get(java.util.Calendar.DAY_OF_WEEK);
         String[] daysOfWeek = context.getResources().getStringArray(R.array.days_of_week_short);
 
@@ -135,11 +157,23 @@ public class DayWidget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + 60 * 1000,
-                pendingIntent
-        );
+        // Request permission if needed
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!alarmManager.canScheduleExactAlarms()) {
+                Intent settingsIntent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(settingsIntent);
+                return; // Don't schedule the alarm until permission is granted
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis() + 60 * 1000,
+                    pendingIntent
+            );
+        }
 
     }
 
@@ -192,6 +226,26 @@ public class DayWidget extends AppWidgetProvider {
             int month = intent.getIntExtra("month", -1);
 
             DatabaseHandler dbh = new DatabaseHandler(context);
+
+            Calendar cldr = Calendar.getInstance(Locale.ROOT);
+
+            int dayInd = loadDayId(context, widgetId);
+            switch (dayInd) {
+                case 0:
+                    cldr.add(Calendar.DATE, 2);
+                    break;
+                case 1:
+                    cldr.add(Calendar.DATE, 1);
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    cldr.add(Calendar.DATE, -1);
+                    break;
+                case 4:
+                    cldr.add(Calendar.DATE, -2);
+                    break;
+            }
 
             MonthEntity me = null;
             if(monthId == -1) {
@@ -268,8 +322,20 @@ public class DayWidget extends AppWidgetProvider {
         editor.apply();
     }
 
+    public static void saveDayId(Context context, int widgetId, int id) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("day_for_" + widgetId, id);
+        editor.apply();
+    }
+
     public static int loadEmployeeId(Context context, int widgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getInt("employee_for_" + widgetId, -1);
+    }
+
+    public static int loadDayId(Context context, int widgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.getInt("day_for_" + widgetId, -1);
     }
 }

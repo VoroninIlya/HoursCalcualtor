@@ -30,6 +30,7 @@
     <string name="delete">Удалить</string>
     <string name="cancel">Отменить</string>
     <string name="save">Сохранить</string>
+    <string name="day">День</string>
 
     <string name="hours_worked">Отработанные часы</string>
     <string name="hours_worked_filler">Введите отработанные часы</string>
@@ -89,6 +90,14 @@
         <item>Чт</item>
         <item>Пт</item>
         <item>Сб</item>
+    </string-array>
+
+    <string-array name="days">
+        <item>Послезавтра</item>
+        <item>Завтра</item>
+        <item>Сегодня</item>
+        <item>Вчера</item>
+        <item>Позавчера</item>
     </string-array>
 
     <string name="error_delete_year">"Невозможно удалить, есть отработанные часы"</string>
