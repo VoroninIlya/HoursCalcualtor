@@ -20,10 +20,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.svilvo.hourscalculator.ui.employees.EmployeesFragment;
-import com.svilvo.hourscalculator.ui.employees.MonthlyReportFragment;
-import com.svilvo.hourscalculator.ui.employees.SharedViewModel;
-import com.svilvo.hourscalculator.ui.employees.YearlyReportFragment;
+import com.svilvo.hourscalculator.ui.fragments.EmployeesFragment;
+import com.svilvo.hourscalculator.ui.fragments.MonthlyReportFragment;
+import com.svilvo.hourscalculator.ui.fragments.SharedViewModel;
+import com.svilvo.hourscalculator.ui.fragments.YearlyReportFragment;
 
 import java.util.ArrayList;
 import java.util.List;

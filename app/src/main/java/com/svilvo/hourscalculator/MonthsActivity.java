@@ -128,12 +128,7 @@ public class MonthsActivity extends AppCompatActivity {
             newEmplButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(MonthsActivity.this, DaysActivity.class);
-                    intent.putExtra("employeeId", employeeId);
-                    intent.putExtra("yearId", yearId);
-                    intent.putExtra("year", year);
-                    intent.putExtra("month", mon);
-                    startActivityForResult.launch(intent);
+
                 }
             });
         }
@@ -249,12 +244,7 @@ public class MonthsActivity extends AppCompatActivity {
                     @Override
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);
-                        Intent intent = new Intent(MonthsActivity.this, DaysActivity.class);
-                        intent.putExtra("employeeId", employeeId);
-                        intent.putExtra("yearId", yearId);
-                        intent.putExtra("year", year);
-                        intent.putExtra("month", month);
-                        startActivityForResult.launch(intent);
+
                     }
                 }
         );

@@ -24,12 +24,6 @@ import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.work.Configuration;
-import androidx.work.Constraints;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.dialogs.EmployeeDialog;
@@ -227,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
             //// Set click listener for the new button
             newEmplButton.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, YearsActivity.class);
+                Intent intent = new Intent(MainActivity.this, DaysActivity.class);
                 intent.putExtra("employeeId", ee.id);
                 startActivity(intent);
             });
@@ -316,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);
-                        Intent intent = new Intent(MainActivity.this, YearsActivity.class);
+                        Intent intent = new Intent(MainActivity.this, DaysActivity.class);
                         intent.putExtra("employeeId", ee.id);
                         startActivityForResult.launch(intent);
                     }

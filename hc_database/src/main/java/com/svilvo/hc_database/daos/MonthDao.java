@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 
 import com.svilvo.hc_database.entities.MonthEntity;
+import com.svilvo.hc_database.entities.YearEntity;
 import com.svilvo.hc_database.views.MonthSummary;
 
 import java.util.List;
@@ -19,6 +20,9 @@ public interface MonthDao {
 
     @Query("SELECT * FROM months WHERE (yearId = :yearId AND month = :month) ORDER BY month ASC" )
     MonthEntity getMonthForYear(int yearId, int month);
+
+    @Query("SELECT * FROM months WHERE (yearId = :yearId AND month = :month) ORDER BY month ASC" )
+    LiveData<MonthEntity> getMonthForYearLd(int yearId, int month);
 
     @Query("SELECT SUM(hours) FROM months " +
             "LEFT JOIN days ON (months.id = days.monthId) " +

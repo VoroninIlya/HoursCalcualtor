@@ -1,4 +1,4 @@
-package com.svilvo.hourscalculator.ui.employees;
+package com.svilvo.hourscalculator.ui.fragments;
 
 import android.app.Application;
 

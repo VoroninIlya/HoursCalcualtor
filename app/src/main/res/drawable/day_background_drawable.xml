@@ -6,7 +6,7 @@
     android:insetRight="2dp">
 
     <shape android:shape="rectangle">
-            <corners android:radius="10dp" />
-            <solid android:color="@color/day_overlay" />
+        <corners android:radius="10dp" />
+        <solid android:color="@color/day_buttons" />
     </shape>
 </inset>

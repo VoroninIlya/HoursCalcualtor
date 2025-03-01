@@ -31,6 +31,8 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="summary">Summary</string>
+    <string name="summary_monthly">Monthly summary:</string>
+    <string name="summary_annual">Annual summary:</string>
 
     <string name="hours_worked">Hours worked</string>
     <string name="hours_worked_filler">Enter working hours</string>

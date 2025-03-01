@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Custom state -->
-    <item app:state_is_weekend="true" app:state_inside_db="false" android:color="@color/red_db0_overlay" />
-    <item app:state_is_weekend="true" app:state_inside_db="true" android:color="@color/red_db1_overlay" />
+    <item app:stateIsWeekend="true" app:stateInsideDb="false" android:color="@color/red_db0_overlay" />
+    <item app:stateIsWeekend="true" app:stateInsideDb="true" android:color="@color/red_db1_overlay" />
     <!-- Default state -->
     <item android:color="@color/black_overlay" />
 </selector>

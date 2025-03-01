@@ -15,6 +15,8 @@
     <string name="monthly">Месячный</string>
     <string name="value">Значение</string>
     <string name="summary">Итог</string>
+    <string name="summary_monthly">Месячный итог:</string>
+    <string name="summary_annual">Годовой итог:</string>
 
     <string name="employee">Cотрудник</string>
     <string name="employee_first_name">Имя сотрудника</string>

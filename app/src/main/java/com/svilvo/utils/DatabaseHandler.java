@@ -140,6 +140,26 @@ public class DatabaseHandler {
         return years;
     }
 
+    public YearEntity getYear(int employeeId, int yearNbr) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        YearEntity year = null;
+        try {
+            Future<YearEntity> yearFuture = executorService.submit(() ->
+                    dbc.getAppDatabase().yearDao().getYearForEmployee(employeeId, yearNbr));
+            year = yearFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executorService.shutdown();
+        }
+        return year;
+    }
+
+    public LiveData<YearEntity> getYearLd(int employeeId, int yearNbr) {
+        return dbc.getAppDatabase().yearDao().getYearForEmployeeLd(employeeId, yearNbr);
+    }
+
     public LiveData<YearSummary> getYearSummary(int employeeId, int year) {
         return dbc.getAppDatabase().yearDao().getYearSummary(employeeId, year);
     }
@@ -190,6 +210,22 @@ public class DatabaseHandler {
         }
     }
 
+    public List<MonthEntity> getMonths(int yearId){
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        List<MonthEntity> months = null;
+        try {
+            Future<List<MonthEntity>> monthFuture = executorService.submit(() ->
+                    dbc.getAppDatabase().monthDao().getMonthsForYear(yearId));
+            months = monthFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executorService.shutdown();
+        }
+        return months;
+    }
+
     public MonthEntity getMonth(int yearId, int month){
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         MonthEntity monthRes = null;
@@ -206,6 +242,10 @@ public class DatabaseHandler {
         return monthRes;
     }
 
+    public LiveData<MonthEntity> getMonthLd(int yearId, int month){
+        return dbc.getAppDatabase().monthDao().getMonthForYearLd(yearId, month);
+    }
+
     public long writeMonth(MonthEntity month){
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         long id = -1;
@@ -220,6 +260,21 @@ public class DatabaseHandler {
             executorService.shutdown();
         }
         return id;
+    }
+
+    public void deleteMonth(MonthEntity month){
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        try {
+            Future<?> idFuture = executorService.submit(() ->
+                    dbc.getAppDatabase().monthDao().delete(month));
+            idFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executorService.shutdown();
+        }
     }
 
     public LiveData<MonthSummary> getMonthSummary(int employeeId, int year, int month) {
@@ -242,6 +297,10 @@ public class DatabaseHandler {
         return days;
     }
 
+    public LiveData<List<DayEntity>> getDaysLd(int monthId) {
+        return dbc.getAppDatabase().dayDao().getDaysForMonthLd(monthId);
+    }
+
     public DayEntity getDay(int monthId, int dayNum) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         DayEntity day = null;
@@ -256,6 +315,10 @@ public class DatabaseHandler {
             executorService.shutdown();
         }
         return day;
+    }
+
+    public LiveData<DayEntity> getDayLd(int monthId, int dayNum) {
+        return dbc.getAppDatabase().dayDao().getDayLd(monthId, dayNum);
     }
 
     public long writeDay(DayEntity day){

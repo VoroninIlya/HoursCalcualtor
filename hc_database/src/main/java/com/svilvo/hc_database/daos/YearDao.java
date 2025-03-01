@@ -21,6 +21,12 @@ public interface YearDao {
     @Query("SELECT * FROM years WHERE employeeId = :employeeId ORDER BY year DESC" )
     List<YearEntity> getYearsForEmployee(int employeeId);
 
+    @Query("SELECT * FROM years WHERE (employeeId = :employeeId  AND year = :year) ORDER BY year DESC" )
+    YearEntity getYearForEmployee(int employeeId, int year);
+
+    @Query("SELECT * FROM years WHERE (employeeId = :employeeId  AND year = :year) ORDER BY year DESC" )
+    LiveData<YearEntity> getYearForEmployeeLd(int employeeId, int year);
+
     @Transaction
     @Query("SELECT y.id AS id, y.year AS year, y.employeeId AS employeeId, " +
             "SUM(m.hours) AS hours, " +
