@@ -17,6 +17,7 @@ import java.util.List;
 
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
     private List<DayItem> daysList;
+    private LayoutInflater inflater;
 
     public DayAdapter(List<DayItem> daysList) {
         this.daysList = daysList;
@@ -25,14 +26,17 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
     @NonNull
     @Override
     public DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_day, parent, false);
+        if(inflater == null) {
+            inflater = LayoutInflater.from(parent.getContext());
+        }
+        View view = inflater.inflate(R.layout.item_day, parent, false);
         return new DayViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DayViewHolder holder, int position) {
         DayItem day = daysList.get(position);
-        holder.button.setCenterText(String.format("%.2f", day.hours)); // или String.valueOf(day.hours)
+        holder.button.setCenterText(String.format("%.2f", day.hours));
         holder.button.setTopLeftText(day.dayOfWeek);
         holder.button.setTopRightText(String.valueOf(day.dayNumber));
         holder.button.setBottomRightText(String.format("%.2f", day.hours * day.price));
@@ -91,12 +95,6 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
         if(position >= 0 && position < daysList.size())
             return daysList.get(position) != null;
         return false;
-    }
-
-    public DayItem getDay(int position) {
-        if(position >= 0 && position < daysList.size())
-            return daysList.get(position);
-        return null;
     }
 
     public void updateDay(DayItem day) {

@@ -14,8 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,10 +31,8 @@ import com.svilvo.hc_database.entities.YearEntity;
 import com.svilvo.utils.DatabaseHandler;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import com.getkeepsafe.taptargetview.TapTarget;
-import com.svilvo.workers.DayWidgetUpdateWorker;
 
 public class MainActivity extends AppCompatActivity {
     private DatabaseHandler dbh = null;
@@ -114,20 +110,16 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> startActivityForResult =
         registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+            result -> {
+                SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
+                boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
 
-                    SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
-                    boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
-
-                    if(!tutorialShown) {
-                        LinearLayout ec = findViewById(R.id.employees_container);
-                        if(ec.getChildCount() > 0)
-                            showTutorial(2);
-                        else
-                            showTutorial(1);
-                    }
+                if(!tutorialShown) {
+                    LinearLayout ec = findViewById(R.id.employees_container);
+                    if(ec.getChildCount() > 0)
+                        showTutorial(2);
+                    else
+                        showTutorial(1);
                 }
             });
 
@@ -150,11 +142,19 @@ public class MainActivity extends AppCompatActivity {
         lastAddedEmployee.id = (int)empId;
 
         if(!hours.isEmpty() || !price.isEmpty()) {
-            SettingsEntity se = new SettingsEntity();
-            se.employeeId = (int)empId;
-            se.hours = hours.isEmpty() ? 0.0 : Double.parseDouble(hours);
-            se.price = price.isEmpty() ? 0.0 : Double.parseDouble(price);
-            long stId = dbh.updateSettings(se);
+            SettingsEntity se = dbh.getSettings((int)empId);
+            if(se == null) {
+                se = new SettingsEntity();
+                se.employeeId = (int)empId;
+                se.hours = hours.isEmpty() ? 0.0 : Double.parseDouble(hours);
+                se.price = price.isEmpty() ? 0.0 : Double.parseDouble(price);
+                long stId = dbh.writeSettings(se);
+            } else {
+                se.employeeId = (int)empId;
+                se.hours = hours.isEmpty() ? 0.0 : Double.parseDouble(hours);
+                se.price = price.isEmpty() ? 0.0 : Double.parseDouble(price);
+                long stId = dbh.updateSettings(se);
+            }
         }
 
         updateEmployeesList();
@@ -268,6 +268,11 @@ public class MainActivity extends AppCompatActivity {
                         List<YearEntity> years = dbh.getYears(ee.id);
                         if(years == null || years.size() == 0) {
                             dbh.deleteEmployee(ee);
+
+                            SettingsEntity se = dbh.getSettings(ee.id);
+                            if(se != null)
+                                dbh.deleteSettings(se);
+
                             updateEmployeesList();
                         } else {
                             Toast.makeText(MainActivity.this,

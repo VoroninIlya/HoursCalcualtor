@@ -35,4 +35,5 @@ public class MonthFragmentAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return 12;
     }
+
 }

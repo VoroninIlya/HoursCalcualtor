@@ -55,9 +55,9 @@ public class MonthFragment extends Fragment {
 
     public static MonthFragment newInstance(int employeeId, int year,
                                             int month, MonthFragmentSummaryCallBack cb,
-                                            View.OnClickListener monthOnClick) {
+                                            View.OnClickListener onClick) {
         sumCb = cb;
-        monthOnClick = monthOnClick;
+        monthOnClick = onClick;
         MonthFragment fragment = new MonthFragment();
         Bundle args = new Bundle();
         args.putInt("employeeId", employeeId);
@@ -85,7 +85,6 @@ public class MonthFragment extends Fragment {
             for (int i = 1; i <= 31; i++) {
                 cldr.set(android.icu.util.Calendar.DATE, i);
                 int dayOfWeek = cldr.get(android.icu.util.Calendar.DAY_OF_WEEK);
-                int day = i;
                 daysList.add(new DayItem(
                         i,
                         daysOfWeek[dayOfWeek - 1].trim(),

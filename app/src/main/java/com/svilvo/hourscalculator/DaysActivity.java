@@ -1,5 +1,6 @@
 package com.svilvo.hourscalculator;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -86,11 +89,10 @@ public class DaysActivity extends AppCompatActivity {
         List<Integer> years = new ArrayList<>();
         for (int i = 2000; i <= year; i++) years.add(i);
         yearPager.setAdapter(new YearMonthAdapter(years, y -> {
-            //Intent intnt = new Intent(DaysActivity.this, YearsActivity.class);
-            //intnt.putExtra("employeeId", ee.id);
-            //startActivity(intnt);
+            Intent intnt = new Intent(DaysActivity.this, YearsActivity.class);
+            intnt.putExtra("employeeId", ee.id);
+            startActivityForResult.launch(intnt);
         }));
-        yearPager.setCurrentItem(year - 2000, false);
         yearPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -111,6 +113,7 @@ public class DaysActivity extends AppCompatActivity {
         monthsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
                 if (state == ViewPager2.SCROLL_STATE_IDLE) {
                     int position = monthsViewPager.getCurrentItem();
                     updateSummary();
@@ -138,6 +141,7 @@ public class DaysActivity extends AppCompatActivity {
     }
 
     private void updateCalendar(Integer year, Integer month) {
+        yearPager.setCurrentItem(year - 2000, false);
         monthsViewPager.setAdapter(null);
         monthsViewPager.setAdapter(new MonthFragmentAdapter(
                 this, employeeId, year, this::onSummaryUpdated, this::monthOnClick));
@@ -182,6 +186,20 @@ public class DaysActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    ActivityResultLauncher<Intent> startActivityForResult =
+        registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            o -> {
+                if(o.getResultCode() == Activity.RESULT_OK) {
+                    Intent resintent = o.getData();
+                    String source = resintent.getStringExtra("source");
+                    year = resintent.getIntExtra("year", -1);
+                    if(source.equals("months")) {
+                        month = resintent.getIntExtra("month", -1);
+                    }
+                    updateCalendar(year, month);
+                }
+            });
+
     private void onSummaryUpdated(YearSummary summary) {
         this.summary = summary;
         updateSummary();
@@ -191,9 +209,10 @@ public class DaysActivity extends AppCompatActivity {
         Intent intnt = new Intent(DaysActivity.this, MonthsActivity.class);
         intnt.putExtra("employeeId", employeeId);
         intnt.putExtra("year", year);
-        startActivity(intnt);
+        startActivityForResult.launch(intnt);
 
     }
+
     private void updateSummary() {
         TextView summaryMonthlyText = this.findViewById(R.id.summaryMonthly);
         TextView summaryAnnualText = this.findViewById(R.id.summaryAnnual);
