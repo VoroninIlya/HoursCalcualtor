@@ -9,8 +9,16 @@
     <string name="tutorial_menu">Обучение</string>
 
     <string name="year">Год</string>
+    <string name="annual">Годовой</string>
     <string name="year_filler">Введите год</string>
+    <string name="month">Месяц</string>
+    <string name="monthly">Месячный</string>
+    <string name="value">Значение</string>
+    <string name="summary">Итог</string>
+    <string name="summary_monthly">Месячный итог:</string>
+    <string name="summary_annual">Годовой итог:</string>
 
+    <string name="employee">Cотрудник</string>
     <string name="employee_first_name">Имя сотрудника</string>
     <string name="employee_first_name_filler">Введите имя сотрудника</string>
     <string name="employee_last_name">Фамилия сотрудника</string>
@@ -24,6 +32,7 @@
     <string name="delete">Удалить</string>
     <string name="cancel">Отменить</string>
     <string name="save">Сохранить</string>
+    <string name="day">День</string>
 
     <string name="hours_worked">Отработанные часы</string>
     <string name="hours_worked_filler">Введите отработанные часы</string>
@@ -85,6 +94,14 @@
         <item>Сб</item>
     </string-array>
 
+    <string-array name="days">
+        <item>Послезавтра</item>
+        <item>Завтра</item>
+        <item>Сегодня</item>
+        <item>Вчера</item>
+        <item>Позавчера</item>
+    </string-array>
+
     <string name="error_delete_year">"Невозможно удалить, есть отработанные часы"</string>
     <string name="error_delete_employee">"Невозможно удалить, есть учтенные года"</string>
     <string name="error_confirm_employee">"Введите пожалуйста фамилию, имя и возраст сотрудника!"</string>
@@ -138,5 +155,8 @@
 либо удаить данные. Нажмите кнопку \"Удалить\", чтобы продолжить</string>
     <string name="tutorial_overflow_title">Превосходно!</string>
     <string name="tutorial_overflow_description">Вы можете в любой момент активировать днное обучение нажав на кнопку \"Обучение\" в меню</string>
+
+    <string name="app_widget_description">Калькулятор часов виджет</string>
+    <string name="day_widget_settings">Настройки виджета</string>
 
 </resources>

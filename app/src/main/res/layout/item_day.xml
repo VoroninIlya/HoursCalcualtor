@@ -1,28 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/Widget.Material3.TabLayout.Secondary"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#00000000"
-    android:layout_margin="0dp"
-    android:padding="2dp"
-    android:orientation="horizontal">
+    android:id="@+id/item_card"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    app:strokeWidth="0dp"
+    app:strokeColor="@android:color/transparent">
 
     <com.svilvo.views.DayButton
         android:id="@+id/item_button"
-        style="@style/Widget.Material3.Button.TonalButton"
-        app:backgroundTint="@color/day_buttons"
-        android:foreground="@drawable/day_overlay_drawable"
-        android:textColor="?attr/colorOnSecondaryContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textAllCaps="false"
-        android:padding="5dp"
-        android:textSize="18sp"
-        app:cornerRadius="10dp"
-        app:subTextSize="14sp"
-        app:subTextColor="?attr/colorSecondary"
-        />
+    />
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView >

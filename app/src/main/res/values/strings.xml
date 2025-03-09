@@ -9,8 +9,14 @@
     <string name="tutorial_menu">Tutorial</string>
 
     <string name="year">Year</string>
+    <string name="annual">Annual</string>
     <string name="year_filler">Enter year</string>
+    <string name="month">Month</string>
+    <string name="monthly">Monthly</string>
+    <string name="value">Value</string>
+    <string name="day">Day</string>
 
+    <string name="employee">Employee</string>
     <string name="employee_first_name">Employee\'s first name</string>
     <string name="employee_first_name_filler">Enter employee\'s first name</string>
     <string name="employee_last_name">Employee\'s last name</string>
@@ -24,6 +30,9 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="summary">Summary</string>
+    <string name="summary_monthly">Monthly summary:</string>
+    <string name="summary_annual">Annual summary:</string>
 
     <string name="hours_worked">Hours worked</string>
     <string name="hours_worked_filler">Enter working hours</string>
@@ -85,6 +94,14 @@
         <item>Sat</item>
     </string-array>
 
+    <string-array name="days">
+        <item>After tomorrow</item>
+        <item>Tomorrow</item>
+        <item>Today</item>
+        <item>Yesterday</item>
+        <item>Before yesterday</item>
+    </string-array>
+
     <string name="error_delete_year">"Could not delete, there are working hours"</string>
     <string name="error_delete_employee">"Could not delete, there are considered years"</string>
     <string name="error_confirm_employee">"Please enter employee's first name, last name and age!"</string>
@@ -138,5 +155,8 @@ Click one time to apply default values!
 or delete the data. Click on the \"Delete\" button to continue</string>
     <string name="tutorial_overflow_title">Well done!</string>
     <string name="tutorial_overflow_description">You can start this tutorial again by pressing the \"Tutorial\" button in menu</string>
+
+    <string name="app_widget_description">Hours calculator widget</string>
+    <string name="day_widget_settings">Widget settings</string>
 
 </resources>

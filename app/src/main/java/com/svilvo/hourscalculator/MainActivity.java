@@ -14,8 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,24 +25,25 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.dialogs.EmployeeDialog;
-import com.svilvo.hc_database.EmployeeEntity;
-import com.svilvo.hc_database.SettingsEntity;
-import com.svilvo.hc_database.YearEntity;
+import com.svilvo.hc_database.entities.EmployeeEntity;
+import com.svilvo.hc_database.entities.SettingsEntity;
+import com.svilvo.hc_database.entities.YearEntity;
 import com.svilvo.utils.DatabaseHandler;
 
 import java.util.List;
+
 import com.getkeepsafe.taptargetview.TapTarget;
 
 public class MainActivity extends AppCompatActivity {
     private DatabaseHandler dbh = null;
     private List<EmployeeEntity> employees;
-
     private EmployeeEntity lastAddedEmployee = null;
     private int indexOfLastAddedEmployee = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
@@ -99,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
 
             showTutorial(1);
+        } else if (R.id.action_report == id) {
+            // Handle about action
+            Intent intent = new Intent(MainActivity.this, ReportActivity.class);
+            startActivity(intent);
+            return true;
         }
 
        return super.onOptionsItemSelected(item);
@@ -106,20 +110,16 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> startActivityForResult =
         registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+            result -> {
+                SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
+                boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
 
-                    SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
-                    boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
-
-                    if(!tutorialShown) {
-                        LinearLayout ec = findViewById(R.id.employees_container);
-                        if(ec.getChildCount() > 0)
-                            showTutorial(2);
-                        else
-                            showTutorial(1);
-                    }
+                if(!tutorialShown) {
+                    LinearLayout ec = findViewById(R.id.employees_container);
+                    if(ec.getChildCount() > 0)
+                        showTutorial(2);
+                    else
+                        showTutorial(1);
                 }
             });
 
@@ -142,11 +142,19 @@ public class MainActivity extends AppCompatActivity {
         lastAddedEmployee.id = (int)empId;
 
         if(!hours.isEmpty() || !price.isEmpty()) {
-            SettingsEntity se = new SettingsEntity();
-            se.employeeId = (int)empId;
-            se.hours = hours.isEmpty() ? 0.0 : Double.parseDouble(hours);
-            se.price = price.isEmpty() ? 0.0 : Double.parseDouble(price);
-            long stId = dbh.updateSettings(se);
+            SettingsEntity se = dbh.getSettings((int)empId);
+            if(se == null) {
+                se = new SettingsEntity();
+                se.employeeId = (int)empId;
+                se.hours = hours.isEmpty() ? 0.0 : Double.parseDouble(hours);
+                se.price = price.isEmpty() ? 0.0 : Double.parseDouble(price);
+                long stId = dbh.writeSettings(se);
+            } else {
+                se.employeeId = (int)empId;
+                se.hours = hours.isEmpty() ? 0.0 : Double.parseDouble(hours);
+                se.price = price.isEmpty() ? 0.0 : Double.parseDouble(price);
+                long stId = dbh.updateSettings(se);
+            }
         }
 
         updateEmployeesList();
@@ -165,12 +173,14 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout ec = findViewById(R.id.employees_container);
         ec.clearDisappearingChildren();
 
-        employees = dbh.getEmployees();
-
         for (int i = ec.getChildCount() - 1; i >= 0; i--) {
             View child = ec.getChildAt(i);
             ec.removeView(child);
         }
+
+        employees = dbh.getEmployees();
+
+        if (employees == null) return;
 
         int i = 0;
         for (EmployeeEntity ee : employees) {
@@ -211,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
             //// Set click listener for the new button
             newEmplButton.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, YearsActivity.class);
+                Intent intent = new Intent(MainActivity.this, DaysActivity.class);
                 intent.putExtra("employeeId", ee.id);
                 startActivity(intent);
             });
@@ -258,6 +268,11 @@ public class MainActivity extends AppCompatActivity {
                         List<YearEntity> years = dbh.getYears(ee.id);
                         if(years == null || years.size() == 0) {
                             dbh.deleteEmployee(ee);
+
+                            SettingsEntity se = dbh.getSettings(ee.id);
+                            if(se != null)
+                                dbh.deleteSettings(se);
+
                             updateEmployeesList();
                         } else {
                             Toast.makeText(MainActivity.this,
@@ -300,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);
-                        Intent intent = new Intent(MainActivity.this, YearsActivity.class);
+                        Intent intent = new Intent(MainActivity.this, DaysActivity.class);
                         intent.putExtra("employeeId", ee.id);
                         startActivityForResult.launch(intent);
                     }

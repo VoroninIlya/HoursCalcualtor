@@ -20,6 +20,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:minWidth="250dp"
+            app:cardElevation="0dp"
             app:cardBackgroundColor="#00FFFFFF">
 
             <FrameLayout
@@ -45,6 +46,7 @@
             android:layout_marginTop="0dp"
             android:background="@drawable/item_card_layout_shape"
             android:minWidth="250dp"
+            app:cardElevation="0dp"
             app:cardBackgroundColor="#00FFFFFF">
 
             <FrameLayout

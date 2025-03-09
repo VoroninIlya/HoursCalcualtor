@@ -29,21 +29,19 @@ import androidx.core.view.WindowInsetsCompat;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.svilvo.dialogs.YearDialog;
-import com.svilvo.hc_database.EmployeeEntity;
-import com.svilvo.hc_database.YearEntity;
+import com.svilvo.hc_database.entities.EmployeeEntity;
+import com.svilvo.hc_database.entities.YearEntity;
 import com.svilvo.utils.DatabaseHandler;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class YearsActivity extends AppCompatActivity {
 
     private DatabaseHandler dbh = null;
-    private List<YearEntity> years;
     private EmployeeEntity ee = null;
     private long employeeId = -1;
 
-    private YearEntity lastAddedYear = null;
-    private int indexOfLastAddedYear = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +109,11 @@ public class YearsActivity extends AppCompatActivity {
             editor.apply();
 
             showTutorial(1);
+        } else if (R.id.action_report == id) {
+            // Handle about action
+            Intent intent = new Intent(YearsActivity.this, ReportActivity.class);
+            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -139,21 +142,6 @@ public class YearsActivity extends AppCompatActivity {
                 }
             });
 
-    public void addYearClickHandler(View view) {
-        YearDialog ed = new YearDialog();
-
-        ed.open(this, this::addYearToYears, this::dialogDismissHandler, "");
-    }
-
-    private void addYearToYears(String year) {
-        lastAddedYear = new YearEntity();
-        lastAddedYear.year = Integer.parseInt(year);
-        lastAddedYear.employeeId = (int)employeeId;
-        long empId = dbh.insertYear(lastAddedYear);
-        lastAddedYear.id = (int)empId;
-        updateYearsList();
-    }
-
     private void dialogDismissHandler() {
         SharedPreferences prefs = getSharedPreferences("hours_calculator_tutorial", MODE_PRIVATE);
         boolean tutorialShown = prefs.getBoolean("tutorial_shown", false);
@@ -168,31 +156,29 @@ public class YearsActivity extends AppCompatActivity {
 
         ec.clearDisappearingChildren();
 
-        years = dbh.getYears((int)employeeId);
-
         for (int i = ec.getChildCount() - 1; i >= 0; i--) {
             View child = ec.getChildAt(i);
             ec.removeView(child);
         }
 
-        int i = 0;
-        for (YearEntity ye : years) {
+        Calendar cldr = Calendar.getInstance();
+        int year = cldr.get(Calendar.YEAR);
 
-            if (lastAddedYear != null && lastAddedYear.id == ye.id)
-                indexOfLastAddedYear = i;
-            i++;
+        for (int y = year; y >= 2000; y--) {
+
+            YearEntity ye = dbh.getYear((int)employeeId, y);
 
             LayoutInflater inflater = LayoutInflater.from(this);
             View newEmployeeItem = inflater.inflate(R.layout.item_card, ec, false);
 
-            CardView newEmplButton = newEmployeeItem.findViewById(R.id.item_button);
+            CardView newYearButton = newEmployeeItem.findViewById(R.id.item_button);
 
             TextView tlt = newEmployeeItem.findViewById(R.id.textLeftTop);
             tlt.setText(ee.lastName);
             TextView tlb = newEmployeeItem.findViewById(R.id.textLeftBottom);
             tlb.setText(ee.firstName + ", " + ee.age);
             TextView tc = newEmployeeItem.findViewById(R.id.textCenter);
-            tc.setText(String.valueOf(ye.year));
+            tc.setText(String.valueOf(y));
             TextView trt = newEmployeeItem.findViewById(R.id.textRightTop);
             trt.setText(""); trt.setVisibility(View.INVISIBLE);
             TextView trb = newEmployeeItem.findViewById(R.id.textRightBottom);
@@ -200,8 +186,12 @@ public class YearsActivity extends AppCompatActivity {
 
             CardView newEmplInfo = newEmployeeItem.findViewById(R.id.item_info);
 
-            double hours = dbh.getHours(ye.id);
-            double salary = dbh.getSalary(ye.id);
+            double hours = 0;
+            double salary = 0;
+            if(ye != null) {
+                hours = dbh.getHours(ye.id);
+                salary = dbh.getSalary(ye.id);
+            }
 
             TextView ttlt = newEmplInfo.findViewById(R.id.titleLeftTop);
             ttlt.setText(this.getString(R.string.hours) + ":");
@@ -215,51 +205,16 @@ public class YearsActivity extends AppCompatActivity {
             ImageButton moreButton = newEmployeeItem.findViewById(R.id.more_button);
 
             // Set click listener for the new button
-            newEmplButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(YearsActivity.this, MonthsActivity.class);
-                    intent.putExtra("employeeId", ye.employeeId);
-                    intent.putExtra("yearId", ye.id);
-                    intent.putExtra("year", ye.year);
-                    startActivityForResult.launch(intent);
-                }
+            int yr = y;
+            newYearButton.setOnClickListener(v -> {
+                Intent resintent = new Intent();
+                resintent.putExtra("source", "years");
+                resintent.putExtra("year", yr);
+                setResult(RESULT_OK, resintent);
+                finish();
             });
 
-            moreButton.setOnClickListener(v -> {
-                PopupMenu menu = new PopupMenu(YearsActivity.this, v);
-                menu.getMenuInflater().inflate(R.menu.menu_item, menu.getMenu());
-
-                menu.setOnMenuItemClickListener(item -> {
-                    int id = item.getItemId();
-                    if (R.id.action_edit == id) {
-                        YearDialog ed = new YearDialog();
-
-                        ed.open(YearsActivity.this,
-                                (String yr) -> {
-                                    ye.year = Integer.parseInt(yr);
-                                    Long yrId = dbh.updateYear(ye);
-                                    updateYearsList();
-                                }, this::dialogDismissHandler, String.valueOf(ye.year));
-                        return true;
-                    }
-                    else if (R.id.action_delete == id) {
-                        double h = dbh.getHours(ye.id);
-
-                        if(h == 0) {
-                            dbh.deleteYear(ye);
-                            updateYearsList();
-                        } else {
-                            Toast.makeText(YearsActivity.this,
-                                    R.string.error_delete_year, Toast.LENGTH_SHORT).show();
-                        }
-                        return true;
-                    };
-                    return false;
-                });
-
-                menu.show();
-            });
+            moreButton.setVisibility(View.INVISIBLE);
 
             ec.addView(newEmployeeItem);
         }
@@ -269,36 +224,36 @@ public class YearsActivity extends AppCompatActivity {
         LinearLayout yc = findViewById(R.id.years_container);
         if (part == 2 && yc.getChildCount() > 0) {
 
-            years = dbh.getYears((int)employeeId);
-            YearEntity ye = years.get(indexOfLastAddedYear >= 0 ? indexOfLastAddedYear : 0);
+            //years = dbh.getYears((int)employeeId);
+            //YearEntity ye = years.get(indexOfLastAddedYear >= 0 ? indexOfLastAddedYear : 0);
 
-            View newYearItem = yc.getChildAt(indexOfLastAddedYear >= 0 ? indexOfLastAddedYear : 0);
+            //View newYearItem = yc.getChildAt(indexOfLastAddedYear >= 0 ? indexOfLastAddedYear : 0);
 
-            TapTargetView.showFor(this,
-                TapTarget.forView(newYearItem,
-                        getString(R.string.tutorial_year_item_title),
-                        getString(R.string.tutorial_year_item_description))
-                    .id(1)
-                    .tintTarget(false)
-                    .transparentTarget(true)
-                    .targetRadius(60)
-                    .outerCircleColor(R.color.notice_100)
-                    .targetCircleColor(R.color.white)
-                    .titleTextSize(20)
-                    .descriptionTextSize(16)
-                    .cancelable(false),
-                new TapTargetView.Listener() {
-                    @Override
-                    public void onTargetClick(TapTargetView view) {
-                        super.onTargetClick(view);
-                        Intent intent = new Intent(YearsActivity.this, MonthsActivity.class);
-                        intent.putExtra("employeeId", ye.employeeId);
-                        intent.putExtra("yearId", ye.id);
-                        intent.putExtra("year", ye.year);
-                        startActivityForResult.launch(intent);
-                    }
-                }
-            );
+            //TapTargetView.showFor(this,
+            //    TapTarget.forView(newYearItem,
+            //            getString(R.string.tutorial_year_item_title),
+            //            getString(R.string.tutorial_year_item_description))
+            //        .id(1)
+            //        .tintTarget(false)
+            //        .transparentTarget(true)
+            //        .targetRadius(60)
+            //        .outerCircleColor(R.color.notice_100)
+            //        .targetCircleColor(R.color.white)
+            //        .titleTextSize(20)
+            //        .descriptionTextSize(16)
+            //        .cancelable(false),
+            //    new TapTargetView.Listener() {
+            //        @Override
+            //        public void onTargetClick(TapTargetView view) {
+            //            super.onTargetClick(view);
+            //            //Intent intent = new Intent(YearsActivity.this, MonthsActivity.class);
+            //            //intent.putExtra("employeeId", ye.employeeId);
+            //            //intent.putExtra("yearId", ye.id);
+            //            //intent.putExtra("year", ye.year);
+            //            //startActivityForResult.launch(intent);
+            //        }
+            //    }
+            //);
         } else {
             TapTargetView.showFor(this,
                 TapTarget.forView(findViewById(R.id.fab_add),
@@ -316,7 +271,7 @@ public class YearsActivity extends AppCompatActivity {
                     @Override
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);
-                        addYearClickHandler(findViewById(R.id.fab_add));
+                        //addYearClickHandler(findViewById(R.id.fab_add));
                     }
                 }
             );
